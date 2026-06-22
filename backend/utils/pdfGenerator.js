@@ -184,6 +184,15 @@ const generatePDF = (submission, res) => {
   sections.forEach(section => {
     const validKeys = section.keys.filter(k => !isEmpty(data[k]));
     if (validKeys.length > 0) {
+      // Calculate total height needed for the entire section to prevent mid-section page breaks
+      let requiredHeight = 60; // Section header + padding
+      validKeys.forEach((k) => {
+        const textHeight = doc.heightOfString(formatValue(data[k]), { width: (contentWidth / 2) - 20, font: fonts.regular, fontSize: 10 });
+        requiredHeight += Math.max(20, textHeight + 8) + 4;
+      });
+      
+      checkPageBreak(requiredHeight + 10);
+
       drawSectionHeader(section.title);
       // Border around grid
       const gridStartY = doc.y;
@@ -208,14 +217,26 @@ const generatePDF = (submission, res) => {
       let maxCardHeight = 0;
 
       validContacts.forEach((contact, idx) => {
+        const keys = Object.keys(contact).filter(k => !isEmpty(contact[k]));
+        
+        // Calculate exact required height for this contact card
+        let requiredHeight = 35; // Header
+        keys.forEach(k => {
+          const tH = doc.heightOfString(String(contact[k]), { width: cardWidth - 20, font: fonts.regular, fontSize: 10 });
+          requiredHeight += 12 + tH + 10;
+        });
+
         if (col === 0 && idx > 0) {
           startY = doc.y + maxCardHeight + 15;
           maxCardHeight = 0;
           doc.y = startY;
         }
         
-        checkPageBreak(100);
-        if (doc.y !== startY && col === 0) startY = doc.y; // Update if page break happened
+        // Ensure the entire card fits on the current page
+        if (checkPageBreak(requiredHeight + 20)) {
+           startY = doc.y; // Update startY if a page break occurred
+           if (col === 1) col = 0; // Reset to left column on new page
+        }
 
         const x = margins.left + (col * (cardWidth + 20));
         let y = startY;
@@ -225,14 +246,14 @@ const generatePDF = (submission, res) => {
         doc.fillColor(colors.maroon).fontSize(10).font(fonts.bold).text(`Contact ${idx + 1}`, x + 10, y + 7);
         y += 30;
 
-        const keys = Object.keys(contact).filter(k => !isEmpty(contact[k]));
         keys.forEach(k => {
           doc.fillColor(colors.textLight).fontSize(8).font(fonts.bold).text(formatKey(k).toUpperCase(), x + 10, y);
+          const tH = doc.heightOfString(String(contact[k]), { width: cardWidth - 20, font: fonts.regular, fontSize: 10 });
           doc.fillColor(colors.textDark).fontSize(10).font(fonts.regular).text(String(contact[k]), x + 10, y + 12, { width: cardWidth - 20 });
-          y += 30;
+          y += 12 + tH + 10;
         });
 
-        const currentHeight = y - startY + 10;
+        const currentHeight = y - startY + 5;
         if (currentHeight > maxCardHeight) maxCardHeight = currentHeight;
         
         doc.roundedRect(x, startY, cardWidth, currentHeight, 6).lineWidth(1).strokeColor(colors.border).stroke();
@@ -248,30 +269,51 @@ const generatePDF = (submission, res) => {
   
   Object.entries(branchKeys).forEach(([key, title]) => {
     if (!isEmpty(data[key])) {
+      
+      const chipHeight = 24;
+      let requiredHeight = 60; // Section header
+      let tempX = margins.left + 10;
+      let tempY = 0;
+      
+      data[key].forEach(item => {
+        if (isEmpty(item)) return;
+        const textWidth = doc.widthOfString(item, { font: fonts.regular, fontSize: 9 });
+        const chipWidth = textWidth + 20;
+        if (tempX + chipWidth > pageWidth - margins.right - 10) {
+          tempX = margins.left + 10;
+          tempY += chipHeight + 10;
+        }
+        tempX += chipWidth + 10;
+      });
+      requiredHeight += tempY + chipHeight + 15;
+      
+      checkPageBreak(requiredHeight + 10);
+
       drawSectionHeader(title);
       
-      let x = margins.left;
-      let y = doc.y;
-      const chipHeight = 24;
+      const gridStartY = doc.y;
+      let x = margins.left + 10;
+      let y = gridStartY + 10;
       
       data[key].forEach(item => {
         if (isEmpty(item)) return;
         const textWidth = doc.widthOfString(item, { font: fonts.regular, fontSize: 9 });
         const chipWidth = textWidth + 20;
         
-        if (x + chipWidth > pageWidth - margins.right) {
-          x = margins.left;
+        if (x + chipWidth > pageWidth - margins.right - 10) {
+          x = margins.left + 10;
           y += chipHeight + 10;
-          checkPageBreak(chipHeight + 10);
-          if (doc.y !== y) y = doc.y; // Account for page break
         }
         
-        doc.roundedRect(x, y, chipWidth, chipHeight, 12).fill(colors.bgGray).lineWidth(1).strokeColor(colors.border).stroke();
+        doc.roundedRect(x, y, chipWidth, chipHeight, 12).lineWidth(1).fillAndStroke(colors.bgGray, colors.border);
         doc.fillColor(colors.textDark).fontSize(9).font(fonts.regular).text(item, x + 10, y + 7);
         
         x += chipWidth + 10;
       });
-      doc.y = y + chipHeight + 20;
+      
+      doc.y = y + chipHeight + 10;
+      doc.roundedRect(margins.left, gridStartY - 4, contentWidth, doc.y - gridStartY + 4, 4).lineWidth(1).strokeColor(colors.border).stroke();
+      doc.moveDown(2);
     }
   });
 
@@ -286,7 +328,28 @@ const generatePDF = (submission, res) => {
         drawSectionHeader(title);
         
         validProfiles.forEach(([course, details]) => {
-          checkPageBreak(120);
+          const detailKeys = Object.keys(details).filter(k => !isEmpty(details[k]));
+          const colWidth = (contentWidth - 40) / 2;
+          
+          // Calculate exact required height for this profile card
+          let requiredHeight = 40; // Header + padding
+          let tempRowMax = 0;
+          let tempCol = 0;
+          
+          detailKeys.forEach((k, i) => {
+             const tH = doc.heightOfString(String(details[k]), { width: colWidth, font: fonts.regular, fontSize: 10 });
+             const itemHeight = 12 + tH + 15;
+             if (itemHeight > tempRowMax) tempRowMax = itemHeight;
+             if (tempCol === 1 || i === detailKeys.length - 1) {
+                requiredHeight += tempRowMax;
+                tempRowMax = 0;
+                tempCol = 0;
+             } else {
+                tempCol = 1;
+             }
+          });
+          
+          checkPageBreak(requiredHeight + 20);
           
           const startY = doc.y;
           
@@ -296,10 +359,7 @@ const generatePDF = (submission, res) => {
           
           let y = startY + 40;
           
-          const detailKeys = Object.keys(details).filter(k => !isEmpty(details[k]));
-          
           // Render in a 2-column grid format inside the card
-          const colWidth = (contentWidth - 40) / 2;
           let colIndex = 0;
           let rowY = y;
           let maxRowHeight = 0;
