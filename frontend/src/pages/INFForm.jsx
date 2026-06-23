@@ -16,7 +16,6 @@ import INFSelectionProcessSection from "../components/inf/INFSelectionProcessSec
 import INFContactSection from "../components/inf/INFContactSection";
 import INFBetterUnderstandingSection from "../components/inf/INFBetterUnderstandingSection";
 import INFImportantNotes from "../components/inf/INFImportantNotes";
-import INFFacilities from "../components/inf/INFFacilities";
 import INFSubmitSection from "../components/inf/INFSubmitSection";
 
 export default function INFForm() {
@@ -205,8 +204,6 @@ export default function INFForm() {
             />
 
             <INFImportantNotes />
-
-            <INFFacilities />
 
             <INFSubmitSection
               onPrevious={previousStep}

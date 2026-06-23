@@ -11,7 +11,7 @@ export default function Footer() {
         </p>
 
         <p className="text-gray-300">
-          tnp@nitkkr.ac.in
+          tnpoffice@nitkkr.ac.in
         </p>
       </div>
     </footer>

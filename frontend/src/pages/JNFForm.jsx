@@ -16,7 +16,6 @@ import JNFSelectionProcessSection from "../components/jnf/JNFSelectionProcessSec
 import JNFCompanyOfficialsSection from "../components/jnf/JNFCompanyOfficialsSection";
 import JNFBetterUnderstandingSection from "../components/jnf/JNFBetterUnderstandingSection";
 import JNFImportantNotes from "../components/jnf/JNFImportantNotes";
-import JNFFacilities from "../components/jnf/JNFFacilities";
 import JNFSubmitSection from "../components/jnf/JNFSubmitSection";
 
 export default function JNFForm() {
@@ -205,8 +204,6 @@ export default function JNFForm() {
             />
 
             <JNFImportantNotes />
-
-            <JNFFacilities />
 
             <JNFSubmitSection
               onPrevious={previousStep}
