@@ -7,9 +7,9 @@ const sendEmail = require('../utils/email');
 const generatePDF = require('../utils/pdfGenerator');
 const authMiddleware = require('../middleware/auth');
 
-// --- Recruiter Routes ---
 
-// Submit JNF
+
+
 router.post('/jnf', async (req, res) => {
   try {
     const formData = req.body;
@@ -23,7 +23,7 @@ router.post('/jnf', async (req, res) => {
 
     await submission.save();
 
-    // Send email notification
+    
     await sendEmail({
       to: 'tnpoffice@nitkkr.ac.in',
       subject: `New JNF Submission: ${companyName}`,
@@ -37,7 +37,7 @@ router.post('/jnf', async (req, res) => {
   }
 });
 
-// Submit INF
+
 router.post('/inf', async (req, res) => {
   try {
     const formData = req.body;
@@ -51,7 +51,7 @@ router.post('/inf', async (req, res) => {
 
     await submission.save();
 
-    // Send email notification
+    
     await sendEmail({
       to: 'tnpoffice@nitkkr.ac.in',
       subject: `New INF Submission: ${companyName}`,
@@ -65,9 +65,9 @@ router.post('/inf', async (req, res) => {
   }
 });
 
-// --- Public Submission Routes ---
 
-// Get single submission publicly
+
+
 router.get('/public/submissions/:id', async (req, res) => {
   try {
     const submission = await Submission.findById(req.params.id);
@@ -81,7 +81,7 @@ router.get('/public/submissions/:id', async (req, res) => {
   }
 });
 
-// Generate PDF for submission publicly
+
 router.get('/public/submissions/pdf/:id', async (req, res) => {
   try {
     const submission = await Submission.findById(req.params.id);
@@ -96,9 +96,9 @@ router.get('/public/submissions/pdf/:id', async (req, res) => {
   }
 });
 
-// --- Admin Auth Routes ---
 
-// Admin Login
+
+
 router.post('/admin/login', async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -134,12 +134,12 @@ router.post('/admin/login', async (req, res) => {
   }
 });
 
-// --- Admin Protected Routes ---
 
-// Get all submissions
+
+
 router.get('/admin/submissions', authMiddleware, async (req, res) => {
   try {
-    // Return sorted by submittedAt descending, limit fields for the list view
+    
     const submissions = await Submission.find({})
       .select('formType companyName submittedAt')
       .sort({ submittedAt: -1 });
@@ -150,7 +150,7 @@ router.get('/admin/submissions', authMiddleware, async (req, res) => {
   }
 });
 
-// Get single submission
+
 router.get('/admin/submissions/:id', authMiddleware, async (req, res) => {
   try {
     const submission = await Submission.findById(req.params.id);
@@ -164,7 +164,7 @@ router.get('/admin/submissions/:id', authMiddleware, async (req, res) => {
   }
 });
 
-// Delete submission
+
 router.delete('/admin/submissions/:id', authMiddleware, async (req, res) => {
   try {
     const submission = await Submission.findByIdAndDelete(req.params.id);
@@ -178,12 +178,12 @@ router.delete('/admin/submissions/:id', authMiddleware, async (req, res) => {
   }
 });
 
-// Update submission
+
 router.put('/admin/submissions/:id', authMiddleware, async (req, res) => {
   try {
     const { formData } = req.body;
     
-    // Extract companyName from flat formData
+    
     const companyName = formData.companyName || 'Unknown Company';
     
     const submission = await Submission.findByIdAndUpdate(
@@ -203,7 +203,7 @@ router.put('/admin/submissions/:id', authMiddleware, async (req, res) => {
   }
 });
 
-// Generate PDF for submission
+
 router.get('/admin/submissions/pdf/:id', authMiddleware, async (req, res) => {
   try {
     const submission = await Submission.findById(req.params.id);

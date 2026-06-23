@@ -12,7 +12,7 @@ export default function AdminLayout() {
 
   return (
     <div className="flex h-screen bg-gray-50">
-      {/* Sidebar */}
+      {}
       <div className="w-64 bg-white border-r border-gray-200 flex flex-col">
         <div className="p-6 border-b border-gray-200">
           <Link to="/" className="flex items-center space-x-3">
@@ -53,9 +53,9 @@ export default function AdminLayout() {
         </div>
       </div>
 
-      {/* Main Content */}
+      {}
       <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Top Navbar */}
+        {}
         <header className="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-8">
           <h2 className="text-lg font-medium text-gray-900">
             {location.pathname === "/admin/dashboard" && "Dashboard Overview"}
@@ -68,7 +68,7 @@ export default function AdminLayout() {
           </div>
         </header>
 
-        {/* Page Content */}
+        {}
         <main className="flex-1 overflow-y-auto p-8">
           <Outlet />
         </main>

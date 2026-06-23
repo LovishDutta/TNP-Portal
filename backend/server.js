@@ -7,21 +7,21 @@ dotenv.config();
 
 const app = express();
 
-// Middleware
+
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Database connection
+
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/tnp-portal')
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log('MongoDB connection error:', err));
 
-// Routes
+
 const apiRoutes = require('./routes/api');
 app.use('/api', apiRoutes);
 
-// Basic error handling
+
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ message: 'Something went wrong!', error: err.message });

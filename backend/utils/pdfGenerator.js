@@ -2,11 +2,7 @@ const PDFDocument = require('pdfkit');
 const path = require('path');
 const fs = require('fs');
 
-/**
- * Generates an official NIT Kurukshetra T&P Cell PDF document from submission data.
- * @param {Object} submission - The submission document from MongoDB
- * @param {Object} res - Express response object to pipe the PDF stream into
- */
+
 const generatePDF = (submission, res) => {
   const doc = new PDFDocument({ 
     margin: 50, 
@@ -22,7 +18,7 @@ const generatePDF = (submission, res) => {
 
   doc.pipe(res);
 
-  // --- Theme & Metrics ---
+  
   const colors = {
     maroon: '#7A0019',
     textDark: '#1E293B',
@@ -46,14 +42,14 @@ const generatePDF = (submission, res) => {
   const margins = doc.page.margins;
   const contentWidth = pageWidth - margins.left - margins.right;
 
-  // --- Helpers ---
+  
   const formatKey = (key) => {
     return key.replace(/([A-Z])/g, ' $1').trim().replace(/^./, str => str.toUpperCase());
   };
 
   const formatValue = (val) => {
     if (typeof val === 'string') {
-      if (val.startsWith('http://') || val.startsWith('https://')) return val; // URL
+      if (val.startsWith('http://') || val.startsWith('https://')) return val; 
       return val;
     }
     return String(val);
@@ -83,7 +79,7 @@ const generatePDF = (submission, res) => {
     return false;
   };
 
-  // --- Drawing Components ---
+  
 
   const drawHeader = () => {
     const logoPath = path.join(__dirname, '../../frontend/public/nitkkr-logo.png');
@@ -126,7 +122,7 @@ const generatePDF = (submission, res) => {
     
     doc.roundedRect(x, y - 2, 45, 16, 4).fill(bgColor);
     
-    // Draw simple check or cross
+    
     if (isYes) {
       doc.moveTo(x + 6, y + 6).lineTo(x + 9, y + 9).lineTo(x + 14, y + 4).lineWidth(1.5).strokeColor(textColor).stroke();
     } else {
@@ -147,10 +143,10 @@ const generatePDF = (submission, res) => {
 
     const startY = doc.y;
     
-    // Key Column
+    
     doc.fillColor(colors.textMedium).fontSize(10).font(fonts.bold).text(formatKey(key), margins.left + 10, startY + 4, { width: (contentWidth / 3) - 20 });
     
-    // Value Column
+    
     const valStr = formatValue(value);
     if (valStr.toLowerCase() === 'yes' || valStr.toLowerCase() === 'no') {
       drawBadge(margins.left + (contentWidth / 3), startY + 4, valStr, valStr.toLowerCase() === 'yes');
@@ -168,12 +164,12 @@ const generatePDF = (submission, res) => {
     }
   };
 
-  // --- Document Assembly ---
+  
   const data = submission.formData;
   
   drawHeader();
 
-  // 1. Company Information & Eligibility Criteria
+  
   const sections = [
     { title: 'Company Information', keys: ['companyName', 'emailAddress', 'website', 'companyType', 'companyTypeOther', 'domain', 'domainOther', 'organisationDescription'] },
     { title: 'Eligibility Criteria', keys: ['minimumCGPA', 'medicalCondition', 'otherCriteria'] },
@@ -184,8 +180,8 @@ const generatePDF = (submission, res) => {
   sections.forEach(section => {
     const validKeys = section.keys.filter(k => !isEmpty(data[k]));
     if (validKeys.length > 0) {
-      // Calculate total height needed for the entire section to prevent mid-section page breaks
-      let requiredHeight = 60; // Section header + padding
+      
+      let requiredHeight = 60; 
       validKeys.forEach((k) => {
         const textHeight = doc.heightOfString(formatValue(data[k]), { width: (contentWidth / 2) - 20, font: fonts.regular, fontSize: 10 });
         requiredHeight += Math.max(20, textHeight + 8) + 4;
@@ -194,18 +190,18 @@ const generatePDF = (submission, res) => {
       checkPageBreak(requiredHeight + 10);
 
       drawSectionHeader(section.title);
-      // Border around grid
+      
       const gridStartY = doc.y;
       validKeys.forEach((k, idx) => {
         drawGridRow(k, data[k], idx === validKeys.length - 1);
       });
-      // Outer border box for section
+      
       doc.roundedRect(margins.left, gridStartY - 4, contentWidth, doc.y - gridStartY + 4, 4).lineWidth(1).strokeColor(colors.border).stroke();
       doc.moveDown(2);
     }
   });
 
-  // 2. Contact Persons (Side-by-side cards)
+  
   if (!isEmpty(data.contacts)) {
     const validContacts = data.contacts.filter(c => !isEmpty(c.name) || !isEmpty(c.email));
     if (validContacts.length > 0) {
@@ -219,8 +215,8 @@ const generatePDF = (submission, res) => {
       validContacts.forEach((contact, idx) => {
         const keys = Object.keys(contact).filter(k => !isEmpty(contact[k]));
         
-        // Calculate exact required height for this contact card
-        let requiredHeight = 35; // Header
+        
+        let requiredHeight = 35; 
         keys.forEach(k => {
           const tH = doc.heightOfString(String(contact[k]), { width: cardWidth - 20, font: fonts.regular, fontSize: 10 });
           requiredHeight += 12 + tH + 10;
@@ -232,16 +228,16 @@ const generatePDF = (submission, res) => {
           doc.y = startY;
         }
         
-        // Ensure the entire card fits on the current page
+        
         if (checkPageBreak(requiredHeight + 20)) {
-           startY = doc.y; // Update startY if a page break occurred
-           if (col === 1) col = 0; // Reset to left column on new page
+           startY = doc.y; 
+           if (col === 1) col = 0; 
         }
 
         const x = margins.left + (col * (cardWidth + 20));
         let y = startY;
 
-        // Card Header
+        
         doc.roundedRect(x, y, cardWidth, 24, 4).fill(colors.bgGray);
         doc.fillColor(colors.maroon).fontSize(10).font(fonts.bold).text(`Contact ${idx + 1}`, x + 10, y + 7);
         y += 30;
@@ -264,14 +260,14 @@ const generatePDF = (submission, res) => {
     }
   }
 
-  // 3. Branches & Specializations (Chips)
+  
   const branchKeys = { 'ugBranches': 'Eligible UG Branches', 'minorDegrees': 'Eligible Minor Degrees', 'pgSpecializations': 'Eligible PG Specializations' };
   
   Object.entries(branchKeys).forEach(([key, title]) => {
     if (!isEmpty(data[key])) {
       
       const chipHeight = 24;
-      let requiredHeight = 60; // Section header
+      let requiredHeight = 60; 
       let tempX = margins.left + 10;
       let tempY = 0;
       
@@ -317,7 +313,7 @@ const generatePDF = (submission, res) => {
     }
   });
 
-  // 4. Internship / Job Profiles
+  
   const profileKeys = { 'jobProfiles': 'Job Profiles', 'internshipProfiles': 'Internship Profiles' };
   
   Object.entries(profileKeys).forEach(([pk, title]) => {
@@ -331,8 +327,8 @@ const generatePDF = (submission, res) => {
           const detailKeys = Object.keys(details).filter(k => !isEmpty(details[k]));
           const colWidth = (contentWidth - 40) / 2;
           
-          // Calculate exact required height for this profile card
-          let requiredHeight = 40; // Header + padding
+          
+          let requiredHeight = 40; 
           let tempRowMax = 0;
           let tempCol = 0;
           
@@ -353,13 +349,13 @@ const generatePDF = (submission, res) => {
           
           const startY = doc.y;
           
-          // Profile Card Header
+          
           doc.roundedRect(margins.left, startY, contentWidth, 30, 6).fill(colors.bgGray);
           doc.fillColor(colors.maroon).fontSize(12).font(fonts.bold).text(`Profile for ${course.toUpperCase()}`, margins.left + 15, startY + 9);
           
           let y = startY + 40;
           
-          // Render in a 2-column grid format inside the card
+          
           let colIndex = 0;
           let rowY = y;
           let maxRowHeight = 0;
@@ -392,7 +388,7 @@ const generatePDF = (submission, res) => {
     }
   });
 
-  // --- Add Footers to all pages ---
+  
   const range = doc.bufferedPageRange();
   for (let i = range.start; i < range.start + range.count; i++) {
     doc.switchToPage(i);

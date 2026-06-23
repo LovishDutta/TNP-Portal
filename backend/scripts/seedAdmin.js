@@ -9,17 +9,17 @@ const seedAdmin = async () => {
     await mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/tnp-portal');
     console.log('MongoDB connected for seeding');
 
-    // Check if admin already exists
+    
     const adminExists = await Admin.findOne({ username: 'admin' });
     if (adminExists) {
       console.log('Admin user already exists');
       process.exit(0);
     }
 
-    // Create default admin
+    
     const admin = new Admin({
       username: 'admin',
-      password: 'admin123' // Will be hashed by pre-save middleware
+      password: 'admin123' 
     });
 
     await admin.save();

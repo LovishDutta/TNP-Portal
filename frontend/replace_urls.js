@@ -7,10 +7,10 @@ function replaceInFile(filePath) {
   let content = fs.readFileSync(filePath, 'utf8');
   let originalContent = content;
 
-  // Replace double quotes
+  
   content = content.replace(/"http:\/\/localhost:5000(.*)"/g, '`${import.meta.env.VITE_BACKEND_URL}$1`');
   
-  // Replace template literals that had the URL hardcoded
+  
   content = content.replace(/`http:\/\/localhost:5000(.*)`/g, '`${import.meta.env.VITE_BACKEND_URL}$1`');
 
   if (content !== originalContent) {

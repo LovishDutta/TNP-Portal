@@ -1,5 +1,5 @@
 const infInitialState = {
-  // Company Details
+  
   companyName: "",
   emailAddress: "",
   website: "",
@@ -9,12 +9,12 @@ const infInitialState = {
   domainOther: "",
   organisationDescription: "",
 
-  // Eligibility
+  
   minimumCGPA: "",
   medicalCondition: "",
   otherCriteria: "",
 
-  // Selection Process
+  
   resumeShortlisting: "",
   preferredVisitDate: "",
   prePlacementTalk: "",
@@ -26,12 +26,12 @@ const infInitialState = {
   technicalInterview: "",
   hrInterview: "",
 
-  // Better Understanding
+  
   sponsorEvents: "",
   studentCompetitions: "",
   competitionDetails: "",
 
-  // Contacts
+  
   contacts: [
     {
       name: "",
@@ -47,11 +47,11 @@ const infInitialState = {
     },
   ],
 
-  // Courses Considered
+  
   ugBranches: [],
   pgSpecializations: [],
 
-  // Internship Profiles
+  
   internshipProfiles: {
     btech: {
       designation: "",

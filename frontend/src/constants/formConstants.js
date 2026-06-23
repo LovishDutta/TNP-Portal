@@ -1,4 +1,4 @@
-// Company Types
+
 
 export const COMPANY_TYPES = [
   "MNC",
@@ -9,7 +9,7 @@ export const COMPANY_TYPES = [
   "Other",
 ];
 
-// Domains
+
 
 export const DOMAINS = [
   "Analytics",
@@ -21,7 +21,7 @@ export const DOMAINS = [
   "Other",
 ];
 
-// Courses (JNF)
+
 
 export const JNF_COURSES = [
   "B.Tech",
@@ -33,7 +33,7 @@ export const JNF_COURSES = [
   "Ph.D",
 ];
 
-// Courses (INF)
+
 
 export const INF_COURSES = [
   "B.Tech",
@@ -43,7 +43,7 @@ export const INF_COURSES = [
   "M.Sc",
 ];
 
-// Undergraduate Branches
+
 
 export const UG_BRANCHES = [
   "Computer Engineering",
@@ -62,14 +62,14 @@ export const UG_BRANCHES = [
   "Microelectronics & VLSI",
 ];
 
-// Minor Degrees (JNF only)
+
 
 export const MINOR_DEGREES = [
   "Computing & Intelligence",
   "Unmanned Aerial Systems",
 ];
 
-// PG Specializations
+
 
 export const PG_SPECIALIZATIONS = [
   "Computer Engineering / Cyber Security",
@@ -104,7 +104,7 @@ export const PG_SPECIALIZATIONS = [
   "Nanomaterials and Nanotechnology",
 ];
 
-// Selection Process
+
 
 export const SHORTLISTING_OPTIONS = [
   "Yes",
@@ -116,21 +116,21 @@ export const YES_NO_OPTIONS = [
   "No",
 ];
 
-// Interview Types
+
 
 export const INTERVIEW_TYPES = [
   "Technical",
   "HR",
 ];
 
-// Recruitment Types
+
 
 export const RECRUITMENT_TYPES = [
   "Full Time",
   "Internship",
 ];
 
-// Accommodation
+
 
 export const ACCOMMODATION_OPTIONS = [
   "Yes",

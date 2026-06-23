@@ -13,7 +13,7 @@ const adminSchema = new mongoose.Schema({
   }
 });
 
-// Pre-save middleware to hash password
+
 adminSchema.pre('save', async function() {
   if (!this.isModified('password')) return;
   
@@ -21,7 +21,7 @@ adminSchema.pre('save', async function() {
   this.password = await bcrypt.hash(this.password, salt);
 });
 
-// Method to compare password
+
 adminSchema.methods.comparePassword = async function(candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);
 };

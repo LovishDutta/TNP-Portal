@@ -72,7 +72,7 @@ export default function FormStepper({
                 </span>
               </div>
               
-              {/* Connecting line */}
+              {}
               {index < steps.length - 1 && (
                 <div className={`flex-1 h-[2px] mx-4 ${
                   stepNumber < currentStep ? "bg-green-500" : "bg-gray-200"

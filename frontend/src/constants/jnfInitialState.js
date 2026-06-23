@@ -1,5 +1,5 @@
 const jnfInitialState = {
-  // Company Details
+  
   companyName: "",
   emailAddress: "",
   website: "",
@@ -9,12 +9,12 @@ const jnfInitialState = {
   domainOther: "",
   organisationDescription: "",
 
-  // Eligibility
+  
   minimumCGPA: "",
   medicalCondition: "",
   otherCriteria: "",
 
-  // Selection Process
+  
   resumeShortlisting: "",
   prePlacementTalk: "",
   groupDiscussion: "",
@@ -29,7 +29,7 @@ const jnfInitialState = {
   accommodationRequired: "",
   bondDetails: "",
 
-  // Better Understanding
+  
   sponsorEvents: "",
   internshipsOffered: "",
   internshipStreams: "",
@@ -37,7 +37,7 @@ const jnfInitialState = {
   studentContests: "",
   contestDetails: "",
 
-  // Contacts
+  
   contacts: [
     {
       name: "",
@@ -53,12 +53,12 @@ const jnfInitialState = {
     },
   ],
 
-  // Courses considered
+  
   ugBranches: [],
   minorDegrees: [],
   pgSpecializations: [],
 
-  // Job Profiles
+  
   jobProfiles: {
     btech: {
       designation: "",

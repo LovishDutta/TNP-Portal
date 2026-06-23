@@ -18,7 +18,7 @@ function App() {
       <Route path="/inf" element={<INFForm />} />
       <Route path="/success/:id" element={<SubmissionSuccess />} />
       
-      {/* Admin Routes */}
+      {}
       <Route path="/admin/login" element={<AdminLogin />} />
       <Route 
         path="/admin" 

@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer');
 
 const sendEmail = async (options) => {
-  // Use real credentials if provided in env, else mock
+  
   if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
     console.log(`[MOCK EMAIL] Sending email to ${options.to}`);
     console.log(`[MOCK EMAIL] Subject: ${options.subject}`);
@@ -10,7 +10,7 @@ const sendEmail = async (options) => {
   }
 
   const transporter = nodemailer.createTransport({
-    service: 'gmail', // Change if using another service
+    service: 'gmail', 
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS

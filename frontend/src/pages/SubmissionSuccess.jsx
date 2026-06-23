@@ -171,7 +171,7 @@ export default function SubmissionSuccess() {
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6">
       <div className="max-w-4xl mx-auto space-y-6">
         
-        {/* Success Banner */}
+        {}
         <div className="bg-green-50 border border-green-200 rounded-xl p-6 text-center shadow-sm">
           <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-4">
             <CheckCircle className="h-6 w-6 text-green-600" />
@@ -181,7 +181,7 @@ export default function SubmissionSuccess() {
           <p className="text-gray-500 text-sm mt-1">Our Training and Placement team will review it shortly.</p>
         </div>
 
-        {/* Actions */}
+        {}
         <div className="flex items-center justify-between">
           <Link
             to="/"
@@ -200,7 +200,7 @@ export default function SubmissionSuccess() {
           </button>
         </div>
 
-        {/* Overview Card */}
+        {}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex items-start justify-between">
           <div className="flex items-center space-x-4">
             <div className="w-12 h-12 bg-[#7A0019]/10 text-[#7A0019] rounded-lg flex items-center justify-center">
@@ -221,7 +221,7 @@ export default function SubmissionSuccess() {
           </div>
         </div>
 
-        {/* Data Sections */}
+        {}
         <div className="space-y-6">
           {renderAllFields()}
         </div>
