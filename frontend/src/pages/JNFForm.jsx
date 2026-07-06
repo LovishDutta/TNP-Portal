@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -17,9 +17,10 @@ import JNFCompanyOfficialsSection from "../components/jnf/JNFCompanyOfficialsSec
 import JNFBetterUnderstandingSection from "../components/jnf/JNFBetterUnderstandingSection";
 import JNFImportantNotes from "../components/jnf/JNFImportantNotes";
 import JNFSubmitSection from "../components/jnf/JNFSubmitSection";
-
+import FormValidationMessage from "../components/FormValidationMessage";
 export default function JNFForm() {
   const navigate = useNavigate();
+  const formTopRef = useRef(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState(() => {
     const savedDraft =
@@ -32,7 +33,8 @@ export default function JNFForm() {
 
   const [currentStep, setCurrentStep] =
     useState(1);
-
+  const [validationMessage, setValidationMessage] =
+  useState("");
   const totalSteps = 7;
 
   useEffect(() => {
@@ -42,26 +44,92 @@ export default function JNFForm() {
     );
   }, [formData]);
 
+  useEffect(() => {
+  setValidationMessage("");
+  }, [currentStep]);
   const handleChange = (e) => {
-    const { name, value } = e.target;
+  const { name, value } = e.target;
 
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  setValidationMessage("");
 
+  setFormData((prev) => ({
+    ...prev,
+    [name]: value,
+  }));
+};
+  const scrollToTop = () => {
+  formTopRef.current?.scrollIntoView({
+    behavior: "smooth",
+    block: "start",
+  });
+};
   const nextStep = () => {
-    if (currentStep < totalSteps) {
-      setCurrentStep((prev) => prev + 1);
+  setValidationMessage("");
+
+  // STEP 1
+  if (currentStep === 1) {
+    if (
+      !formData.companyName.trim() ||
+      !formData.emailAddress.trim()
+    ) {
+      setValidationMessage(
+        "Company Name and Email Address are required to continue."
+      );
+      scrollToTop();
+      return;
     }
-  };
+  }
+
+  // STEP 2
+  if (currentStep === 2) {
+    const hasJobProfile = Object.values(
+  formData.jobProfiles
+).some((profile) => {
+  return (
+    profile.designation.trim() !== "" &&
+    profile.jobDescriptionAttached.trim() !== "" &&
+    profile.ctc.trim() !== "" &&
+    profile.placeOfPosting.trim() !== ""
+  );
+});
+
+    if (!hasJobProfile) {
+      setValidationMessage(
+  "Please complete the Job Profile (Job Designation, Job Description Available, CTC and Place of Posting) for at least one programme before proceeding."
+);
+      scrollToTop();
+      return;
+    }
+  }
+
+  // STEP 3
+  if (currentStep === 3) {
+    const hasCourses =
+      formData.ugBranches.length > 0 ||
+      formData.minorDegrees.length > 0 ||
+      formData.pgSpecializations.length > 0;
+
+    if (!hasCourses) {
+      setValidationMessage(
+        "Please select at least one course/programme before proceeding."
+      );
+      scrollToTop();
+      return;
+    }
+  }
+
+  if (currentStep < totalSteps) {
+    setCurrentStep((prev) => prev + 1);
+  }
+};
 
   const previousStep = () => {
-    if (currentStep > 1) {
-      setCurrentStep((prev) => prev - 1);
-    }
-  };
+  setValidationMessage("");
+
+  if (currentStep > 1) {
+    setCurrentStep((prev) => prev - 1);
+  }
+};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -90,12 +158,15 @@ export default function JNFForm() {
 
   return (
     <FormLayout>
+       <div ref={formTopRef}>
       <FormStepper
         title="Job Notification Form"
         currentStep={currentStep}
         steps={stepperLabels}
       />
-
+      <FormValidationMessage
+      message={validationMessage}
+      />
       <form
         onSubmit={handleSubmit}
         className="space-y-6"
@@ -121,6 +192,7 @@ export default function JNFForm() {
             <JNFJobProfileSection
               formData={formData}
               setFormData={setFormData}
+              setValidationMessage={setValidationMessage}
             />
 
             <FormNavigation
@@ -137,6 +209,7 @@ export default function JNFForm() {
             <JNFCoursesSection
               formData={formData}
               setFormData={setFormData}
+              setValidationMessage={setValidationMessage}
             />
 
             <FormNavigation
@@ -212,6 +285,7 @@ export default function JNFForm() {
           </>
         )}
       </form>
+      </div>
     </FormLayout>
   );
 }

@@ -22,22 +22,24 @@ const MINOR_DEGREES = [
 export default function JNFCoursesSection({
   formData,
   setFormData,
+  setValidationMessage,
 }) {
   const toggleSelection = (field, option) => {
-    setFormData((prev) => {
-      const exists = prev[field].includes(option);
+  setValidationMessage("");
 
-      return {
-        ...prev,
-        [field]: exists
-          ? prev[field].filter(
-              (item) => item !== option
-            )
-          : [...prev[field], option],
-      };
-    });
-  };
+  setFormData((prev) => {
+    const exists = prev[field].includes(option);
 
+    return {
+      ...prev,
+      [field]: exists
+        ? prev[field].filter(
+            (item) => item !== option
+          )
+        : [...prev[field], option],
+    };
+  });
+};
   return (
     <SectionCard title="Courses Considered for Recruitment">
       <div className="space-y-10">
@@ -287,13 +289,13 @@ export default function JNFCoursesSection({
               </h4>
 
               <CheckboxGroup
-                label=""
+                  label=""
                 options={[
-                  "Master of Business Administration (MBA)",
+                  "MBA - Human Resource",
+                  "MBA - Finance",
+                  "MBA - Marketing",
                 ]}
-                selected={
-                  formData.pgSpecializations
-                }
+                selected={formData.pgSpecializations}
                 onChange={(option) =>
                   toggleSelection(
                     "pgSpecializations",
@@ -314,10 +316,9 @@ export default function JNFCoursesSection({
                   "Physics",
                   "Chemistry",
                   "Mathematics",
+                  "Economics",
                 ]}
-                selected={
-                  formData.pgSpecializations
-                }
+                selected={formData.pgSpecializations}
                 onChange={(option) =>
                   toggleSelection(
                     "pgSpecializations",

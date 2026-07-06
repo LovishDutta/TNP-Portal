@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -17,9 +17,11 @@ import INFContactSection from "../components/inf/INFContactSection";
 import INFBetterUnderstandingSection from "../components/inf/INFBetterUnderstandingSection";
 import INFImportantNotes from "../components/inf/INFImportantNotes";
 import INFSubmitSection from "../components/inf/INFSubmitSection";
-
+import FormValidationMessage from "../components/FormValidationMessage";
 export default function INFForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
+  const formTopRef = useRef(null);
   const [formData, setFormData] = useState(() => {
     const savedDraft =
       localStorage.getItem("infDraft");
@@ -31,7 +33,8 @@ export default function INFForm() {
 
   const [currentStep, setCurrentStep] =
     useState(1);
-
+  const [validationMessage, setValidationMessage] =
+  useState("");
   const totalSteps = 7;
 
   useEffect(() => {
@@ -40,29 +43,90 @@ export default function INFForm() {
       JSON.stringify(formData)
     );
   }, [formData]);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  const scrollToTop = () => {
+  formTopRef.current?.scrollIntoView({
+    behavior: "smooth",
+    block: "start",
+  });
   };
+  const handleChange = (e) => {
+  const { name, value } = e.target;
+
+  setValidationMessage("");
+
+  setFormData((prev) => ({
+    ...prev,
+    [name]: value,
+  }));
+};
 
   const nextStep = () => {
-    if (currentStep < totalSteps) {
-      setCurrentStep((prev) => prev + 1);
-    }
-  };
+  setValidationMessage("");
 
-  const previousStep = () => {
-    if (currentStep > 1) {
-      setCurrentStep((prev) => prev - 1);
+  // STEP 1
+  if (currentStep === 1) {
+    if (
+      !formData.companyName.trim() ||
+      !formData.emailAddress.trim()
+    ) {
+      setValidationMessage(
+        "Company Name and Email Address are required to continue."
+      );
+      scrollToTop();
+      return;
     }
-  };
-  const navigate = useNavigate();
+  }
 
+  // STEP 2
+  if (currentStep === 2) {
+    const hasInternshipProfile = Object.values(
+      formData.internshipProfiles
+    ).some((profile) => {
+      return (
+        profile.designation?.trim() &&
+        profile.jobDescriptionAttached?.trim() &&
+        profile.gross?.trim() &&
+        profile.location?.trim()
+      );
+    });
+
+    if (!hasInternshipProfile) {
+      setValidationMessage(
+        "Please complete the Internship Profile (Designation, Job Description Available, Gross Stipend and Location) for at least one programme before proceeding."
+      );
+      scrollToTop();
+      return;
+    }
+  }
+
+  // STEP 3
+  if (currentStep === 3) {
+    const hasCourses =
+      formData.ugBranches.length > 0 ||
+      formData.pgSpecializations.length > 0;
+
+    if (!hasCourses) {
+      setValidationMessage(
+        "Please select at least one course/programme before proceeding."
+      );
+      scrollToTop();
+      return;
+    }
+  }
+
+  if (currentStep < totalSteps) {
+    setCurrentStep((prev) => prev + 1);
+  }
+};
+
+ const previousStep = () => {
+  setValidationMessage("");
+
+  if (currentStep > 1) {
+    setCurrentStep((prev) => prev - 1);
+  }
+};
+  
   const handleSubmit = async (e) => {
     e.preventDefault(); 
     setIsSubmitting(true);
@@ -90,12 +154,15 @@ export default function INFForm() {
 
   return (
     <FormLayout>
+      <div ref={formTopRef}>
       <FormStepper
         title="Internship Notification Form"
         currentStep={currentStep}
         steps={stepperLabels}
       />
-
+      <FormValidationMessage
+        message={validationMessage}
+      />
       <form
         onSubmit={handleSubmit}
         className="space-y-6"
@@ -121,6 +188,7 @@ export default function INFForm() {
             <INFInternshipProfileSection
               formData={formData}
               setFormData={setFormData}
+              setValidationMessage={setValidationMessage}
             />
 
             <FormNavigation
@@ -137,6 +205,7 @@ export default function INFForm() {
             <INFCoursesSection
               formData={formData}
               setFormData={setFormData}
+              setValidationMessage={setValidationMessage}
             />
 
             <FormNavigation
@@ -212,6 +281,7 @@ export default function INFForm() {
           </>
         )}
       </form>
+      </div>
     </FormLayout>
   );
 }

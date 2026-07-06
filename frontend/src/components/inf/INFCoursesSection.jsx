@@ -21,8 +21,11 @@ const UG_BRANCHES = [
 export default function INFCoursesSection({
   formData,
   setFormData,
+  setValidationMessage,
 }) {
   const toggleSelection = (field, option) => {
+    setValidationMessage("");
+
     setFormData((prev) => {
       const exists = prev[field].includes(option);
 
@@ -258,7 +261,9 @@ export default function INFCoursesSection({
               <CheckboxGroup
                 label=""
                 options={[
-                  "Master of Business Administration (MBA)",
+                  "MBA - Human Resource",
+                  "MBA - Finance",
+                  "MBA - Marketing",
                 ]}
                 selected={formData.pgSpecializations}
                 onChange={(option) =>
@@ -278,10 +283,11 @@ export default function INFCoursesSection({
               <CheckboxGroup
                 label=""
                 options={[
-                  "Physics",
-                  "Chemistry",
-                  "Mathematics",
-                ]}
+                    "Physics",
+                    "Chemistry",
+                    "Mathematics",
+                    "Economics",
+                  ]}
                 selected={formData.pgSpecializations}
                 onChange={(option) =>
                   toggleSelection(

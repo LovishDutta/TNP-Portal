@@ -16,12 +16,15 @@ const courses = [
 export default function JNFJobProfileSection({
   formData,
   setFormData,
+  setValidationMessage,
 }) {
   const handleProfileChange = (
     course,
     field,
     value
   ) => {
+    setValidationMessage("");
+
     setFormData((prev) => ({
       ...prev,
       jobProfiles: {

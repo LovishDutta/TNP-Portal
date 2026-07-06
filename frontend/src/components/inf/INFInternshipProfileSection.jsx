@@ -7,25 +7,26 @@ import infCourses from "../../constants/infCourses";
 export default function INFInternshipProfileSection({
   formData,
   setFormData,
+  setValidationMessage,
 }) {
   const handleProfileChange = (
-    course,
-    field,
-    value
-  ) => {
-    setFormData((prev) => ({
-      ...prev,
+  course,
+  field,
+  value
+) => {
+  setValidationMessage("");
 
-      internshipProfiles: {
-        ...prev.internshipProfiles,
-
-        [course]: {
-          ...prev.internshipProfiles[course],
-          [field]: value,
-        },
+  setFormData((prev) => ({
+    ...prev,
+    internshipProfiles: {
+      ...prev.internshipProfiles,
+      [course]: {
+        ...prev.internshipProfiles[course],
+        [field]: value,
       },
-    }));
-  };
+    },
+  }));
+};
 
   return (
     <SectionCard title="Internship Profile">
