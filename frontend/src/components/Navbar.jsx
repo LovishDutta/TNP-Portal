@@ -7,15 +7,17 @@ export default function Navbar() {
   const isHome = location.pathname === "/";
 
   return (
-    <nav className="bg-white border-b border-gray-100 sticky top-0 z-50" style={{ boxShadow: 'var(--shadow-sm)' }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          {/* Back button — only shown when not on the Home page */}
+    <nav className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 flex items-center justify-between gap-3">
+
+        {/* Left Side */}
+        <div className="flex items-center gap-3 flex-1 min-w-0">
+
           {!isHome && (
             <button
               onClick={() => navigate("/")}
-              aria-label="Back to home"
-              className="flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 rounded-full border border-gray-200 text-gray-600 hover:text-gray-900 hover:border-gray-300 hover:bg-gray-50 transition-all duration-200 mr-1 flex-shrink-0"
+              aria-label="Back to Home"
+              className="flex-shrink-0 flex items-center justify-center h-9 w-9 rounded-full border border-gray-200 text-gray-600 hover:text-gray-900 hover:border-gray-300 hover:bg-gray-50 transition"
             >
               <ChevronLeft className="h-5 w-5" />
             </button>
@@ -24,35 +26,43 @@ export default function Navbar() {
           <img
             src="/nitkkr-logo.png"
             alt="NIT Kurukshetra"
-            className="h-11 w-11 sm:h-12 sm:w-12 object-contain"
+            className="h-10 w-10 sm:h-12 sm:w-12 object-contain flex-shrink-0"
           />
 
-          <div>
-            <h1 className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 leading-tight tracking-tight">
+          <div className="min-w-0">
+            <h1 className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 leading-tight truncate">
               National Institute of Technology Kurukshetra
             </h1>
 
-            <p className="text-xs sm:text-sm text-gray-500 font-medium">
+            <p className="text-xs sm:text-sm text-gray-500 truncate">
               Training & Placement Cell
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-4">
+        {/* Right Side */}
+        <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+
           <Link
             to="/demographics"
-            className="hidden sm:inline-flex items-center text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
+            className="text-xs sm:text-sm font-medium text-gray-600 hover:text-gray-900 transition whitespace-nowrap"
           >
-            Demographics
+            Demo
+            <span className="hidden sm:inline">graphics</span>
           </Link>
+
           <Link
             to="/admin/login"
-            className="hidden sm:inline-flex items-center text-sm font-medium text-[#7A0019] hover:text-[#5C0013] border border-[#7A0019]/20 hover:border-[#7A0019]/40 px-4 py-2 rounded-lg hover:bg-[#7A0019]/5 transition-all duration-200"
+            className="text-xs sm:text-sm font-medium text-[#7A0019] border border-[#7A0019]/20 hover:border-[#7A0019]/40 hover:bg-[#7A0019]/5 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-lg transition whitespace-nowrap"
           >
-            Admin Login
+            Admin
+            <span className="hidden sm:inline"> Login</span>
           </Link>
+
         </div>
+
       </div>
     </nav>
   );
 }
+

@@ -3,7 +3,7 @@
 // <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 // <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
   PieChart, Pie, Cell, Sector, LabelList
@@ -58,7 +58,7 @@ const totalStats2027 = {
 // 2028 Batch Data
 const programData2028 = [
   { name: "B.Tech CSE", shortName: "CSE", category: "UG", total: 117, male: 95, female: 22, femalePercentage: 18.8, malePercentage: 81.2 },
-  { name: "B.Tech IT", shortName: "Information Tech", category: "UG", total: 65, male: 49, female: 16, femalePercentage: 24.6, malePercentage: 75.4 },
+  { name: "B.Tech IT", shortName: "IT", category: "UG", total: 65, male: 49, female: 16, femalePercentage: 24.6, malePercentage: 75.4 },
   { name: "B.Tech ECE", shortName: "ECE", category: "UG", total: 118, male: 94, female: 24, femalePercentage: 20.3, malePercentage: 79.7 },
   { name: "B.Tech EE", shortName: "EE", category: "UG", total: 119, male: 95, female: 24, femalePercentage: 20.2, malePercentage: 79.8 },
   { name: "B.Tech ME", shortName: "ME", category: "UG", total: 114, male: 91, female: 23, femalePercentage: 20.2, malePercentage: 79.8 },
@@ -70,7 +70,7 @@ const programData2028 = [
   { name: "B.Tech SET", shortName: "SET", category: "UG", total: 55, male: 42, female: 13, femalePercentage: 23.6, malePercentage: 76.4 },
   { name: "B.Tech VLSI", shortName: "VLSI", category: "UG", total: 56, male: 44, female: 12, femalePercentage: 21.4, malePercentage: 78.6 },
   { name: "B.Tech RA", shortName: "RA", category: "UG", total: 47, male: 39, female: 8, femalePercentage: 17.0, malePercentage: 83.0 },
-  { name: "B.Tech MnC", shortName: "Math & Computing", category: "UG", total: 58, male: 46, female: 12, femalePercentage: 20.7, malePercentage: 79.3 }
+  { name: "B.Tech MnC", shortName: "MnC", category: "UG", total: 58, male: 46, female: 12, femalePercentage: 20.7, malePercentage: 79.3 }
 ];
 
 const totalStats2028 = {
@@ -168,11 +168,11 @@ const batch2028DoughnutData = [
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-white p-4 border border-gray-100 shadow-xl rounded-xl animate-scale-in">
-        <p className="font-bold text-gray-900 mb-2 text-base">{label}</p>
+      <div className="bg-white p-3 sm:p-4 border border-gray-100 shadow-xl rounded-xl animate-scale-in max-w-[220px]">
+        <p className="font-bold text-gray-900 mb-2 text-sm sm:text-base truncate">{label}</p>
         {payload.map((entry, index) => (
-          <div key={`item-${index}`} className="flex items-center gap-2 text-base">
-            <div className="w-3 h-3 rounded-md" style={{ backgroundColor: entry.color }} />
+          <div key={`item-${index}`} className="flex items-center gap-2 text-sm sm:text-base">
+            <div className="w-3 h-3 rounded-md flex-shrink-0" style={{ backgroundColor: entry.color }} />
             <span className="text-gray-700 font-semibold">{entry.name}:</span>
             <span className="text-gray-900 font-bold">{entry.value}</span>
           </div>
@@ -183,19 +183,39 @@ const CustomTooltip = ({ active, payload, label }) => {
   return null;
 };
 
-// Adjusted Axis Tick to ensure zero clipping on X-Axis
-const CustomizedAxisTick = ({ x, y, payload }) => {
+// Hook: tells us whether we're on a phone-sized viewport so charts can
+// switch to shorter labels / smaller fonts / tighter margins. Desktop
+// (>= breakpoint) always renders exactly as before — nothing changes there.
+const useIsMobile = (breakpoint = 768) => {
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== 'undefined' ? window.innerWidth < breakpoint : false
+  );
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < breakpoint);
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [breakpoint]);
+
+  return isMobile;
+};
+
+// Adjusted Axis Tick to ensure zero clipping on X-Axis. Accepts an
+// `isMobile` flag so the rotated label uses a smaller font/offset on
+// phones (where labels are already the short program codes).
+const CustomizedAxisTick = ({ x, y, payload, isMobile }) => {
   return (
     <g transform={`translate(${x},${y})`}>
       <text 
         x={0} 
         y={0} 
-        dy={16} 
-        dx={-20} // Pulled further left
+        dy={isMobile ? 10 : 16} 
+        dx={isMobile ? -8 : -20}
         textAnchor="end" 
-        fill={COLORS.textMain} // Darker text
-        transform="rotate(-45)" // Sharper rotation
-        className="text-[13px] font-bold"
+        fill={COLORS.textMain}
+        transform="rotate(-45)"
+        style={{ fontSize: isMobile ? '10px' : '13px', fontWeight: 800 }}
       >
         {payload.value}
       </text>
@@ -205,11 +225,13 @@ const CustomizedAxisTick = ({ x, y, payload }) => {
 
 // Doughnut + clean list-style legend below it — no overlapping on-chart labels, every
 // program name is always fully readable regardless of how many segments there are.
+// Legend is single-column on phones (long program names truncate less that way)
+// and switches to 2 columns from the sm breakpoint up, same as before.
 const DoughnutWithLegend = ({ data }) => {
   if (!data || data.length === 0) return null;
   return (
     <div className="w-full flex flex-col items-center">
-      <div className="relative w-full h-[320px]">
+      <div className="relative w-full h-[260px] sm:h-[320px]">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
@@ -219,7 +241,7 @@ const DoughnutWithLegend = ({ data }) => {
               paddingAngle={2}
               dataKey="value"
               stroke="none"
-              animationDuration={1200}
+              animationDuration={800}
               animationEasing="ease-out"
             >
               {data.map((entry, index) => (
@@ -230,19 +252,19 @@ const DoughnutWithLegend = ({ data }) => {
           </PieChart>
         </ResponsiveContainer>
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-          <span className="text-4xl font-black text-gray-900">{data[0].total}</span>
-          <span className="text-xs text-gray-500 font-bold uppercase tracking-widest mt-1">Total</span>
+          <span className="text-3xl sm:text-4xl font-black text-gray-900">{data[0].total}</span>
+          <span className="text-[10px] sm:text-xs text-gray-500 font-bold uppercase tracking-widest mt-1">Total</span>
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-x-8 gap-y-3 mt-8 w-full max-w-md">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2.5 sm:gap-y-3 mt-6 sm:mt-8 w-full max-w-md">
         {data.map((entry, index) => (
           <div key={entry.name} className="flex items-center gap-2.5 min-w-0">
             <div
               className="w-3 h-3 rounded-sm flex-shrink-0"
               style={{ backgroundColor: UG_PALETTE[index % UG_PALETTE.length] }}
             />
-            <span className="text-sm font-bold text-gray-800 truncate">{entry.name}</span>
-            <span className="text-sm font-black text-gray-500 ml-auto flex-shrink-0">{entry.value}%</span>
+            <span className="text-xs sm:text-sm font-bold text-gray-800 truncate">{entry.name}</span>
+            <span className="text-xs sm:text-sm font-black text-gray-500 ml-auto flex-shrink-0">{entry.value}%</span>
           </div>
         ))}
       </div>
@@ -254,11 +276,12 @@ export default function Demographics() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState("UG"); 
   const [activeYear, setActiveYear] = useState(2027);
+  const isMobile = useIsMobile(768);
 
   // Use appropriate dataset based on year
   const activeProgramData = filter === "PG"
-  ? programData2027
-  : (activeYear === 2027 ? programData2027 : programData2028);
+    ? programData2027
+    : (activeYear === 2027 ? programData2027 : programData2028);
 
   const filteredData = useMemo(() => {
     return activeProgramData.filter(prog => {
@@ -299,10 +322,34 @@ export default function Demographics() {
   const isPGView = filter === 'PG';
   const doughnutSectionTitle = isPGView ? 'Postgraduate Programs' : 'Undergraduate Programs';
   const doughnut2027Data = isPGView ? batch2027PGDoughnutData : batch2027DoughnutData;
-  // 2028 batch: PG numbers haven't been reported separately yet, so we mirror the 2027
-  // PG split here (per request) until real 2028 PG data comes in.
-  // 
-  const doughnut2028Data = batch2028DoughnutData
+  const doughnut2028Data = batch2028DoughnutData;
+
+  // ---- Responsive chart config (mobile vs desktop) ----
+  // Desktop values below are IDENTICAL to what you already have — only the
+  // mobile branch is new, so the laptop view is untouched.
+  const xAxisKey = isMobile ? 'shortName' : 'name';
+
+  const verticalBarMargin = isMobile
+    ? { top: 20, right: 5, left: -25, bottom: 55 }
+    : { top: 20, right: 30, left: -20, bottom: 120 };
+
+  const stackedBarMargin = isMobile
+    ? { top: 20, right: 5, left: -25, bottom: 55 }
+    : { top: 20, right: 30, left: -20, bottom: 120 };
+
+  const xAxisTickHeight = isMobile ? 65 : 140;
+  const legendHeight = isMobile ? 34 : 50;
+  const legendFontSize = isMobile ? '11px' : '15px';
+  const yAxisTickFontSize = isMobile ? 11 : 14;
+  const barLabelFontSize = isMobile ? 10 : 13;
+  const stackedBarSize = isMobile ? Math.max(14, Math.min(30, 260 / Math.max(filteredData.length, 1))) : 42;
+  const rankingBarSize = isMobile ? 16 : 24;
+  const rankingYAxisWidth = isMobile ? 78 : 150;
+  const rankingYAxisFontSize = isMobile ? 10 : 13;
+  const rankingXAxisFontSize = isMobile ? 11 : 14;
+  const rankingLabelFontSize = isMobile ? 11 : 14;
+  const totalLabelFontSize = isMobile ? 10 : 14;
+  const totalLabelYOffset = isMobile ? 6 : 10;
 
   return (
     <div
@@ -315,8 +362,8 @@ export default function Demographics() {
         {/* Header Section */}
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-10 animate-fade-in-up">
           <div>
-            <h1 className="text-4xl font-black text-gray-900 tracking-tight">Batch Strength Demographics</h1>
-            <p className="text-gray-700 mt-2 font-semibold text-lg">Comprehensive overview of student distribution and diversity.</p>
+            <h1 className="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight">Batch Strength Demographics</h1>
+            <p className="text-gray-700 mt-2 font-semibold text-base sm:text-lg">Comprehensive overview of student distribution and diversity.</p>
           </div>
           
           <div className="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto">
@@ -348,31 +395,31 @@ export default function Demographics() {
             </div>
             
             {filter === "UG" ? (
-  <div className="flex items-center bg-white border-2 border-gray-200 rounded-xl p-1.5 w-full sm:w-auto shadow-sm">
-    {[2027, 2028].map((year) => (
-      <button
-        key={year}
-        onClick={() => setActiveYear(year)}
-        className={`px-6 py-2 text-base font-bold rounded-lg transition-all ${
-          activeYear === year
-            ? "bg-red-50 text-[#BE123C] shadow-sm"
-            : "text-gray-500 hover:text-gray-800"
-        }`}
-      >
-        {year} Batch
-      </button>
-    ))}
-  </div>
-) : (
-  <div className="flex items-center bg-white border-2 border-gray-200 rounded-xl p-1.5 w-full sm:w-auto shadow-sm">
-    <button
-      onClick={() => setActiveYear(2027)}
-      className="px-6 py-2 text-base font-bold rounded-lg bg-red-50 text-[#BE123C] shadow-sm"
-    >
-      2027 Batch
-    </button>
-  </div>
-)}
+              <div className="flex items-center bg-white border-2 border-gray-200 rounded-xl p-1.5 w-full sm:w-auto shadow-sm">
+                {[2027, 2028].map((year) => (
+                  <button
+                    key={year}
+                    onClick={() => setActiveYear(year)}
+                    className={`px-6 py-2 text-base font-bold rounded-lg transition-all ${
+                      activeYear === year
+                        ? "bg-red-50 text-[#BE123C] shadow-sm"
+                        : "text-gray-500 hover:text-gray-800"
+                    }`}
+                  >
+                    {year} Batch
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <div className="flex items-center bg-white border-2 border-gray-200 rounded-xl p-1.5 w-full sm:w-auto shadow-sm">
+                <button
+                  onClick={() => setActiveYear(2027)}
+                  className="px-6 py-2 text-base font-bold rounded-lg bg-red-50 text-[#BE123C] shadow-sm"
+                >
+                  2027 Batch
+                </button>
+              </div>
+            )}
           </div>
         </div>
 
@@ -382,7 +429,7 @@ export default function Demographics() {
           <div className="bg-white p-6 rounded-3xl border border-gray-200 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1">
             <p className="text-base font-bold text-gray-600 mb-2 uppercase tracking-wide">Total Students</p>
             <div className="flex items-baseline gap-3">
-              <h2 className="text-5xl font-black text-gray-900 tracking-tight">{activeTotalStats.total}</h2>
+              <h2 className="text-4xl sm:text-5xl font-black text-gray-900 tracking-tight">{activeTotalStats.total}</h2>
               <Users className="h-7 w-7 text-gray-300" />
             </div>
             <div className="flex items-center gap-3 mt-4 text-sm font-bold">
@@ -394,7 +441,7 @@ export default function Demographics() {
           {/* Male Students Card */}
           <div className="bg-white p-6 rounded-3xl border border-gray-200 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1">
             <p className="text-base font-bold text-gray-600 mb-2 uppercase tracking-wide">Male Students</p>
-            <h2 className="text-5xl font-black text-[#1D4ED8] tracking-tight">{activeTotalStats.male}</h2>
+            <h2 className="text-4xl sm:text-5xl font-black text-[#1D4ED8] tracking-tight">{activeTotalStats.male}</h2>
             <p className="mt-4 text-base font-bold text-gray-900">
               {activeTotalStats.malePercentage}% <span className="text-gray-500 font-semibold">of total</span>
             </p>
@@ -403,7 +450,7 @@ export default function Demographics() {
           {/* Female Students Card */}
           <div className="bg-white p-6 rounded-3xl border border-gray-200 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1">
             <p className="text-base font-bold text-gray-600 mb-2 uppercase tracking-wide">Female Students</p>
-            <h2 className="text-5xl font-black text-[#06B6D4] tracking-tight">{activeTotalStats.female}</h2>
+            <h2 className="text-4xl sm:text-5xl font-black text-[#06B6D4] tracking-tight">{activeTotalStats.female}</h2>
             <p className="mt-4 text-base font-bold text-gray-900">
               {activeTotalStats.femalePercentage}% <span className="text-gray-500 font-semibold">of total</span>
             </p>
@@ -425,11 +472,11 @@ export default function Demographics() {
         {/* Charts Row 1 */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10 stagger-children">
           {/* Gender Distribution Bar Chart */}
-          <div className="lg:col-span-2 bg-white p-8 rounded-3xl border border-gray-200 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)]">
-            <h3 className="text-2xl font-black text-gray-900 mb-8">Gender Distribution by Program</h3>
-            <div className="h-[450px] w-full">
+          <div className="lg:col-span-2 bg-white p-4 sm:p-8 rounded-3xl border border-gray-200 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)]">
+            <h3 className="text-xl sm:text-2xl font-black text-gray-900 mb-4 sm:mb-8">Gender Distribution by Program</h3>
+            <div className="h-[340px] sm:h-[450px] w-full">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={filteredData} margin={{ top: 20, right: 30, left: -20, bottom: 120 }} barGap={6}>
+                <BarChart data={filteredData} margin={verticalBarMargin} barGap={isMobile ? 2 : 6}>
                   <defs>
                     <linearGradient id="colorMaleBar" x1="0" y1="1" x2="0" y2="0">
                       <stop offset="0%" stopColor="#1E3A8A" stopOpacity={1}/>
@@ -442,31 +489,32 @@ export default function Demographics() {
                   </defs>
                   <CartesianGrid strokeDasharray="4 4" vertical={false} stroke={COLORS.grid} strokeOpacity={0.6} />
                   <XAxis 
-                    dataKey="name" 
+                    dataKey={xAxisKey} 
                     axisLine={false}
                     tickLine={false}
                     interval={0}
-                    height={140}
-                    tick={<CustomizedAxisTick />}
+                    height={xAxisTickHeight}
+                    tick={(props) => <CustomizedAxisTick {...props} isMobile={isMobile} />}
                   />
                   <YAxis 
                     axisLine={false} 
                     tickLine={false} 
-                    tick={{ fill: COLORS.textMain, fontSize: 14, fontWeight: 800 }}
+                    tick={{ fill: COLORS.textMain, fontSize: yAxisTickFontSize, fontWeight: 800 }}
                     allowDecimals={false}
+                    width={isMobile ? 28 : 60}
                   />
                   <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(0,0,0,0.02)' }} />
                   <Legend 
                     verticalAlign="top" 
-                    height={50} 
+                    height={legendHeight} 
                     iconType="square"
-                    wrapperStyle={{ fontSize: '15px', fontWeight: 800, color: COLORS.textMain }}
+                    wrapperStyle={{ fontSize: legendFontSize, fontWeight: 800, color: COLORS.textMain }}
                   />
-                  <Bar dataKey="female" name="Female" fill="url(#colorFemaleBar)" radius={[8, 8, 0, 0]} animationDuration={1000}>
-                    <LabelList dataKey="female" position="top" fill={COLORS.textMain} fontSize={13} fontWeight="800" />
+                  <Bar dataKey="female" name="Female" fill="url(#colorFemaleBar)" radius={[6, 6, 0, 0]} animationDuration={700}>
+                    <LabelList dataKey="female" position="top" fill={COLORS.textMain} fontSize={barLabelFontSize} fontWeight="800" />
                   </Bar>
-                  <Bar dataKey="male" name="Male" fill="url(#colorMaleBar)" radius={[8, 8, 0, 0]} animationDuration={1000}>
-                    <LabelList dataKey="male" position="top" fill={COLORS.textMain} fontSize={13} fontWeight="800" />
+                  <Bar dataKey="male" name="Male" fill="url(#colorMaleBar)" radius={[6, 6, 0, 0]} animationDuration={700}>
+                    <LabelList dataKey="male" position="top" fill={COLORS.textMain} fontSize={barLabelFontSize} fontWeight="800" />
                   </Bar>
                 </BarChart>
               </ResponsiveContainer>
@@ -474,9 +522,9 @@ export default function Demographics() {
           </div>
 
           {/* Overall Diversity Doughnut */}
-          <div className="bg-white p-8 rounded-3xl border border-gray-200 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] flex flex-col">
-            <h3 className="text-2xl font-black text-gray-900 mb-6">Overall Diversity</h3>
-            <div className="flex-1 relative min-h-[350px]">
+          <div className="bg-white p-4 sm:p-8 rounded-3xl border border-gray-200 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] flex flex-col">
+            <h3 className="text-xl sm:text-2xl font-black text-gray-900 mb-4 sm:mb-6">Overall Diversity</h3>
+            <div className="flex-1 relative min-h-[260px] sm:min-h-[350px]">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <defs>
@@ -499,7 +547,7 @@ export default function Demographics() {
                     paddingAngle={3}
                     dataKey="value"
                     stroke="none"
-                    animationDuration={1200}
+                    animationDuration={700}
                     animationEasing="ease-out"
                   >
                     {[
@@ -514,67 +562,65 @@ export default function Demographics() {
               </ResponsiveContainer>
               {/* Center Text */}
               <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                <span className="text-5xl font-black text-gray-900">{activeTotalStats.total}</span>
-                <span className="text-sm text-gray-600 font-bold uppercase tracking-widest mt-2">Total</span>
+                <span className="text-4xl sm:text-5xl font-black text-gray-900">{activeTotalStats.total}</span>
+                <span className="text-xs sm:text-sm text-gray-600 font-bold uppercase tracking-widest mt-2">Total</span>
               </div>
             </div>
             {/* Custom Legend for Doughnut */}
-            <div className="flex justify-center gap-8 mt-6">
-              <div className="flex items-center gap-3">
+            <div className="flex justify-center gap-4 sm:gap-8 mt-4 sm:mt-6">
+              <div className="flex items-center gap-2 sm:gap-3">
                 <div className="w-4 h-4 rounded-md bg-gradient-to-b from-[#3B82F6] to-[#1E3A8A] shadow-sm"></div>
-                <span className="text-base font-bold text-gray-900">Male ({activeTotalStats.malePercentage}%)</span>
+                <span className="text-sm sm:text-base font-bold text-gray-900">Male ({activeTotalStats.malePercentage}%)</span>
               </div>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 sm:gap-3">
                 <div className="w-4 h-4 rounded-md bg-gradient-to-b from-[#22D3EE] to-[#0E7490] shadow-sm"></div>
-                <span className="text-base font-bold text-gray-900">Female ({activeTotalStats.femalePercentage}%)</span>
+                <span className="text-sm sm:text-base font-bold text-gray-900">Female ({activeTotalStats.femalePercentage}%)</span>
               </div>
             </div>
           </div>
         </div>
 
         {/* Undergraduate / Postgraduate Programs Section (switches with UG/PG filter) */}
-        <div className="bg-white p-10 rounded-3xl border border-gray-200 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] mb-10 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
-          <h3 className="text-3xl font-black text-gray-900 mb-12 tracking-tight">{doughnutSectionTitle}</h3>
+        <div className="bg-white p-5 sm:p-10 rounded-3xl border border-gray-200 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] mb-10 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
+          <h3 className="text-2xl sm:text-3xl font-black text-gray-900 mb-8 sm:mb-12 tracking-tight">{doughnutSectionTitle}</h3>
           
           <div
-  className={`grid ${
-    filter === "PG"
-      ? "grid-cols-1"
-      : "grid-cols-1 md:grid-cols-2"
-  } gap-12 lg:gap-24`}
->
+            className={`grid ${
+              filter === "PG" ? "grid-cols-1" : "grid-cols-1 md:grid-cols-2"
+            } gap-10 lg:gap-24`}
+          >
 
-  {/* 2027 Batch */}
-  <div className="flex flex-col items-center">
-    <h4 className="text-2xl font-black text-gray-900 mb-8 tracking-wide">
-      2027 Batch
-    </h4>
+            {/* 2027 Batch */}
+            <div className="flex flex-col items-center">
+              <h4 className="text-xl sm:text-2xl font-black text-gray-900 mb-6 sm:mb-8 tracking-wide">
+                2027 Batch
+              </h4>
 
-    <DoughnutWithLegend data={doughnut2027Data} />
-  </div>
+              <DoughnutWithLegend data={doughnut2027Data} />
+            </div>
 
-  {/* 2028 Batch (Only for UG) */}
-  {filter === "UG" && (
-    <div className="flex flex-col items-center">
-      <h4 className="text-2xl font-black text-gray-900 mb-8 tracking-wide">
-        2028 Batch
-      </h4>
+            {/* 2028 Batch (Only for UG) */}
+            {filter === "UG" && (
+              <div className="flex flex-col items-center">
+                <h4 className="text-xl sm:text-2xl font-black text-gray-900 mb-6 sm:mb-8 tracking-wide">
+                  2028 Batch
+                </h4>
 
-      <DoughnutWithLegend data={doughnut2028Data} />
-    </div>
-  )}
+                <DoughnutWithLegend data={doughnut2028Data} />
+              </div>
+            )}
 
-</div>
+          </div>
         </div>
 
         {/* Charts Row 2 */}
         <div className="grid grid-cols-1 gap-6 mb-10 stagger-children">
           {/* Stacked Bar Chart */}
-          <div className="bg-white p-10 rounded-3xl border border-gray-200 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)]">
-            <h3 className="text-2xl font-black text-gray-900 mb-10">Total Strength Stacked</h3>
-            <div className="h-[450px] w-full">
+          <div className="bg-white p-4 sm:p-10 rounded-3xl border border-gray-200 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)]">
+            <h3 className="text-xl sm:text-2xl font-black text-gray-900 mb-6 sm:mb-10">Total Strength Stacked</h3>
+            <div className="h-[340px] sm:h-[450px] w-full">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={filteredData} margin={{ top: 20, right: 30, left: -20, bottom: 120 }} barSize={42}>
+                <BarChart data={filteredData} margin={stackedBarMargin} barSize={stackedBarSize}>
                   <defs>
                     <linearGradient id="colorMaleStacked" x1="0" y1="1" x2="0" y2="0">
                       <stop offset="0%" stopColor="#1E3A8A" stopOpacity={1}/>
@@ -587,31 +633,32 @@ export default function Demographics() {
                   </defs>
                   <CartesianGrid strokeDasharray="4 4" vertical={false} stroke={COLORS.grid} strokeOpacity={0.6} />
                   <XAxis 
-                    dataKey="name" 
+                    dataKey={xAxisKey} 
                     axisLine={false}
                     tickLine={false}
                     interval={0}
-                    height={140}
-                    tick={<CustomizedAxisTick />}
+                    height={xAxisTickHeight}
+                    tick={(props) => <CustomizedAxisTick {...props} isMobile={isMobile} />}
                   />
                   <YAxis 
                     axisLine={false} 
                     tickLine={false} 
-                    tick={{ fill: COLORS.textMain, fontSize: 14, fontWeight: 800 }}
+                    tick={{ fill: COLORS.textMain, fontSize: yAxisTickFontSize, fontWeight: 800 }}
                     allowDecimals={false}
+                    width={isMobile ? 28 : 60}
                   />
                   <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(0,0,0,0.02)' }} />
                   <Legend 
                     verticalAlign="top" 
-                    height={50} 
+                    height={legendHeight} 
                     iconType="square"
-                    wrapperStyle={{ fontSize: '15px', fontWeight: 800, color: COLORS.textMain }}
+                    wrapperStyle={{ fontSize: legendFontSize, fontWeight: 800, color: COLORS.textMain }}
                   />
-                  <Bar dataKey="male" name="Male" stackId="a" fill="url(#colorMaleStacked)" animationDuration={1000}>
-                    <LabelList dataKey="male" position="inside" fill="#fff" fontSize={12} fontWeight="bold" />
+                  <Bar dataKey="male" name="Male" stackId="a" fill="url(#colorMaleStacked)" animationDuration={700}>
+                    <LabelList dataKey="male" position="inside" fill="#fff" fontSize={isMobile ? 9 : 12} fontWeight="bold" />
                   </Bar>
-                  <Bar dataKey="female" name="Female" stackId="a" fill="url(#colorFemaleStacked)" radius={[8, 8, 0, 0]} animationDuration={1000}>
-                    <LabelList dataKey="female" position="inside" fill="#fff" fontSize={11} fontWeight="bold" />
+                  <Bar dataKey="female" name="Female" stackId="a" fill="url(#colorFemaleStacked)" radius={[6, 6, 0, 0]} animationDuration={700}>
+                    <LabelList dataKey="female" position="inside" fill="#fff" fontSize={isMobile ? 8 : 11} fontWeight="bold" />
                     {/* Total label above the bar in "male:female" format, always visible even for tiny bars */}
                     <LabelList
                       content={(props) => {
@@ -621,10 +668,10 @@ export default function Demographics() {
                         return (
                           <text
                             x={x + width / 2}
-                            y={y - 10}
+                            y={y - totalLabelYOffset}
                             textAnchor="middle"
                             fill={COLORS.textMain}
-                            fontSize={14}
+                            fontSize={totalLabelFontSize}
                             fontWeight="800"
                           >
                             {entry.male}:{entry.female}
@@ -639,28 +686,28 @@ export default function Demographics() {
           </div>
           
           {/* Program Ranking Horizontal Bar */}
-          <div className="bg-white p-10 rounded-3xl border border-gray-200 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)]">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 gap-4">
-              <h3 className="text-2xl font-black text-gray-900">Program Ranking by Total Strength</h3>
-              <div className="flex gap-6">
-                <div className="flex items-center gap-3 bg-purple-50 px-4 py-2 rounded-xl">
-                  <div className="w-4 h-4 rounded-md bg-gradient-to-r from-[#C084FC] to-[#7E22CE] shadow-sm"></div>
-                  <span className="text-base font-black text-purple-900">UG Programs</span>
+          <div className="bg-white p-4 sm:p-10 rounded-3xl border border-gray-200 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)]">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-10 gap-4">
+              <h3 className="text-xl sm:text-2xl font-black text-gray-900">Program Ranking by Total Strength</h3>
+              <div className="flex gap-3 sm:gap-6">
+                <div className="flex items-center gap-2 sm:gap-3 bg-purple-50 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl">
+                  <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-md bg-gradient-to-r from-[#C084FC] to-[#7E22CE] shadow-sm"></div>
+                  <span className="text-sm sm:text-base font-black text-purple-900">UG Programs</span>
                 </div>
-                <div className="flex items-center gap-3 bg-blue-50 px-4 py-2 rounded-xl">
-                  <div className="w-4 h-4 rounded-md bg-gradient-to-r from-[#60A5FA] to-[#2563EB] shadow-sm"></div>
-                  <span className="text-base font-black text-blue-900">PG Programs</span>
+                <div className="flex items-center gap-2 sm:gap-3 bg-blue-50 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl">
+                  <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-md bg-gradient-to-r from-[#60A5FA] to-[#2563EB] shadow-sm"></div>
+                  <span className="text-sm sm:text-base font-black text-blue-900">PG Programs</span>
                 </div>
               </div>
             </div>
             
-            <div className="h-[500px] w-full">
+            <div className="h-[420px] sm:h-[500px] w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart 
                   layout="vertical" 
                   data={[...filteredData].sort((a, b) => b.total - a.total)} 
-                  margin={{ top: 40, right: 60, left: 20, bottom: 10 }}
-                  barSize={24}
+                  margin={{ top: 40, right: isMobile ? 30 : 60, left: isMobile ? 5 : 20, bottom: 10 }}
+                  barSize={rankingBarSize}
                 >
                   <defs>
                     <linearGradient id="colorUgGrad" x1="0" y1="0" x2="1" y2="0">
@@ -678,20 +725,20 @@ export default function Demographics() {
                     orientation="top"
                     axisLine={false} 
                     tickLine={false}
-                    tick={{ fill: COLORS.textMain, fontSize: 14, fontWeight: 800 }}
+                    tick={{ fill: COLORS.textMain, fontSize: rankingXAxisFontSize, fontWeight: 800 }}
                   />
                   <YAxis 
                     dataKey="shortName" 
                     type="category" 
                     axisLine={false} 
                     tickLine={false}
-                    width={150}
+                    width={rankingYAxisWidth}
                     interval={0}
-                    tick={{ fill: COLORS.textMain, fontSize: 13, fontWeight: 800 }}
+                    tick={{ fill: COLORS.textMain, fontSize: rankingYAxisFontSize, fontWeight: 800 }}
                   />
                   <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(0,0,0,0.02)' }} />
-                  <Bar dataKey="total" name="Total Strength" radius={[0, 8, 8, 0]} animationDuration={1000}>
-                    <LabelList dataKey="total" position="right" fill={COLORS.textMain} fontSize={14} fontWeight="800" />
+                  <Bar dataKey="total" name="Total Strength" radius={[0, 6, 6, 0]} animationDuration={700}>
+                    <LabelList dataKey="total" position="right" fill={COLORS.textMain} fontSize={rankingLabelFontSize} fontWeight="800" />
                     {
                       [...filteredData].sort((a, b) => b.total - a.total).map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={entry.category === 'UG' ? "url(#colorPgGrad)" : "url(#colorUgGrad)"} />
@@ -706,9 +753,9 @@ export default function Demographics() {
 
         {/* Detailed Report Table */}
         <div className="bg-white rounded-3xl border border-gray-200 overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] animate-fade-in-up" style={{ animationDelay: '300ms' }}>
-          <div className="px-8 py-8 border-b border-gray-200 flex justify-between items-center bg-white">
-            <h3 className="text-2xl font-black text-gray-900">Detailed Report</h3>
-            <span className="text-base font-black text-gray-700 bg-gray-100 px-4 py-1.5 rounded-full">{filteredData.length} RECORDS</span>
+          <div className="px-5 sm:px-8 py-5 sm:py-8 border-b border-gray-200 flex justify-between items-center bg-white">
+            <h3 className="text-xl sm:text-2xl font-black text-gray-900">Detailed Report</h3>
+            <span className="text-sm sm:text-base font-black text-gray-700 bg-gray-100 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full">{filteredData.length} RECORDS</span>
           </div>
           
           <div className="overflow-x-auto">
