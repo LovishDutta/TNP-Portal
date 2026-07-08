@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Search, Users, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { Search, Users, ArrowUpDown, ArrowUp, ArrowDown, ChevronDown } from 'lucide-react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend, ResponsiveContainer,
   PieChart, Pie, Cell,
@@ -97,6 +97,7 @@ const getSearchScore = (program, query) => {
 };
 
 export default function BatchDemographics() {
+  const [isExpanded, setIsExpanded] = useState(false);
   const [selectedBatch, setSelectedBatch] = useState('2027');
   const [programType, setProgramType] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
@@ -200,88 +201,116 @@ export default function BatchDemographics() {
   return (
     <div className="mt-20 pt-16 border-t border-gray-200">
       
-      {/* Header and Filters */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4 w-full">
-        <div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">
-            Batch Strength Demographics
-          </h2>
-          <p className="text-gray-500">Comprehensive overview of student distribution and diversity.</p>
-        </div>
-
-        <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-          {/* Search */}
-          <div 
-            className="relative z-50" 
-            onFocus={() => setShowSuggestions(true)} 
-            onBlur={() => setShowSuggestions(false)}
-          >
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search className="h-4 w-4 text-gray-400" />
+      {/* Collapsible Card Container */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden transition-all duration-300">
+        
+        {/* Accordion Header */}
+        <div 
+          className="px-6 py-5 cursor-pointer hover:bg-gray-50 flex justify-between items-center transition-colors"
+          onClick={() => setIsExpanded(!isExpanded)}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => { if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setIsExpanded(!isExpanded); } }}
+          aria-expanded={isExpanded}
+          aria-controls="demographics-content"
+        >
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-2xl">📊</span>
+              <h2 className="text-xl font-bold text-gray-900">
+                Batch Strength Demographics
+              </h2>
             </div>
-            <input
-              type="text"
-              className="pl-10 pr-4 py-2 w-full border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#7A0019] focus:border-transparent outline-none transition"
-              placeholder="Search program..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+            <p className="text-gray-500 text-sm mt-1 ml-9">View student demographics by batch, branch, and gender</p>
+          </div>
+          <div className="text-gray-400">
+            <ChevronDown 
+              className={`w-6 h-6 transform transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} 
             />
-            {showSuggestions && searchSuggestions.length > 0 && (
-              <ul className="absolute z-10 w-full bg-white border border-gray-200 rounded-lg shadow-lg mt-1 max-h-48 overflow-y-auto">
-                {searchSuggestions.map(prog => (
-                  <li 
-                    key={prog} 
-                    className="px-4 py-2 hover:bg-gray-50 cursor-pointer text-sm text-gray-700"
-                    onMouseDown={(e) => {
-                      e.preventDefault();
-                      setSearchQuery(prog);
-                      setShowSuggestions(false);
-                    }}
-                  >
-                    {prog}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-
-          {/* Program Type Filter */}
-          <div className="inline-flex bg-gray-100 rounded-lg p-1 overflow-x-auto max-w-full scrollbar-hide">
-            {programTypes.map(pt => (
-              <button
-                key={pt}
-                onClick={() => setProgramType(pt)}
-                className={`px-4 py-1.5 rounded-md text-sm font-medium transition ${
-                  programType === pt
-                    ? 'bg-white shadow-sm text-[#7A0019]'
-                    : 'text-gray-500 hover:text-gray-700'
-                }`}
-              >
-                {pt}
-              </button>
-            ))}
-          </div>
-
-          {/* Batch Filter */}
-          <div className="inline-flex bg-gray-100 rounded-lg p-1 overflow-x-auto max-w-full scrollbar-hide">
-            {batches.map(batch => (
-              <button
-                key={batch}
-                onClick={() => setSelectedBatch(batch)}
-                className={`px-4 py-1.5 rounded-md text-sm font-medium transition ${
-                  selectedBatch === batch
-                    ? 'bg-white shadow-sm text-[#7A0019]'
-                    : 'text-gray-500 hover:text-gray-700'
-                }`}
-              >
-                {batch}
-              </button>
-            ))}
           </div>
         </div>
-      </div>
 
-      {/* Summary Cards */}
+        {/* Collapsible Content */}
+        <div 
+          id="demographics-content"
+          className={`grid transition-[grid-template-rows,opacity] duration-300 ease-in-out ${isExpanded ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
+        >
+          <div className="overflow-hidden">
+            <div className="px-6 pt-6 pb-6 border-t border-gray-100">
+
+              {/* Filters */}
+              <div className="flex flex-col sm:flex-row justify-end mb-8 gap-3 w-full">
+                {/* Search */}
+                <div 
+                  className="relative z-50" 
+                  onFocus={() => setShowSuggestions(true)} 
+                  onBlur={() => setShowSuggestions(false)}
+                >
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Search className="h-4 w-4 text-gray-400" />
+                  </div>
+                  <input
+                    type="text"
+                    className="pl-10 pr-4 py-2 w-full border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#7A0019] focus:border-transparent outline-none transition"
+                    placeholder="Search program..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                  {showSuggestions && searchSuggestions.length > 0 && (
+                    <ul className="absolute z-10 w-full bg-white border border-gray-200 rounded-lg shadow-lg mt-1 max-h-48 overflow-y-auto">
+                      {searchSuggestions.map(prog => (
+                        <li 
+                          key={prog} 
+                          className="px-4 py-2 hover:bg-gray-50 cursor-pointer text-sm text-gray-700"
+                          onMouseDown={(e) => {
+                            e.preventDefault();
+                            setSearchQuery(prog);
+                            setShowSuggestions(false);
+                          }}
+                        >
+                          {prog}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+
+                {/* Program Type Filter */}
+                <div className="inline-flex bg-gray-100 rounded-lg p-1 overflow-x-auto max-w-full scrollbar-hide">
+                  {programTypes.map(pt => (
+                    <button
+                      key={pt}
+                      onClick={() => setProgramType(pt)}
+                      className={`px-4 py-1.5 rounded-md text-sm font-medium transition ${
+                        programType === pt
+                          ? 'bg-white shadow-sm text-[#7A0019]'
+                          : 'text-gray-500 hover:text-gray-700'
+                      }`}
+                    >
+                      {pt}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Batch Filter */}
+                <div className="inline-flex bg-gray-100 rounded-lg p-1 overflow-x-auto max-w-full scrollbar-hide">
+                  {batches.map(batch => (
+                    <button
+                      key={batch}
+                      onClick={() => setSelectedBatch(batch)}
+                      className={`px-4 py-1.5 rounded-md text-sm font-medium transition ${
+                        selectedBatch === batch
+                          ? 'bg-white shadow-sm text-[#7A0019]'
+                          : 'text-gray-500 hover:text-gray-700'
+                      }`}
+                    >
+                      {batch}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <div className="bg-white rounded-xl shadow-sm border p-5">
           <p className="text-sm text-gray-500 font-medium mb-1">Total Students</p>
@@ -548,6 +577,11 @@ export default function BatchDemographics() {
               )}
             </tbody>
           </table>
+        </div>
+      </div>
+
+            </div>
+          </div>
         </div>
       </div>
     </div>
