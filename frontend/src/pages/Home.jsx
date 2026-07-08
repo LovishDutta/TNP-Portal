@@ -46,54 +46,125 @@ export default function Home() {
 
     <div className="flex-1 flex flex-col justify-center">
       <ul className="space-y-4 text-gray-600 max-w-xl mx-auto">
-        <li className="flex items-start">
-          <span className="text-[#7A0019] mr-3 mt-1.5 flex-shrink-0">
-            <svg className="w-4 h-4" viewBox="0 0 16 16" fill="currentColor">
-              <circle cx="4" cy="8" r="3" />
-            </svg>
-          </span>
-          <span className="text-sm leading-relaxed">
-            All information provided in the notification forms must be accurate
-            and verifiable.
-          </span>
-        </li>
 
-        <li className="flex items-start">
-          <span className="text-[#7A0019] mr-3 mt-1.5 flex-shrink-0">
-            <svg className="w-4 h-4" viewBox="0 0 16 16" fill="currentColor">
-              <circle cx="4" cy="8" r="3" />
-            </svg>
-          </span>
-          <span className="text-sm leading-relaxed">
-            Once submitted, forms cannot be modified without prior approval from
-            the T&P Cell.
-          </span>
-        </li>
+  {/* 1 */}
+  <li className="flex items-start">
+    <span className="text-[#7A0019] mr-3 mt-1.5 flex-shrink-0">
+      <svg className="w-4 h-4" viewBox="0 0 16 16" fill="currentColor">
+        <circle cx="4" cy="8" r="3" />
+      </svg>
+    </span>
+    <span className="text-sm leading-relaxed">
+      All information provided in the notification forms must be accurate and
+      verifiable.
+    </span>
+  </li>
 
-        <li className="flex items-start">
-          <span className="text-[#7A0019] mr-3 mt-1.5 flex-shrink-0">
-            <svg className="w-4 h-4" viewBox="0 0 16 16" fill="currentColor">
-              <circle cx="4" cy="8" r="3" />
-            </svg>
-          </span>
-          <span className="text-sm leading-relaxed">
-            Companies are expected to adhere strictly to the agreed-upon
-            compensation structure.
-          </span>
-        </li>
+  {/* 2 */}
+  <li className="flex items-start">
+    <span className="text-[#7A0019] mr-3 mt-1.5 flex-shrink-0">
+      <svg className="w-4 h-4" viewBox="0 0 16 16" fill="currentColor">
+        <circle cx="4" cy="8" r="3" />
+      </svg>
+    </span>
+    <span className="text-sm leading-relaxed">
+      Once submitted, forms cannot be modified without prior approval from the
+      Training & Placement Cell.
+    </span>
+  </li>
 
-        <li className="flex items-start">
-          <span className="text-[#7A0019] mr-3 mt-1.5 flex-shrink-0">
-            <svg className="w-4 h-4" viewBox="0 0 16 16" fill="currentColor">
-              <circle cx="4" cy="8" r="3" />
-            </svg>
-          </span>
-          <span className="text-sm leading-relaxed">
-            Pre-Placement Offers (PPOs) must be routed exclusively through the
-            Training & Placement Cell.
-          </span>
-        </li>
+  {/* 3 */}
+  <li className="flex items-start">
+    <span className="text-[#7A0019] mr-3 mt-1.5 flex-shrink-0">
+      <svg className="w-4 h-4" viewBox="0 0 16 16" fill="currentColor">
+        <circle cx="4" cy="8" r="3" />
+      </svg>
+    </span>
+    <span className="text-sm leading-relaxed">
+      Companies are expected to adhere strictly to the agreed-upon compensation
+      structure.
+    </span>
+  </li>
+
+  {/* 4 */}
+  <li className="flex items-start">
+    <span className="text-[#7A0019] mr-3 mt-1.5 flex-shrink-0">
+      <svg className="w-4 h-4" viewBox="0 0 16 16" fill="currentColor">
+        <circle cx="4" cy="8" r="3" />
+      </svg>
+    </span>
+    <span className="text-sm leading-relaxed">
+      Pre-Placement Offers (PPOs) must be routed exclusively through the
+      Training & Placement Cell.
+    </span>
+  </li>
+
+  {/* 5 */}
+  <li className="flex items-start">
+    <span className="text-[#7A0019] mr-3 mt-1.5 flex-shrink-0">
+      <svg className="w-4 h-4" viewBox="0 0 16 16" fill="currentColor">
+        <circle cx="4" cy="8" r="3" />
+      </svg>
+    </span>
+    <div className="text-sm leading-relaxed">
+      <strong>Eligibility for a Second Offer:</strong>
+      <ul className="list-disc ml-5 mt-2 space-y-1">
+        <li>The new opportunity offers a CTC of at least <strong>1.5×</strong> the student's current offer.</li>
+        <li>The student's existing offer has a CTC of <strong>₹12 LPA or below.</strong></li>
+        <li>At least <strong>50% of students</strong> from the respective department have already been placed at the time of recruitment.</li>
       </ul>
+    </div>
+  </li>
+
+  {/* 6 */}
+  <li className="flex items-start">
+    <span className="text-[#7A0019] mr-3 mt-1.5 flex-shrink-0">
+      <svg className="w-4 h-4" viewBox="0 0 16 16" fill="currentColor">
+        <circle cx="4" cy="8" r="3" />
+      </svg>
+    </span>
+    <span className="text-sm leading-relaxed">
+      <strong>Bonus Company Policy:</strong> Companies offering a CTC of
+      <strong> ₹5 LPA or below</strong> shall be classified as Bonus Companies.
+      Students selected by a Bonus Company shall remain eligible to participate
+      in all subsequent campus recruitment drives offering a higher CTC without
+      any restriction arising from their earlier selection.
+    </span>
+  </li>
+
+  {/* 7 */}
+  <li className="flex items-start">
+    <span className="text-[#7A0019] mr-3 mt-1.5 flex-shrink-0">
+      <svg className="w-4 h-4" viewBox="0 0 16 16" fill="currentColor">
+        <circle cx="4" cy="8" r="3" />
+      </svg>
+    </span>
+    <span className="text-sm leading-relaxed">
+      <strong>Package Parity Across NITs:</strong> Recruiting organizations are
+      requested to maintain parity in the compensation package across all
+      National Institutes of Technology (NITs) for similar roles, eligibility
+      criteria and recruitment processes unless justified by significant
+      differences in job location, responsibilities or role requirements.
+    </span>
+  </li>
+
+  {/* 8 */}
+  <li className="flex items-start">
+    <span className="text-[#7A0019] mr-3 mt-1.5 flex-shrink-0">
+      <svg className="w-4 h-4" viewBox="0 0 16 16" fill="currentColor">
+        <circle cx="4" cy="8" r="3" />
+      </svg>
+    </span>
+    <span className="text-sm leading-relaxed">
+      <strong>Eligibility for PSU Recruitment:</strong> Students who have
+      already secured an on-campus offer shall remain eligible to participate
+      in recruitment drives conducted by Public Sector Undertakings (PSUs) and
+      Government Organizations, subject to the eligibility criteria prescribed
+      by the recruiting organization.
+    </span>
+  </li>
+
+</ul>
     </div>
   </div>
 
