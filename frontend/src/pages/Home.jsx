@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import BatchDemographics from "../components/BatchDemographics";
 
 export default function Home() {
   return (
@@ -38,93 +39,63 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-14">
 
-  {/* Placement Policies Card */}
-  <div className="bg-white rounded-2xl shadow-md border p-8 flex flex-col h-full">
-    <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-      Placement and Internship Policies
-    </h2>
+            <div className="bg-white rounded-2xl shadow-md border p-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                Rules and Regulations
+              </h2>
+              <ul className="space-y-4 text-gray-600">
+                <li className="flex items-start">
+                  <span className="text-[#7A0019] mr-2 font-bold">•</span>
+                  <span>All information provided in the notification forms must be accurate and verifiable.</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-[#7A0019] mr-2 font-bold">•</span>
+                  <span>Once submitted, forms cannot be modified without prior approval from the T&P Cell.</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-[#7A0019] mr-2 font-bold">•</span>
+                  <span>Companies are expected to adhere strictly to the agreed-upon compensation structure.</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-[#7A0019] mr-2 font-bold">•</span>
+                  <span>Pre-Placement Offers (PPOs) must be routed exclusively through the Training & Placement Cell.</span>
+                </li>
+              </ul>
+            </div>
 
-    <div className="flex-1 flex flex-col justify-center">
-      <ul className="space-y-5 text-gray-600 max-w-xl mx-auto">
-        <li className="flex items-start">
-          <span className="text-[#7A0019] mr-2 font-bold">•</span>
-          <span>
-            All information provided in the notification forms must be accurate
-            and verifiable.
-          </span>
-        </li>
+            <div className="bg-white rounded-2xl shadow-md border p-8 flex flex-col justify-center">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+                Submit Notification Forms
+              </h2>
+              
+              <div className="space-y-6">
+                <div className="p-5 rounded-xl border border-gray-100 bg-gray-50 hover:border-gray-200 transition">
+                  <h3 className="text-lg font-semibold text-gray-800">Job Notification Form</h3>
+                  <p className="mt-1 text-sm text-gray-500 mb-4">For final year students seeking full-time roles.</p>
+                  <Link
+                    to="/jnf"
+                    className="block w-full text-center bg-[#7A0019] hover:bg-[#650015] text-white px-4 py-2.5 rounded-lg font-medium transition"
+                  >
+                    Fill JNF
+                  </Link>
+                </div>
 
-        <li className="flex items-start">
-          <span className="text-[#7A0019] mr-2 font-bold">•</span>
-          <span>
-            Once submitted, forms cannot be modified without prior approval from
-            the T&P Cell.
-          </span>
-        </li>
+                <div className="p-5 rounded-xl border border-gray-100 bg-gray-50 hover:border-gray-200 transition">
+                  <h3 className="text-lg font-semibold text-gray-800">Internship Notification Form</h3>
+                  <p className="mt-1 text-sm text-gray-500 mb-4">For pre-final year students seeking internships.</p>
+                  <Link
+                    to="/inf"
+                    className="block w-full text-center bg-[#7A0019] hover:bg-[#650015] text-white px-4 py-2.5 rounded-lg font-medium transition"
+                  >
+                    Fill INF
+                  </Link>
+                </div>
+              </div>
+            </div>
 
-        <li className="flex items-start">
-          <span className="text-[#7A0019] mr-2 font-bold">•</span>
-          <span>
-            Companies are expected to adhere strictly to the agreed-upon
-            compensation structure.
-          </span>
-        </li>
-
-        <li className="flex items-start">
-          <span className="text-[#7A0019] mr-2 font-bold">•</span>
-          <span>
-            Pre-Placement Offers (PPOs) must be routed exclusively through the
-            Training & Placement Cell.
-          </span>
-        </li>
-      </ul>
-    </div>
-  </div>
-
-  {/* Forms Card */}
-  <div className="bg-white rounded-2xl shadow-md border p-8 flex flex-col h-full">
-    <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-      Submit Notification Forms
-    </h2>
-
-    <div className="flex-1 flex flex-col justify-center">
-      <div className="space-y-6">
-        <div className="p-5 rounded-xl border border-gray-100 bg-gray-50 hover:border-gray-200 transition">
-          <h3 className="text-lg font-semibold text-gray-800">
-            Job Notification Form
-          </h3>
-          <p className="mt-1 text-sm text-gray-500 mb-4">
-            For final year students seeking full-time roles.
-          </p>
-
-          <Link
-            to="/jnf"
-            className="block w-full text-center bg-[#7A0019] hover:bg-[#650015] text-white px-4 py-2.5 rounded-lg font-medium transition"
-          >
-            Fill JNF
-          </Link>
-        </div>
-
-        <div className="p-5 rounded-xl border border-gray-100 bg-gray-50 hover:border-gray-200 transition">
-          <h3 className="text-lg font-semibold text-gray-800">
-            Internship Notification Form
-          </h3>
-          <p className="mt-1 text-sm text-gray-500 mb-4">
-            For pre-final year students seeking internships.
-          </p>
-
-          <Link
-            to="/inf"
-            className="block w-full text-center bg-[#7A0019] hover:bg-[#650015] text-white px-4 py-2.5 rounded-lg font-medium transition"
-          >
-            Fill INF
-          </Link>
-        </div>
-      </div>
-    </div>
-  </div>
-
-</div>
+          </div>
+          
+          <BatchDemographics />
 
           <div className="mt-20 border-t border-gray-200 pt-16">
             <h2 className="text-3xl font-bold text-gray-900 text-center mb-10">
