@@ -11,44 +11,44 @@ export default function AdminLayout() {
   };
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-white">
       {}
-      <div className="w-64 bg-white border-r border-gray-200 flex flex-col">
-        <div className="p-6 border-b border-gray-200">
-          <Link to="/" className="flex items-center space-x-3">
+      <div className="w-64 bg-white border-r border-gray-100 flex flex-col">
+        <div className="p-5 border-b border-gray-100">
+          <Link to="/" className="flex items-center space-x-3 group">
             <img
               src="/nitkkr-logo.png"
               alt="NIT Kurukshetra"
               className="h-10 w-10 object-contain"
             />
             <div>
-              <h1 className="text-sm font-bold text-gray-900 leading-tight">TNP Cell</h1>
-              <p className="text-xs text-gray-500">Admin Portal</p>
+              <h1 className="text-sm font-bold text-gray-900 leading-tight tracking-tight">TNP Cell</h1>
+              <p className="text-xs text-gray-400 font-medium">Admin Portal</p>
             </div>
           </Link>
         </div>
 
-        <nav className="flex-1 p-4 space-y-1">
+        <nav className="flex-1 p-3 space-y-1">
           <Link
             to="/admin/dashboard"
-            className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+            className={`flex items-center space-x-3 px-4 py-2.5 rounded-lg transition-all duration-200 ${
               location.pathname === "/admin/dashboard"
-                ? "bg-[#7A0019]/10 text-[#7A0019]"
-                : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                ? "bg-[#7A0019]/8 text-[#7A0019] font-semibold"
+                : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
             }`}
           >
-            <LayoutDashboard className="w-5 h-5" />
-            <span className="font-medium">Dashboard</span>
+            <LayoutDashboard className="w-[18px] h-[18px]" />
+            <span className="text-sm font-medium">Dashboard</span>
           </Link>
         </nav>
 
-        <div className="p-4 border-t border-gray-200">
+        <div className="p-3 border-t border-gray-100">
           <button
             onClick={handleLogout}
-            className="flex items-center space-x-3 px-4 py-3 w-full rounded-lg text-gray-600 hover:bg-red-50 hover:text-red-600 transition-colors"
+            className="flex items-center space-x-3 px-4 py-2.5 w-full rounded-lg text-gray-400 hover:bg-red-50 hover:text-red-500 transition-all duration-200"
           >
-            <LogOut className="w-5 h-5" />
-            <span className="font-medium">Logout</span>
+            <LogOut className="w-[18px] h-[18px]" />
+            <span className="text-sm font-medium">Logout</span>
           </button>
         </div>
       </div>
@@ -56,20 +56,20 @@ export default function AdminLayout() {
       {}
       <div className="flex-1 flex flex-col overflow-hidden">
         {}
-        <header className="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-8">
-          <h2 className="text-lg font-medium text-gray-900">
+        <header className="bg-white border-b border-gray-100 h-14 flex items-center justify-between px-8" style={{ boxShadow: 'var(--shadow-xs)' }}>
+          <h2 className="text-sm font-semibold text-gray-900 tracking-tight">
             {location.pathname === "/admin/dashboard" && "Dashboard Overview"}
             {location.pathname.includes("/admin/submission/") && "Submission Details"}
           </h2>
           <div className="flex items-center space-x-4">
-             <div className="text-sm font-medium text-gray-700 bg-gray-100 px-3 py-1 rounded-full">
+             <div className="text-xs font-medium text-gray-500 bg-gray-50 px-3 py-1.5 rounded-full border border-gray-100">
                 Admin User
              </div>
           </div>
         </header>
 
         {}
-        <main className="flex-1 overflow-y-auto p-8">
+        <main className="flex-1 overflow-y-auto p-8 bg-gray-50/50">
           <Outlet />
         </main>
       </div>

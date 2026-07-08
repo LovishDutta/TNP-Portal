@@ -72,8 +72,7 @@ export default function INFCoursesSection({
               <CheckboxGroup
                 label=""
                 options={[
-                  "M.Tech Computer Engineering (Specialization in Computer Engineering)",
-                  "M.Tech Computer Engineering (Specialization in Cyber Security)",
+                  "Computer Engineering / Cyber Security",
                 ]}
                 selected={formData.pgSpecializations}
                 onChange={(option) =>

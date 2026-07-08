@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import JNFForm from "./pages/JNFForm";
 import INFForm from "./pages/INFForm";
 import SubmissionSuccess from "./pages/SubmissionSuccess";
+import Demographics from "./pages/Demographics";
 
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminLayout from "./components/AdminLayout";
@@ -17,8 +18,9 @@ function App() {
       <Route path="/jnf" element={<JNFForm />} />
       <Route path="/inf" element={<INFForm />} />
       <Route path="/success/:id" element={<SubmissionSuccess />} />
+      <Route path="/demographics" element={<Demographics />} />
       
-      {}
+      {/* Admin Routes */}
       <Route path="/admin/login" element={<AdminLogin />} />
       <Route 
         path="/admin" 
