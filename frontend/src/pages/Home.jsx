@@ -168,52 +168,74 @@ export default function Home() {
     </div>
   </div>
 
-  {/* Forms Card */}
+{/* Forms Card */}
   <div className="bg-white rounded-2xl p-8 flex flex-col h-full transition-all duration-300 hover:shadow-lg" style={{ border: '1px solid var(--color-border)', boxShadow: 'var(--shadow-sm)' }}>
-    <h2 className="text-xl font-bold text-gray-900 mb-6 text-center tracking-tight">
+    <h2 className="text-xl font-bold text-gray-900 text-center tracking-tight mb-7">
       Submit Notification Forms
     </h2>
 
-    <div className="flex-1 flex flex-col justify-center">
-      <div className="space-y-5">
-        <div className="p-5 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-gray-200 transition-all duration-200">
-          <h3 className="text-base font-semibold text-gray-800">
-            Job Notification Form
-          </h3>
-          <p className="mt-1 text-sm text-gray-500 mb-4">
-            For final year students seeking full-time roles.
-          </p>
+    <div className="flex flex-col gap-7">
 
-          <Link
-            to="/jnf"
-            className="block w-full text-center bg-[#7A0019] hover:bg-[#5C0013] text-white px-4 py-2.5 rounded-lg font-medium transition-all duration-200 text-sm"
-            style={{ boxShadow: '0 1px 3px rgba(122, 0, 25, 0.2)' }}
-          >
-            Fill JNF
-          </Link>
-        </div>
+      <div className="p-7 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-gray-200 transition-all duration-200">
+        <h3 className="text-xl font-semibold text-gray-800">
+          Job Notification Form
+        </h3>
+        <p className="mt-2 text-base text-gray-500 mb-6">
+          For final year students seeking full-time roles.
+        </p>
 
-        <div className="p-5 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-gray-200 transition-all duration-200">
-          <h3 className="text-base font-semibold text-gray-800">
-            Internship Notification Form
-          </h3>
-          <p className="mt-1 text-sm text-gray-500 mb-4">
-            For pre-final year students seeking internships.
-          </p>
-
-          <Link
-            to="/inf"
-            className="block w-full text-center bg-[#7A0019] hover:bg-[#5C0013] text-white px-4 py-2.5 rounded-lg font-medium transition-all duration-200 text-sm"
-            style={{ boxShadow: '0 1px 3px rgba(122, 0, 25, 0.2)' }}
-          >
-            Fill INF
-          </Link>
-        </div>
+        <Link
+          to="/jnf"
+          className="block w-full text-center bg-[#7A0019] hover:bg-[#5C0013] text-white px-4 py-4 rounded-lg font-semibold transition-all duration-200 text-base"
+          style={{ boxShadow: '0 1px 3px rgba(122, 0, 25, 0.2)' }}
+        >
+          Fill JNF
+        </Link>
       </div>
+
+      <div className="p-7 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-gray-200 transition-all duration-200">
+        <h3 className="text-xl font-semibold text-gray-800">
+          Internship Notification Form
+        </h3>
+        <p className="mt-2 text-base text-gray-500 mb-6">
+          For pre-final year students seeking internships.
+        </p>
+
+        <Link
+          to="/inf"
+          className="block w-full text-center bg-[#7A0019] hover:bg-[#5C0013] text-white px-4 py-4 rounded-lg font-semibold transition-all duration-200 text-base"
+          style={{ boxShadow: '0 1px 3px rgba(122, 0, 25, 0.2)' }}
+        >
+          Fill INF
+        </Link>
+      </div>
+
+      {/* Demographics callout — deliberately styled apart from JNF/INF to stand out */}
+      <div className="p-7 rounded-xl bg-gradient-to-br from-[#7A0019]/[0.08] to-[#7A0019]/[0.03] border-2 border-[#7A0019]/20 text-center">
+        <div className="flex items-center justify-center gap-2 mb-2">
+          <svg className="w-5 h-5 text-[#7A0019]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          </svg>
+          <h3 className="text-xl font-bold text-[#7A0019]">
+            Batch Demographics
+          </h3>
+        </div>
+        <p className="text-base text-gray-600 leading-relaxed mb-6">
+          View student distribution across various programmes.
+        </p>
+
+        <Link
+          to="/demographics"
+          className="block w-full text-center bg-[#7A0019] hover:bg-[#5C0013] text-white px-4 py-4 rounded-lg font-semibold transition-all duration-200 text-base"
+          style={{ boxShadow: '0 1px 3px rgba(122, 0, 25, 0.2)' }}
+        >
+          View Demographics
+        </Link>
+      </div>
+
     </div>
   </div>
-
-</div>
+  </div>
 
           <div className="mt-20 border-t border-gray-100 pt-16">
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900 text-center mb-10 tracking-tight">

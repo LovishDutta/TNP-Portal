@@ -26,23 +26,23 @@ const programData2027 = [
   { name: "B.Tech PIE", shortName: "PIE", category: "UG", total: 57, male: 47, female: 10, femalePercentage: 17.5, malePercentage: 82.5 },
 
   // ---------- PG ----------
-  { name: "MCA", shortName: "MCA", category: "PG", total: 91, male: 73, female: 18, femalePercentage: 19.8, malePercentage: 80.2 },
-  { name: "M.Tech PIE", shortName: "M.Tech PIE", category: "PG", total: 4, male: 2, female: 2, femalePercentage: 50.0, malePercentage: 50.0 },
-  { name: "M.Tech Structures (Civil)", shortName: "M.Tech Structures", category: "PG", total: 17, male: 14, female: 3, femalePercentage: 17.6, malePercentage: 82.4 },
-  { name: "M.Tech Control System", shortName: "M.Tech Control Sys", category: "PG", total: 10, male: 7, female: 3, femalePercentage: 30.0, malePercentage: 70.0 },
-  { name: "M.Tech Computer Engineering (Cybersecurity)", shortName: "M.Tech Cybersecurity", category: "PG", total: 30, male: 22, female: 8, femalePercentage: 26.7, malePercentage: 73.3 },
-  { name: "M.Tech Computer Engineering (Computer)", shortName: "M.Tech Computer Eng", category: "PG", total: 46, male: 35, female: 11, femalePercentage: 23.9, malePercentage: 76.1 },
-  { name: "M.Tech PED", shortName: "M.Tech PED", category: "PG", total: 12, male: 8, female: 4, femalePercentage: 33.3, malePercentage: 66.7 },
-  { name: "M.Tech Communication Systems", shortName: "M.Tech Comm Systems", category: "PG", total: 12, male: 8, female: 3, femalePercentage: 25.0, malePercentage: 66.7 },
-  { name: "M.Tech Geotech", shortName: "M.Tech Geotech", category: "PG", total: 5, male: 3, female: 2, femalePercentage: 40.0, malePercentage: 60.0 },
-  { name: "M.Tech Power System", shortName: "M.Tech Power System", category: "PG", total: 5, male: 5, female: 0, femalePercentage: 0.0, malePercentage: 100.0 },
-  { name: "MBA", shortName: "MBA", category: "PG", total: 47, male: 28, female: 19, femalePercentage: 40.4, malePercentage: 59.6 },
-  { name: "M.Tech VLSI Design", shortName: "M.Tech VLSI", category: "PG", total: 56, male: 43, female: 13, femalePercentage: 23.2, malePercentage: 76.8 },
-  { name: "M.Tech Embedded System Design", shortName: "M.Tech Embedded Sys", category: "PG", total: 29, male: 24, female: 5, femalePercentage: 17.2, malePercentage: 82.8 },
-  { name: "M.Sc Economics", shortName: "M.Sc Economics", category: "PG", total: 5, male: 1, female: 4, femalePercentage: 80.0, malePercentage: 20.0 },
-  { name: "M.Sc Chemistry", shortName: "M.Sc Chemistry", category: "PG", total: 22, male: 3, female: 19, femalePercentage: 86.4, malePercentage: 13.6 },
-  { name: "M.Sc Mathematics", shortName: "M.Sc Mathematics", category: "PG", total: 26, male: 16, female: 8, femalePercentage: 30.8, malePercentage: 61.5 },
-  { name: "M.Tech Transportation", shortName: "M.Tech Transportation", category: "PG", total: 15, male: 12, female: 3, femalePercentage: 20.0, malePercentage: 80.0 }
+{ name: "MCA", shortName: "MCA", category: "PG", total: 91, male: 73, female: 18, femalePercentage: 19.8, malePercentage: 80.2 },
+{ name: "M.Tech PIE", shortName: "M.Tech PIE", category: "PG", total: 4, male: 2, female: 2, femalePercentage: 50.0, malePercentage: 50.0 },
+{ name: "M.Tech Structures (Civil)", shortName: "M.Tech Structures", category: "PG", total: 17, male: 14, female: 3, femalePercentage: 17.6, malePercentage: 82.4 },
+{ name: "M.Tech Control System", shortName: "M.Tech Control Sys", category: "PG", total: 10, male: 7, female: 3, femalePercentage: 30.0, malePercentage: 70.0 },
+{ name: "M.Tech Computer Engineering (Cybersecurity)", shortName: "M.Tech Cybersecurity", category: "PG", total: 30, male: 22, female: 8, femalePercentage: 26.7, malePercentage: 73.3 },
+{ name: "M.Tech Computer Engineering (Computer)", shortName: "M.Tech Computer Eng", category: "PG", total: 46, male: 35, female: 11, femalePercentage: 23.9, malePercentage: 76.1 },
+{ name: "M.Tech PED", shortName: "M.Tech PED", category: "PG", total: 12, male: 8, female: 4, femalePercentage: 33.3, malePercentage: 66.7 },
+{ name: "M.Tech Communication Systems", shortName: "M.Tech Comm Systems", category: "PG", total: 12, male: 8, female: 4, femalePercentage: 33.3, malePercentage: 66.7 },
+{ name: "M.Tech Geotech", shortName: "M.Tech Geotech", category: "PG", total: 5, male: 3, female: 2, femalePercentage: 40.0, malePercentage: 60.0 },
+{ name: "M.Tech Power System", shortName: "M.Tech Power System", category: "PG", total: 5, male: 5, female: 0, femalePercentage: 0.0, malePercentage: 100.0 },
+{ name: "MBA", shortName: "MBA", category: "PG", total: 47, male: 28, female: 19, femalePercentage: 40.4, malePercentage: 59.6 },
+{ name: "M.Tech VLSI Design", shortName: "M.Tech VLSI", category: "PG", total: 56, male: 43, female: 13, femalePercentage: 23.2, malePercentage: 76.8 },
+{ name: "M.Tech Embedded System Design", shortName: "M.Tech Embedded Sys", category: "PG", total: 29, male: 24, female: 5, femalePercentage: 17.2, malePercentage: 82.8 },
+{ name: "M.Sc Economics", shortName: "M.Sc Economics", category: "PG", total: 5, male: 1, female: 4, femalePercentage: 80.0, malePercentage: 20.0 },
+{ name: "M.Sc Chemistry", shortName: "M.Sc Chemistry", category: "PG", total: 22, male: 3, female: 19, femalePercentage: 86.4, malePercentage: 13.6 },
+{ name: "M.Sc Mathematics", shortName: "M.Sc Mathematics", category: "PG", total: 26, male: 18, female: 8, femalePercentage: 30.8, malePercentage: 69.2 },
+{ name: "M.Tech Transportation", shortName: "M.Tech Transportation", category: "PG", total: 15, male: 12, female: 3, femalePercentage: 20.0, malePercentage: 80.0 }
 ];
 
 const totalStats2027 = {
