@@ -496,7 +496,7 @@ export default function DemographicsContent() {
 
       {/* Charts Row 2 */}
       <div className="grid grid-cols-1 gap-6 mb-10">
-        <div className="bg-white p-4 sm:p-10 rounded-3xl border border-gray-200 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+        {/* <div className="bg-white p-4 sm:p-10 rounded-3xl border border-gray-200 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
           <h3 className="text-xl sm:text-2xl font-black text-gray-900 mb-6 sm:mb-10">Total Strength Stacked</h3>
           <div className="h-[340px] sm:h-[450px] w-full">
             <ResponsiveContainer width="100%" height="100%">
@@ -547,7 +547,7 @@ export default function DemographicsContent() {
               </BarChart>
             </ResponsiveContainer>
           </div>
-        </div>
+        </div> */}
 
         <div className="bg-white p-4 sm:p-10 rounded-3xl border border-gray-200 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-10 gap-4">
