@@ -551,7 +551,7 @@ export default function DemographicsContent() {
 
         <div className="bg-white p-4 sm:p-10 rounded-3xl border border-gray-200 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-10 gap-4">
-            <h3 className="text-xl sm:text-2xl font-black text-gray-900">Program Ranking by Total Strength</h3>
+            <h3 className="text-xl sm:text-2xl font-black text-gray-900">Total Strength</h3>
             <div className="flex gap-3 sm:gap-6">
               <div className="flex items-center gap-2 sm:gap-3 bg-purple-50 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl">
                 <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-md bg-gradient-to-r from-[#C084FC] to-[#7E22CE] shadow-sm"></div>
