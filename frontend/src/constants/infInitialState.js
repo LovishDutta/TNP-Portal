@@ -12,6 +12,7 @@ const infInitialState = {
   domain: "",
   domainOther: "",
   organisationDescription: "",
+  internshipType: "",
 
   
   minimumCGPA: "",

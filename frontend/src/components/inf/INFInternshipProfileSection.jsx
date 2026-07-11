@@ -1,6 +1,8 @@
 import SectionCard from "../SectionCard";
 import InputField from "../InputField";
 import CourseProfileCard from "../CourseProfileCard";
+import SelectField from "../SelectField";
+import RadioGroup from "../RadioGroup";
 
 import infCourses from "../../constants/infCourses";
 
@@ -31,6 +33,24 @@ export default function INFInternshipProfileSection({
   return (
     <SectionCard title="Internship Profile">
       <div className="space-y-6">
+        <RadioGroup
+          label="Internship Type"
+          name="internshipType"
+          value={formData.internshipType || ""}
+          onChange={(e) => {
+            setValidationMessage("");
+            setFormData((prev) => ({
+              ...prev,
+              internshipType: e.target.value,
+            }));
+          }}
+          options={[
+            "Internship only",
+            "Internship plus FTE",
+            "Internship with PPO offers"
+          ]}
+          required
+        />
 
         {infCourses.map((course) => (
           <CourseProfileCard

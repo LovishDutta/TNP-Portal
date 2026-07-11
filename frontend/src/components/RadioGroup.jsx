@@ -4,12 +4,16 @@ export default function RadioGroup({
   value,
   options,
   onChange,
+  required = false,
 }) {
   return (
     <div>
 
       <label className="block font-medium text-gray-700 mb-4">
         {label}
+        {required && (
+          <span className="text-red-500 ml-1">*</span>
+        )}
       </label>
 
       <div className="flex flex-wrap gap-3">

@@ -80,6 +80,12 @@ export default function INFForm() {
 
   // STEP 2
   if (currentStep === 2) {
+    if (!formData.internshipType) {
+      setValidationMessage("Please select the Internship Type before proceeding.");
+      scrollToTop();
+      return;
+    }
+
     const hasInternshipProfile = Object.values(
   formData.internshipProfiles
 ).some((profile) => {

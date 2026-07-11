@@ -106,61 +106,98 @@ const generatePDF = (submission, res) => {
   };
 
   const drawSectionHeader = (title) => {
-    checkPageBreak(50);
-    doc.moveDown(1);
+    checkPageBreak(30);
+    doc.moveDown(0.5);
     
-    doc.rect(margins.left, doc.y, contentWidth, 24).fill(colors.bgGray);
-    doc.moveTo(margins.left, doc.y + 24).lineTo(pageWidth - margins.right, doc.y + 24).lineWidth(1).strokeColor(colors.border).stroke();
+    const startY = doc.y;
+    doc.rect(margins.left, startY, contentWidth, 20).fill(colors.bgGray);
     
-    doc.fillColor(colors.maroon).fontSize(12).font(fonts.bold).text(title.toUpperCase(), margins.left + 10, doc.y + 6);
-    doc.moveDown(1.5);
+    doc.moveTo(margins.left, startY).lineTo(pageWidth - margins.right, startY).lineWidth(1).strokeColor(colors.border).stroke();
+    doc.moveTo(margins.left, startY).lineTo(margins.left, startY + 20).lineWidth(1).strokeColor(colors.border).stroke();
+    doc.moveTo(pageWidth - margins.right, startY).lineTo(pageWidth - margins.right, startY + 20).lineWidth(1).strokeColor(colors.border).stroke();
+    doc.moveTo(margins.left, startY + 20).lineTo(pageWidth - margins.right, startY + 20).lineWidth(1).strokeColor(colors.border).stroke();
+    
+    doc.fillColor(colors.maroon).fontSize(10).font(fonts.bold).text(title.toUpperCase(), margins.left + 10, startY + 6);
+    doc.y = startY + 20;
   };
 
   const drawBadge = (x, y, text, isYes) => {
     const bgColor = isYes ? '#DCFCE7' : '#FEE2E2';
     const textColor = isYes ? colors.green : colors.red;
     
-    doc.roundedRect(x, y - 2, 45, 16, 4).fill(bgColor);
-    
+    doc.roundedRect(x, y - 2, 38, 14, 4).fill(bgColor);
     
     if (isYes) {
-      doc.moveTo(x + 6, y + 6).lineTo(x + 9, y + 9).lineTo(x + 14, y + 4).lineWidth(1.5).strokeColor(textColor).stroke();
+      doc.moveTo(x + 5, y + 5).lineTo(x + 8, y + 8).lineTo(x + 13, y + 3).lineWidth(1.2).strokeColor(textColor).stroke();
     } else {
-      doc.moveTo(x + 7, y + 4).lineTo(x + 13, y + 10).lineWidth(1.5).strokeColor(textColor).stroke();
-      doc.moveTo(x + 13, y + 4).lineTo(x + 7, y + 10).lineWidth(1.5).strokeColor(textColor).stroke();
+      doc.moveTo(x + 6, y + 3).lineTo(x + 12, y + 9).lineWidth(1.2).strokeColor(textColor).stroke();
+      doc.moveTo(x + 12, y + 3).lineTo(x + 6, y + 9).lineWidth(1.2).strokeColor(textColor).stroke();
     }
 
-    doc.fillColor(textColor).fontSize(9).font(fonts.bold).text(text.toUpperCase(), x + 18, y + 2.5);
+    doc.fillColor(textColor).fontSize(8).font(fonts.bold).text(text.toUpperCase(), x + 16, y + 1.5);
   };
 
-  const drawGridRow = (key, value, isLast = false) => {
-    if (isEmpty(value)) return;
+  const drawGridRowMulti = (keys, isFirst = false, isLast = false) => {
+    const colCount = keys.length;
+    const colWidth = contentWidth / colCount;
+    let maxRowHeight = 18;
     
-    const textHeight = doc.heightOfString(formatValue(value), { width: (contentWidth / 2) - 20, font: fonts.regular, fontSize: 10 });
-    const rowHeight = Math.max(20, textHeight + 8);
-    
-    checkPageBreak(rowHeight);
+    keys.forEach(k => {
+      const val = data[k];
+      const labelWidth = colCount === 1 ? 140 : 100;
+      const textWidth = colCount === 1 ? contentWidth - 170 : colWidth - 120;
+      
+      doc.font(fonts.regular).fontSize(9);
+      const valHeight = doc.heightOfString(formatValue(val), { width: textWidth });
+      doc.font(fonts.bold).fontSize(9);
+      const labelHeight = doc.heightOfString(formatKey(k), { width: labelWidth });
+      
+      const neededHeight = Math.max(valHeight, labelHeight) + 12;
+      if (neededHeight > maxRowHeight) maxRowHeight = neededHeight;
+    });
 
-    const startY = doc.y;
-    
-    
-    doc.fillColor(colors.textMedium).fontSize(10).font(fonts.bold).text(formatKey(key), margins.left + 10, startY + 4, { width: (contentWidth / 3) - 20 });
-    
-    
-    const valStr = formatValue(value);
-    if (valStr.toLowerCase() === 'yes' || valStr.toLowerCase() === 'no') {
-      drawBadge(margins.left + (contentWidth / 3), startY + 4, valStr, valStr.toLowerCase() === 'yes');
-    } else if (valStr.startsWith('http://') || valStr.startsWith('https://')) {
-      doc.fillColor('#2563EB').fontSize(10).font(fonts.regular).text(valStr, margins.left + (contentWidth / 3), startY + 4, { width: (contentWidth * 2/3) - 10, link: valStr, underline: true });
-    } else {
-      doc.fillColor(colors.textDark).fontSize(10).font(fonts.regular).text(valStr, margins.left + (contentWidth / 3), startY + 4, { width: (contentWidth * 2/3) - 10 });
+    if (doc.y + maxRowHeight > pageHeight - margins.bottom - 40) {
+      if (!isFirst) {
+        doc.moveTo(margins.left, doc.y).lineTo(pageWidth - margins.right, doc.y).lineWidth(1).strokeColor(colors.border).stroke();
+      }
+      doc.addPage();
+      doc.moveTo(margins.left, doc.y).lineTo(pageWidth - margins.right, doc.y).lineWidth(1).strokeColor(colors.border).stroke();
     }
     
-    doc.y = startY + rowHeight;
+    const startY = doc.y;
+
+    keys.forEach((k, idx) => {
+      const val = data[k];
+      const startX = margins.left + (idx * colWidth);
+      const labelWidth = colCount === 1 ? 140 : 100;
+      const valueX = startX + labelWidth + 10;
+      const valueWidth = colCount === 1 ? contentWidth - 170 : colWidth - 120;
+
+      doc.fillColor(colors.textMedium).fontSize(9).font(fonts.bold).text(formatKey(k), startX + 10, startY + 6, { width: labelWidth });
+      
+      const valStr = formatValue(val);
+      if (valStr.toLowerCase() === 'yes' || valStr.toLowerCase() === 'no') {
+        drawBadge(valueX, startY + 5, valStr, valStr.toLowerCase() === 'yes');
+      } else if (valStr.startsWith('http://') || valStr.startsWith('https://')) {
+        doc.fillColor('#2563EB').fontSize(9).font(fonts.regular).text(valStr, valueX, startY + 6, { width: valueWidth, link: valStr, underline: true });
+      } else {
+        doc.fillColor(colors.textDark).fontSize(9).font(fonts.regular).text(valStr, valueX, startY + 6, { width: valueWidth });
+      }
+
+      if (idx === 0 && colCount === 2) {
+         doc.moveTo(startX + colWidth, startY).lineTo(startX + colWidth, startY + maxRowHeight).lineWidth(0.5).strokeColor(colors.border).stroke();
+      }
+    });
     
-    if (!isLast) {
-      doc.moveTo(margins.left + 10, doc.y).lineTo(pageWidth - margins.right - 10, doc.y).lineWidth(0.5).strokeColor(colors.border).stroke();
-      doc.y += 4;
+    doc.y = startY + maxRowHeight;
+    
+    doc.moveTo(margins.left, startY).lineTo(margins.left, doc.y).lineWidth(1).strokeColor(colors.border).stroke();
+    doc.moveTo(pageWidth - margins.right, startY).lineTo(pageWidth - margins.right, doc.y).lineWidth(1).strokeColor(colors.border).stroke();
+    
+    if (isLast) {
+      doc.moveTo(margins.left, doc.y).lineTo(pageWidth - margins.right, doc.y).lineWidth(1).strokeColor(colors.border).stroke();
+    } else {
+      doc.moveTo(margins.left, doc.y).lineTo(pageWidth - margins.right, doc.y).lineWidth(0.5).strokeColor(colors.border).stroke();
     }
   };
 
@@ -171,7 +208,7 @@ const generatePDF = (submission, res) => {
 
   
   const sections = [
-    { title: 'Company Information', keys: ['companyName', 'emailAddress', 'website', 'companyType', 'companyTypeOther', 'domain', 'domainOther', 'organisationDescription'] },
+    { title: 'Company Information', keys: ['companyName', 'emailAddress', 'website', 'companyType', 'companyTypeOther', 'domain', 'domainOther', 'organisationDescription', 'internshipType'] },
     { title: 'Eligibility Criteria', keys: ['minimumCGPA', 'medicalCondition', 'otherCriteria'] },
     { title: 'Recruitment Process', keys: ['resumeShortlisting', 'prePlacementTalk', 'groupDiscussion', 'aptitudeTest', 'testMode', 'technicalTest', 'technicalInterview', 'hrInterview', 'otherRounds', 'expectedRecruits', 'tentativeVisitDate', 'accommodationRequired', 'bondDetails'] },
     { title: 'Additional Details', keys: ['sponsorEvents', 'internshipsOffered', 'internshipStreams', 'internshipDuration', 'studentContests', 'contestDetails'] }
@@ -180,24 +217,31 @@ const generatePDF = (submission, res) => {
   sections.forEach(section => {
     const validKeys = section.keys.filter(k => !isEmpty(data[k]));
     if (validKeys.length > 0) {
+      let gridRows = [];
+      let currentRow = [];
+      const longTextKeys = ['organisationDescription', 'medicalCondition', 'otherCriteria', 'bondDetails', 'contestDetails'];
       
-      let requiredHeight = 60; 
       validKeys.forEach((k) => {
-        const textHeight = doc.heightOfString(formatValue(data[k]), { width: (contentWidth / 2) - 20, font: fonts.regular, fontSize: 10 });
-        requiredHeight += Math.max(20, textHeight + 8) + 4;
+        if (longTextKeys.includes(k)) {
+          if (currentRow.length > 0) { gridRows.push(currentRow); currentRow = []; }
+          gridRows.push([k]);
+        } else {
+          currentRow.push(k);
+          if (currentRow.length === 2) { gridRows.push(currentRow); currentRow = []; }
+        }
       });
-      
-      checkPageBreak(requiredHeight + 10);
+      if (currentRow.length > 0) { gridRows.push(currentRow); }
+
+      let requiredHeight = 80; 
+      checkPageBreak(requiredHeight);
 
       drawSectionHeader(section.title);
       
-      const gridStartY = doc.y;
-      validKeys.forEach((k, idx) => {
-        drawGridRow(k, data[k], idx === validKeys.length - 1);
+      gridRows.forEach((row, idx) => {
+        drawGridRowMulti(row, idx === 0, idx === gridRows.length - 1);
       });
       
-      doc.roundedRect(margins.left, gridStartY - 4, contentWidth, doc.y - gridStartY + 4, 4).lineWidth(1).strokeColor(colors.border).stroke();
-      doc.moveDown(2);
+      doc.moveDown(1.5);
     }
   });
 
@@ -216,37 +260,36 @@ const generatePDF = (submission, res) => {
         const keys = Object.keys(contact).filter(k => !isEmpty(contact[k]));
         
         
-        let requiredHeight = 35; 
+        let requiredHeight = 25; 
         keys.forEach(k => {
-          const tH = doc.heightOfString(String(contact[k]), { width: cardWidth - 20, font: fonts.regular, fontSize: 10 });
-          requiredHeight += 12 + tH + 10;
+          doc.font(fonts.regular).fontSize(9);
+          const tH = doc.heightOfString(String(contact[k]), { width: cardWidth - 20 });
+          requiredHeight += 8 + tH + 6;
         });
 
         if (col === 0 && idx > 0) {
-          startY = doc.y + maxCardHeight + 15;
+          startY = doc.y + maxCardHeight + 10;
           maxCardHeight = 0;
           doc.y = startY;
         }
-        
         
         if (checkPageBreak(requiredHeight + 20)) {
            startY = doc.y; 
            if (col === 1) col = 0; 
         }
 
-        const x = margins.left + (col * (cardWidth + 20));
+        const x = margins.left + (col * (cardWidth + 10));
         let y = startY;
 
-        
-        doc.roundedRect(x, y, cardWidth, 24, 4).fill(colors.bgGray);
-        doc.fillColor(colors.maroon).fontSize(10).font(fonts.bold).text(`Contact ${idx + 1}`, x + 10, y + 7);
-        y += 30;
+        doc.roundedRect(x, y, cardWidth, 20, 4).fill(colors.bgGray);
+        doc.fillColor(colors.maroon).fontSize(9).font(fonts.bold).text(`Contact ${idx + 1}`, x + 10, y + 5);
+        y += 24;
 
         keys.forEach(k => {
-          doc.fillColor(colors.textLight).fontSize(8).font(fonts.bold).text(formatKey(k).toUpperCase(), x + 10, y);
-          const tH = doc.heightOfString(String(contact[k]), { width: cardWidth - 20, font: fonts.regular, fontSize: 10 });
-          doc.fillColor(colors.textDark).fontSize(10).font(fonts.regular).text(String(contact[k]), x + 10, y + 12, { width: cardWidth - 20 });
-          y += 12 + tH + 10;
+          doc.fillColor(colors.textLight).fontSize(7).font(fonts.bold).text(formatKey(k).toUpperCase(), x + 10, y);
+          const tH = doc.heightOfString(String(contact[k]), { width: cardWidth - 20, font: fonts.regular, fontSize: 9 });
+          doc.fillColor(colors.textDark).fontSize(9).font(fonts.regular).text(String(contact[k]), x + 10, y + 10, { width: cardWidth - 20 });
+          y += 10 + tH + 6;
         });
 
         const currentHeight = y - startY + 5;
@@ -256,7 +299,7 @@ const generatePDF = (submission, res) => {
         
         col = (col + 1) % 2;
       });
-      doc.y = startY + maxCardHeight + 20;
+      doc.y = startY + maxCardHeight + 15;
     }
   }
 
@@ -265,51 +308,52 @@ const generatePDF = (submission, res) => {
   
   Object.entries(branchKeys).forEach(([key, title]) => {
     if (!isEmpty(data[key])) {
-      
-      const chipHeight = 24;
-      let requiredHeight = 60; 
+      const chipHeight = 18;
+      let requiredHeight = 40; 
       let tempX = margins.left + 10;
       let tempY = 0;
       
       data[key].forEach(item => {
         if (isEmpty(item)) return;
-        const textWidth = doc.widthOfString(item, { font: fonts.regular, fontSize: 9 });
-        const chipWidth = textWidth + 20;
+        const textWidth = doc.widthOfString(item, { font: fonts.regular, fontSize: 8 });
+        const chipWidth = textWidth + 16;
         if (tempX + chipWidth > pageWidth - margins.right - 10) {
           tempX = margins.left + 10;
-          tempY += chipHeight + 10;
+          tempY += chipHeight + 6;
         }
-        tempX += chipWidth + 10;
+        tempX += chipWidth + 6;
       });
-      requiredHeight += tempY + chipHeight + 15;
+      requiredHeight += tempY + chipHeight + 10;
       
-      checkPageBreak(requiredHeight + 10);
+      checkPageBreak(requiredHeight);
 
       drawSectionHeader(title);
       
       const gridStartY = doc.y;
       let x = margins.left + 10;
-      let y = gridStartY + 10;
+      let y = gridStartY + 8;
       
       data[key].forEach(item => {
         if (isEmpty(item)) return;
-        const textWidth = doc.widthOfString(item, { font: fonts.regular, fontSize: 9 });
-        const chipWidth = textWidth + 20;
+        const textWidth = doc.widthOfString(item, { font: fonts.regular, fontSize: 8 });
+        const chipWidth = textWidth + 16;
         
         if (x + chipWidth > pageWidth - margins.right - 10) {
           x = margins.left + 10;
-          y += chipHeight + 10;
+          y += chipHeight + 6;
         }
         
-        doc.roundedRect(x, y, chipWidth, chipHeight, 12).lineWidth(1).fillAndStroke(colors.bgGray, colors.border);
-        doc.fillColor(colors.textDark).fontSize(9).font(fonts.regular).text(item, x + 10, y + 7);
+        doc.roundedRect(x, y, chipWidth, chipHeight, 9).lineWidth(1).fillAndStroke(colors.bgGray, colors.border);
+        doc.fillColor(colors.textDark).fontSize(8).font(fonts.regular).text(item, x + 8, y + 5);
         
-        x += chipWidth + 10;
+        x += chipWidth + 6;
       });
       
-      doc.y = y + chipHeight + 10;
-      doc.roundedRect(margins.left, gridStartY - 4, contentWidth, doc.y - gridStartY + 4, 4).lineWidth(1).strokeColor(colors.border).stroke();
-      doc.moveDown(2);
+      doc.y = y + chipHeight + 8;
+      doc.moveTo(margins.left, gridStartY).lineTo(margins.left, doc.y).lineWidth(1).strokeColor(colors.border).stroke();
+      doc.moveTo(pageWidth - margins.right, gridStartY).lineTo(pageWidth - margins.right, doc.y).lineWidth(1).strokeColor(colors.border).stroke();
+      doc.moveTo(margins.left, doc.y).lineTo(pageWidth - margins.right, doc.y).lineWidth(1).strokeColor(colors.border).stroke();
+      doc.moveDown(1.5);
     }
   });
 
@@ -327,14 +371,14 @@ const generatePDF = (submission, res) => {
           const detailKeys = Object.keys(details).filter(k => !isEmpty(details[k]));
           const colWidth = (contentWidth - 40) / 2;
           
-          
-          let requiredHeight = 40; 
+          let requiredHeight = 35; 
           let tempRowMax = 0;
           let tempCol = 0;
           
           detailKeys.forEach((k, i) => {
-             const tH = doc.heightOfString(String(details[k]), { width: colWidth, font: fonts.regular, fontSize: 10 });
-             const itemHeight = 12 + tH + 15;
+             doc.font(fonts.regular).fontSize(9);
+             const tH = doc.heightOfString(String(details[k]), { width: colWidth });
+             const itemHeight = 10 + tH + 10;
              if (itemHeight > tempRowMax) tempRowMax = itemHeight;
              if (tempCol === 1 || i === detailKeys.length - 1) {
                 requiredHeight += tempRowMax;
@@ -345,29 +389,27 @@ const generatePDF = (submission, res) => {
              }
           });
           
-          checkPageBreak(requiredHeight + 20);
+          checkPageBreak(requiredHeight + 15);
           
           const startY = doc.y;
           
+          doc.roundedRect(margins.left, startY, contentWidth, 24, 6).fill(colors.bgGray);
+          doc.fillColor(colors.maroon).fontSize(10).font(fonts.bold).text(`Profile for ${course.toUpperCase()}`, margins.left + 10, startY + 7);
           
-          doc.roundedRect(margins.left, startY, contentWidth, 30, 6).fill(colors.bgGray);
-          doc.fillColor(colors.maroon).fontSize(12).font(fonts.bold).text(`Profile for ${course.toUpperCase()}`, margins.left + 15, startY + 9);
-          
-          let y = startY + 40;
-          
+          let y = startY + 30;
           
           let colIndex = 0;
           let rowY = y;
           let maxRowHeight = 0;
           
           detailKeys.forEach((k, i) => {
-            const currentX = margins.left + 15 + (colIndex * (colWidth + 10));
+            const currentX = margins.left + 10 + (colIndex * (colWidth + 10));
             
-            doc.fillColor(colors.textLight).fontSize(8).font(fonts.bold).text(formatKey(k).toUpperCase(), currentX, rowY);
-            const textHeight = doc.heightOfString(String(details[k]), { width: colWidth, font: fonts.regular, fontSize: 10 });
-            doc.fillColor(colors.textDark).fontSize(10).font(fonts.regular).text(String(details[k]), currentX, rowY + 12, { width: colWidth });
+            doc.fillColor(colors.textLight).fontSize(7).font(fonts.bold).text(formatKey(k).toUpperCase(), currentX, rowY);
+            const textHeight = doc.heightOfString(String(details[k]), { width: colWidth, font: fonts.regular, fontSize: 9 });
+            doc.fillColor(colors.textDark).fontSize(9).font(fonts.regular).text(String(details[k]), currentX, rowY + 10, { width: colWidth });
             
-            const itemHeight = 12 + textHeight + 15;
+            const itemHeight = 10 + textHeight + 10;
             if (itemHeight > maxRowHeight) maxRowHeight = itemHeight;
             
             if (colIndex === 1 || i === detailKeys.length - 1) {
@@ -379,10 +421,10 @@ const generatePDF = (submission, res) => {
             }
           });
           
-          const cardHeight = rowY - startY + 10;
+          const cardHeight = rowY - startY + 6;
           doc.roundedRect(margins.left, startY, contentWidth, cardHeight, 6).lineWidth(1).strokeColor(colors.border).stroke();
           
-          doc.y = startY + cardHeight + 20;
+          doc.y = startY + cardHeight + 12;
         });
       }
     }
@@ -396,8 +438,7 @@ const generatePDF = (submission, res) => {
   
   const undertakingStartY = doc.y;
   
-  // Declaration text
-  doc.fillColor(colors.textDark).fontSize(10).font(fonts.regular).text(declarationText, margins.left + 10, doc.y, { width: contentWidth - 20, align: 'justify' });
+  doc.fillColor(colors.textDark).fontSize(10).font(fonts.regular).text(declarationText, margins.left + 10, doc.y + 10, { width: contentWidth - 20, align: 'justify' });
   
   doc.moveDown(1.5);
   
@@ -419,7 +460,10 @@ const generatePDF = (submission, res) => {
   
   doc.y += 10;
   
-  doc.roundedRect(margins.left, undertakingStartY - 4, contentWidth, doc.y - undertakingStartY + 4, 4).lineWidth(1).strokeColor(colors.border).stroke();
+  doc.moveTo(margins.left, undertakingStartY).lineTo(margins.left, doc.y).lineWidth(1).strokeColor(colors.border).stroke();
+  doc.moveTo(pageWidth - margins.right, undertakingStartY).lineTo(pageWidth - margins.right, doc.y).lineWidth(1).strokeColor(colors.border).stroke();
+  doc.moveTo(margins.left, doc.y).lineTo(pageWidth - margins.right, doc.y).lineWidth(1).strokeColor(colors.border).stroke();
+  
   doc.moveDown(2);
 
   

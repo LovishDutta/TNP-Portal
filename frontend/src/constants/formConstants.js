@@ -48,17 +48,17 @@ export const INF_COURSES = [
 export const UG_BRANCHES = [
   "Computer Engineering",
   "Information Technology",
-  "Artificial Intelligence & Machine Learning",
-  "Industrial Internet of Things",
-  "Mathematics & Computing",
-  "Civil Engineering",
   "Electronics & Communication Engineering",
   "Electrical Engineering",
   "Mechanical Engineering",
+  "Civil Engineering",
+  "Mathematics & Computing",
+  "Artificial Intelligence & Machine Learning (AIML)",
+  "Industrial Internet of Things (IIOT)",
   "Production & Industrial Engineering",
-  "Artificial Intelligence & Data Science",
-  "Robotics & Automation",
-  "Sustainable Energy Technologies",
+  "Artificial Intelligence & Data Science (AI&DS)",
+  "Sustainable Energy Technologies (SET)",
+  "Robotics & Automation (RA)",
   "Microelectronics & VLSI",
 ];
 
@@ -73,35 +73,24 @@ export const MINOR_DEGREES = [
 
 export const PG_SPECIALIZATIONS = [
   "Computer Engineering / Cyber Security",
-
+  "Transportation Engineering",
+  "Structural Engineering",
+  "Geotechnical Engineering",
   "Communication Systems",
   "Power System",
   "Power Electronics & Drives",
   "Control System",
-
-  "Thermal Engineering",
-  "Instrumentation",
-  "Machine Design",
-
-  "Environmental Engineering",
-  "Water Resources Engineering",
-  "Transportation Engineering",
-  "Structural Engineering",
-  "Geotechnical Engineering",
-
   "Renewable Energy Systems",
-
+  "Machine Design",
+  "Production & Industrial Engineering",
   "VLSI Design",
   "Embedded System Design",
-
+  "M.Sc. (Physics)",
+  "M.Sc. (Chemistry)",
+  "M.Sc. (Mathematics)",
+  "M.Sc. (Economics)",
   "Master of Computer Applications (MCA)",
   "Master of Business Administration (MBA)",
-
-  "Physics",
-  "Chemistry",
-  "Mathematics",
-
-  "Nanomaterials and Nanotechnology",
 ];
 
 
