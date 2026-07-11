@@ -45,9 +45,9 @@ export default function INFInternshipProfileSection({
             }));
           }}
           options={[
-            "Internship only",
-            "Internship plus FTE",
-            "Internship with PPO offers"
+            "Internship Only",
+            "Internship + FTE",
+            "Internship with PPO Offers"
           ]}
           required
         />

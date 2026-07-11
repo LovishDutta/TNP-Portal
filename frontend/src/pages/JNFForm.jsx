@@ -264,7 +264,6 @@ export default function JNFForm() {
   if (currentStep === 3) {
     const hasCourses =
       formData.ugBranches.length > 0 ||
-      formData.minorDegrees.length > 0 ||
       formData.pgSpecializations.length > 0;
 
     if (!hasCourses) {

@@ -1,23 +1,7 @@
 import SectionCard from "../SectionCard";
 import CheckboxGroup from "../CheckboxGroup";
 
-const UG_BRANCHES = [
-  "Computer Engineering",
-  "Information Technology",
-  "Electronics & Communication Engineering",
-  "Electrical Engineering",
-  "Mechanical Engineering",
-  "Civil Engineering",
-  "Mathematics & Computing",
-  "Artificial Intelligence & Machine Learning (AIML)",
-  "Industrial Internet of Things (IIOT)",
-  "Production & Industrial Engineering",
-];
-
-const MINOR_DEGREES = [
-  "Computing & Intelligence",
-  "Unmanned Aerial Systems",
-];
+import { JNF_UG_BRANCHES } from "../../constants/formConstants";
 
 export default function JNFCoursesSection({
   formData,
@@ -46,23 +30,11 @@ export default function JNFCoursesSection({
 
         <CheckboxGroup
           label="Undergraduate Programme (B.Tech)"
-          options={UG_BRANCHES}
+          options={JNF_UG_BRANCHES}
           selected={formData.ugBranches}
           onChange={(option) =>
             toggleSelection(
               "ugBranches",
-              option
-            )
-          }
-        />
-
-        <CheckboxGroup
-          label="Minor Degree (UG)"
-          options={MINOR_DEGREES}
-          selected={formData.minorDegrees}
-          onChange={(option) =>
-            toggleSelection(
-              "minorDegrees",
               option
             )
           }

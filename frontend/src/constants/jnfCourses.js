@@ -4,10 +4,6 @@ const jnfCourses = [
     title: "B.Tech",
   },
   {
-    key: "minor",
-    title: "Minor Degree (UG)",
-  },
-  {
     key: "mca",
     title: "MCA",
   },

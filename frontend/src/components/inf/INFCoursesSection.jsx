@@ -1,22 +1,7 @@
 import SectionCard from "../SectionCard";
 import CheckboxGroup from "../CheckboxGroup";
 
-const UG_BRANCHES = [
-  "Computer Engineering",
-  "Information Technology",
-  "Electronics & Communication Engineering",
-  "Electrical Engineering",
-  "Mechanical Engineering",
-  "Civil Engineering",
-  "Mathematics & Computing",
-  "Artificial Intelligence & Machine Learning (AIML)",
-  "Industrial Internet of Things (IIOT)",
-  "Production & Industrial Engineering",
-  "Artificial Intelligence & Data Science (AI&DS)",
-  "Sustainable Energy Technologies (SET)",
-  "Robotics & Automation (RA)",
-  "Microelectronics & VLSI",
-];
+import { INF_UG_BRANCHES } from "../../constants/formConstants";
 
 export default function INFCoursesSection({
   formData,
@@ -46,7 +31,7 @@ export default function INFCoursesSection({
 
         <CheckboxGroup
           label="Undergraduate Programmes"
-          options={UG_BRANCHES}
+          options={INF_UG_BRANCHES}
           selected={formData.ugBranches}
           onChange={(option) =>
             toggleSelection(
