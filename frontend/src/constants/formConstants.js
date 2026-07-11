@@ -45,34 +45,43 @@ export const INF_COURSES = [
 
 
 
-export const UG_BRANCHES = [
+export const JNF_UG_BRANCHES = [
+  "Civil Engineering",
   "Computer Engineering",
   "Information Technology",
+  "Artificial Intelligence & Machine learning (AIML)",
+  "Industrial Internet of Things (IIOT)",
+  "Mathematics & Computing",
   "Electronics & Communication Engineering",
   "Electrical Engineering",
   "Mechanical Engineering",
-  "Civil Engineering",
-  "Mathematics & Computing",
-  "Artificial Intelligence & Machine Learning (AIML)",
-  "Industrial Internet of Things (IIOT)",
   "Production & Industrial Engineering",
-  "Artificial Intelligence & Data Science (AI&DS)",
-  "Sustainable Energy Technologies (SET)",
-  "Robotics & Automation (RA)",
-  "Microelectronics & VLSI",
 ];
 
-
+export const INF_UG_BRANCHES = [
+  "Computer Engineering",
+  "Artificial Intelligence & Machine Learning",
+  "Industrial Internet of Things",
+  "Information Technology",
+  "Mathematics & Computing",
+  "Artificial Intelligence & Data Science",
+  "Robotics & Automation",
+  "Civil Engineering",
+  "Electronics & Communication Engineering",
+  "Electrical Engineering",
+  "Production & Industrial Engineering",
+  "Mechanical Engineering",
+  "Sustainable Energy Technologies",
+  "Microelectronics & VLSI",
+];
 
 export const MINOR_DEGREES = [
   "Computing & Intelligence",
   "Unmanned Aerial Systems",
 ];
 
-
-
 export const PG_SPECIALIZATIONS = [
-  "Computer Engineering / Cyber Security",
+  "Computer Engineering/ Cyber Security",
   "Transportation Engineering",
   "Structural Engineering",
   "Geotechnical Engineering",

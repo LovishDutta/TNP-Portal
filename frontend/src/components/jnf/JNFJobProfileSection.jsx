@@ -3,15 +3,7 @@ import InputField from "../InputField";
 import SelectField from "../SelectField";
 import CourseProfileCard from "../CourseProfileCard";
 
-const courses = [
-  { key: "btech", title: "B.Tech" },
-  { key: "minor", title: "Minor Degree (UG)" },
-  { key: "mca", title: "MCA" },
-  { key: "mtech", title: "M.Tech" },
-  { key: "mba", title: "MBA" },
-  { key: "msc", title: "M.Sc." },
-  { key: "phd", title: "Ph.D" },
-];
+import jnfCourses from "../../constants/jnfCourses";
 
 export default function JNFJobProfileSection({
   formData,
@@ -40,7 +32,7 @@ export default function JNFJobProfileSection({
   return (
     <SectionCard title="Job Profile">
       <div className="space-y-6">
-        {courses.map((course) => (
+        {jnfCourses.map((course) => (
           <CourseProfileCard
             key={course.key}
             title={course.title}

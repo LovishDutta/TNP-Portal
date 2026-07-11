@@ -59,22 +59,11 @@ const jnfInitialState = {
 
   
   ugBranches: [],
-  minorDegrees: [],
   pgSpecializations: [],
 
   
   jobProfiles: {
     btech: {
-      designation: "",
-      jobDescriptionAttached: "",
-      ctc: "",
-      takeHome: "",
-      perks: "",
-      trainingPeriod: "",
-      placeOfPosting: "",
-    },
-
-    minor: {
       designation: "",
       jobDescriptionAttached: "",
       ctc: "",
