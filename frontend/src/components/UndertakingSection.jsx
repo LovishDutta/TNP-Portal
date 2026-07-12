@@ -51,7 +51,7 @@ export default function UndertakingSection({ formData, handleChange }) {
             name="formFillerDesignation"
             value={formData.formFillerDesignation || ""}
             onChange={handleChange}
-            placeholder="Example: SPC, Faculty Coordinator, Department Representative"
+            placeholder="Example: Talent Acquisition, HR, Hiring Manager etc."
             required
           />
         </div>

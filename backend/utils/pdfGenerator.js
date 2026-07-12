@@ -304,7 +304,7 @@ const generatePDF = (submission, res) => {
   }
 
   
-  const branchKeys = { 'ugBranches': 'Eligible UG Branches', 'minorDegrees': 'Eligible Minor Degrees', 'pgSpecializations': 'Eligible PG Specializations' };
+  const branchKeys = { 'ugBranches': 'Eligible UG Branches', 'minorDegrees': 'Eligible Minor Degrees', 'pgSpecializations': 'Eligible PG Specializations', 'dualDegreeBranches': 'Eligible Dual Degree Branches' };
   
   Object.entries(branchKeys).forEach(([key, title]) => {
     if (!isEmpty(data[key])) {
