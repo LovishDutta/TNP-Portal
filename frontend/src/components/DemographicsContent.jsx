@@ -10,7 +10,7 @@ import { Search } from 'lucide-react';
 
 const programData2027 = [
   // ---------- UG ----------
-  { name: "Computer Engineering", shortName: "CE", category: "UG", total: 213, male: 169, female: 44, femalePercentage: 20.7, malePercentage: 79.3 },
+  { name: "Computer Engineering", shortName: "CSE", category: "UG", total: 213, male: 169, female: 44, femalePercentage: 20.7, malePercentage: 79.3 },
   { name: "Information Technology", shortName: "IT", category: "UG", total: 142, male: 114, female: 28, femalePercentage: 19.7, malePercentage: 80.3 },
   { name: "Electronics & Communication Engineering", shortName: "ECE", category: "UG", total: 140, male: 114, female: 26, femalePercentage: 18.6, malePercentage: 81.4 },
   { name: "Electrical Engineering", shortName: "EE", category: "UG", total: 136, male: 110, female: 26, femalePercentage: 19.1, malePercentage: 80.9 },
@@ -57,7 +57,7 @@ const totalStats2027 = {
 // ========================= 2028 Batch =========================
 
 const programData2028 = [
-  { name: "Computer Engineering", shortName: "CE", category: "UG", total: 132, male: 106, female: 26, femalePercentage: 19.7, malePercentage: 80.3 },
+  { name: "Computer Engineering", shortName: "CSE", category: "UG", total: 132, male: 106, female: 26, femalePercentage: 19.7, malePercentage: 80.3 },
   { name: "Information Technology", shortName: "IT", category: "UG", total: 65, male: 49, female: 16, femalePercentage: 24.6, malePercentage: 75.4 },
   { name: "Electronics & Communication Engineering", shortName: "ECE", category: "UG", total: 120, male: 96, female: 24, femalePercentage: 20.0, malePercentage: 80.0 },
   { name: "Electrical Engineering", shortName: "EE", category: "UG", total: 120, male: 96, female: 24, femalePercentage: 20.0, malePercentage: 80.0 },
@@ -102,7 +102,7 @@ const UG_PALETTE = [
 // ========================= 2027 UG Doughnut =========================
 
 const batch2027DoughnutData = [
-  { name: "CE", value: 18.9, total: 1125 },
+  { name: "CSE", value: 18.9, total: 1125 },
   { name: "IT", value: 12.6, total: 1125 },
   { name: "ECE", value: 12.4, total: 1125 },
   { name: "EE", value: 12.1, total: 1125 },
@@ -143,7 +143,7 @@ const batch2027PGDoughnutData = [
 // ========================= 2028 UG Doughnut =========================
 
 const batch2028DoughnutData = [
-  { name: "CE", value: 12.0, total: 1097 },
+  { name: "CSE", value: 12.0, total: 1097 },
   { name: "IT", value: 5.9, total: 1097 },
   { name: "ECE", value: 10.9, total: 1097 },
   { name: "EE", value: 10.9, total: 1097 },
