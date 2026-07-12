@@ -136,14 +136,10 @@ function JNFPoliciesBox() {
       </li>
 
       <li>
-        Once a student receives an offer from a
-        <strong> PSU/Government Organization</strong>, or is
-        <strong> under consideration </strong>
-        (awaiting the final selection/offer) for any
-        <strong> PSU/Government Organization</strong>, the student shall
-        <strong> not be permitted to participate in the recruitment
-        process of any other PSU/Government Organization.</strong>
-      </li>
+  Once a student receives an offer from a
+  <strong> PSU/Government Organization</strong>, the student shall
+  <strong> not be permitted to participate in the recruitment process of any other PSU/Government Organization.</strong>
+</li>
     </ul>
   </div>
 </li>
