@@ -100,7 +100,7 @@ function ImportantMentionsList() {
 
                 <li>
                   The student's existing offer must have a
-                  <strong> CTC of Rs.12 LPA or below.</strong>
+                  <strong> CTC of ₹12 LPA or below.</strong>
                 </li>
 
                 <li>

@@ -92,7 +92,7 @@ function JNFPoliciesBox() {
 
       <li>
         The student's existing offer must have a
-        <strong> CTC of Rs.12 LPA or below.</strong>
+        <strong> CTC of ₹12 LPA or below.</strong>
       </li>
 
       <li>
@@ -152,7 +152,7 @@ function JNFPoliciesBox() {
 
   <span className="text-sm leading-relaxed">
     <strong>Bonus Company Policy:</strong> Companies offering a
-    <strong> CTC of Rs.5 LPA or below</strong> shall be classified as
+    <strong> CTC of ₹5 LPA or below</strong> shall be classified as
     <strong> Bonus Companies</strong>. Students selected by a Bonus
     Company shall remain eligible to participate in all subsequent campus
     recruitment drives offering a higher CTC without any restriction
