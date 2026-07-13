@@ -100,7 +100,7 @@ function ImportantMentionsList() {
 
                 <li>
                   The student's existing offer must have a
-                  <strong> CTC of ₹12 LPA or below.</strong>
+                  <strong> CTC of Rs.12 LPA or below.</strong>
                 </li>
 
                 <li>
@@ -201,8 +201,7 @@ export default function UndertakingSection({ formData, handleChange }) {
           </div>
           <div className="ml-3 text-sm">
             <label htmlFor="undertakingAccepted" className="font-medium text-gray-900">
-              I hereby declare that all the information provided in this form is true, complete, and correct to the best of my knowledge, and I agree to abide by all Training & Placement Cell policies and guidelines.
-            </label>
+I hereby declare that the information provided in this form is true and correct to the best of my knowledge. I have read and understand all the provided important mentions from the TNP Recruitment Portal.            </label>
             {!formData.undertakingAccepted && (
               <p className="text-red-600 text-xs font-medium mt-1.5">
                 Please read and submit.
