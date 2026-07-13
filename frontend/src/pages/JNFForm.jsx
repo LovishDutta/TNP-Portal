@@ -15,7 +15,6 @@ import JNFEligibilitySection from "../components/jnf/JNFEligibilitySection";
 import JNFSelectionProcessSection from "../components/jnf/JNFSelectionProcessSection";
 import JNFCompanyOfficialsSection from "../components/jnf/JNFCompanyOfficialsSection";
 import JNFBetterUnderstandingSection from "../components/jnf/JNFBetterUnderstandingSection";
-import JNFImportantNotes from "../components/jnf/JNFImportantNotes";
 import JNFSubmitSection from "../components/jnf/JNFSubmitSection";
 import FormValidationMessage from "../components/FormValidationMessage";
 import UndertakingSection from "../components/UndertakingSection";
@@ -93,7 +92,7 @@ function JNFPoliciesBox() {
 
       <li>
         The student's existing offer must have a
-        <strong> CTC of ₹12 LPA or below.</strong>
+        <strong> CTC of Rs.12 LPA or below.</strong>
       </li>
 
       <li>
@@ -153,7 +152,7 @@ function JNFPoliciesBox() {
 
   <span className="text-sm leading-relaxed">
     <strong>Bonus Company Policy:</strong> Companies offering a
-    <strong> CTC of ₹5 LPA or below</strong> shall be classified as
+    <strong> CTC of Rs.5 LPA or below</strong> shall be classified as
     <strong> Bonus Companies</strong>. Students selected by a Bonus
     Company shall remain eligible to participate in all subsequent campus
     recruitment drives offering a higher CTC without any restriction
@@ -338,7 +337,7 @@ export default function JNFForm() {
     <FormLayout>
        <div ref={formTopRef}>
       {/* Policies box — shown first, before the stepper and the form */}
-      <JNFPoliciesBox />
+      {/* <JNFPoliciesBox /> */}
 
       <FormStepper
         title="Job Notification Form"
@@ -457,8 +456,6 @@ export default function JNFForm() {
               handleChange={handleChange}
             />
 
-            <JNFImportantNotes />
-
             <UndertakingSection 
               formData={formData}
               handleChange={handleChange}
@@ -467,6 +464,7 @@ export default function JNFForm() {
             <JNFSubmitSection
               onPrevious={previousStep}
               isSubmitting={isSubmitting}
+              agreed={formData.undertakingAccepted}
             />
           </>
         )}

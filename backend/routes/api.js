@@ -14,7 +14,7 @@ router.post('/jnf', async (req, res) => {
   try {
     const formData = req.body;
     const companyName = formData.companyName || 'Unknown Company';
-    
+
     const submission = new Submission({
       formType: 'JNF',
       companyName,
@@ -23,11 +23,15 @@ router.post('/jnf', async (req, res) => {
 
     await submission.save();
 
-    
     await sendEmail({
       to: 'tnpoffice@nitkkr.ac.in',
       subject: `New JNF Submission: ${companyName}`,
-      text: `A new Job Notification Form (JNF) has been submitted by ${companyName}.\nSubmission Time: ${new Date().toLocaleString()}`
+      text: `A new Job Notification Form (JNF) has been submitted by ${companyName}.
+
+Submission Time: ${submission.submittedAt.toLocaleString("en-IN", {
+        dateStyle: "medium",
+        timeStyle: "medium",
+      })}`
     }).catch(err => console.log('Email sending failed:', err));
 
     res.status(201).json({ message: 'JNF submitted successfully', id: submission._id });
@@ -42,20 +46,24 @@ router.post('/inf', async (req, res) => {
   try {
     const formData = req.body;
     const companyName = formData.companyName || 'Unknown Company';
-    
+
     const submission = new Submission({
       formType: 'INF',
       companyName,
       formData
     });
 
-    await submission.save();
-
+    await submission.save(); 
     
     await sendEmail({
       to: 'tnpoffice@nitkkr.ac.in',
       subject: `New INF Submission: ${companyName}`,
-      text: `A new Internship Notification Form (INF) has been submitted by ${companyName}.\nSubmission Time: ${new Date().toLocaleString()}`
+      text: `A new Internship Notification Form (INF) has been submitted by ${companyName}.
+
+Submission Time: ${submission.submittedAt.toLocaleString("en-IN", {
+        dateStyle: "medium",
+        timeStyle: "medium",
+      })}`
     }).catch(err => console.log('Email sending failed:', err));
 
     res.status(201).json({ message: 'INF submitted successfully', id: submission._id });
@@ -88,7 +96,7 @@ router.get('/public/submissions/pdf/:id', async (req, res) => {
     if (!submission) {
       return res.status(404).json({ message: 'Submission not found' });
     }
-    
+
     generatePDF(submission, res);
   } catch (error) {
     console.error('Error generating public PDF:', error);
@@ -139,7 +147,7 @@ router.post('/admin/login', async (req, res) => {
 
 router.get('/admin/submissions', authMiddleware, async (req, res) => {
   try {
-    
+
     const submissions = await Submission.find({})
       .select('formType companyName submittedAt')
       .sort({ submittedAt: -1 });
@@ -182,20 +190,20 @@ router.delete('/admin/submissions/:id', authMiddleware, async (req, res) => {
 router.put('/admin/submissions/:id', authMiddleware, async (req, res) => {
   try {
     const { formData } = req.body;
-    
-    
+
+
     const companyName = formData.companyName || 'Unknown Company';
-    
+
     const submission = await Submission.findByIdAndUpdate(
-      req.params.id, 
-      { formData, companyName }, 
+      req.params.id,
+      { formData, companyName },
       { new: true }
     );
-    
+
     if (!submission) {
       return res.status(404).json({ message: 'Submission not found' });
     }
-    
+
     res.json(submission);
   } catch (error) {
     console.error('Error updating submission:', error);
@@ -210,7 +218,7 @@ router.get('/admin/submissions/pdf/:id', authMiddleware, async (req, res) => {
     if (!submission) {
       return res.status(404).json({ message: 'Submission not found' });
     }
-    
+
     generatePDF(submission, res);
   } catch (error) {
     console.error('Error generating PDF:', error);

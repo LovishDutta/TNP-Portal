@@ -7,9 +7,7 @@ export default function JNFImportantNotes() {
       <ul className="list-disc pl-6 space-y-3 text-gray-700">
 
         <li>
-          As per our latest upgraded curriculum,
-          B.Tech students are available for a
-          six-month internship, but with FTE only.
+          As per our latest curriculum, B.Tech students are available for internships with a minimum duration of 16 weeks.
         </li>
 
         <li>

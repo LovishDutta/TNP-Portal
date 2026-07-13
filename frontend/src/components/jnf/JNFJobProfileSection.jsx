@@ -124,7 +124,7 @@ export default function JNFJobProfileSection({
             />
 
             <InputField
-              label="Training Period"
+              label="Training Period (In Months)"
               value={
                 formData.jobProfiles[course.key]
                   .trainingPeriod

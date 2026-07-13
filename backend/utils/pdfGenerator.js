@@ -100,8 +100,19 @@ const generatePDF = (submission, res) => {
     doc.fillColor(colors.maroon).fontSize(18).font(fonts.bold).text(formTitle, margins.left, margins.top + 75, { align: 'center' });
     
     doc.fillColor(colors.textDark).fontSize(14).font(fonts.bold).text(submission.companyName || 'Unknown Company', margins.left, margins.top + 105, { align: 'center' });
-    doc.fillColor(colors.textLight).fontSize(10).font(fonts.regular).text(`Submitted on: ${new Date(submission.submittedAt).toLocaleDateString()}`, margins.left, margins.top + 125, { align: 'center' });
-
+    doc
+  .fillColor(colors.textLight)
+  .fontSize(10)
+  .font(fonts.regular)
+  .text(
+    `Submitted on: ${new Date(submission.submittedAt).toLocaleString("en-IN", {
+      dateStyle: "medium",
+      timeStyle: "medium",
+    })}`,
+    margins.left,
+    margins.top + 125,
+    { align: "center" }
+  );
     doc.y = margins.top + 160;
   };
 
@@ -429,6 +440,45 @@ const generatePDF = (submission, res) => {
       }
     }
   });
+
+  // Important Mentions (policies) — shown just before the Undertaking section
+  checkPageBreak(150);
+  drawSectionHeader('Important Mentions');
+  doc.moveDown(0.3);
+
+  doc.fillColor(colors.textDark).fontSize(9).font(fonts.regular);
+  doc.list(
+    [
+      'All information provided in the notification forms must be accurate and verifiable.',
+      'Once submitted, forms cannot be modified without prior approval from the Training & Placement Cell.',
+      'Companies are expected to adhere strictly to the agreed-upon compensation structure.',
+      'Pre-Placement Offers (PPOs) must be routed exclusively through the Training & Placement Cell.',
+      'Second Offer Policy:',
+      [
+        "The new opportunity must offer a CTC of at least 1.5x the student's current offer.",
+        "The student's existing offer must have a CTC of \u20b912 LPA or below.",
+        'At least 50% of students from the respective department must have already been placed at the time of recruitment.',
+        'If 80% or more students of a department have already been placed, the remaining eligible students of that department shall be permitted to participate in all subsequent campus recruitment drives, including PSU/Government Organization recruitment, irrespective of their existing CTC.'
+      ],
+      'PSU Recruitment Policy:',
+      [
+        'Students who have already secured an on-campus offer shall remain eligible to participate in recruitment drives conducted by Public Sector Undertakings (PSUs) and Government Organizations, subject to the eligibility criteria prescribed by the recruiting organization.',
+        'Once a student receives an offer from a PSU/Government Organization, the student shall not be permitted to participate in the recruitment process of any other PSU/Government Organization.'
+      ],
+      'Bonus Company Policy: Companies offering a CTC of \u20b95 LPA or below shall be classified as Bonus Companies. Students selected by a Bonus Company shall remain eligible to participate in all subsequent campus recruitment drives offering a higher CTC without any restriction arising from their earlier selection.'
+    ],
+    margins.left + 10,
+    doc.y,
+    {
+      width: contentWidth - 20,
+      bulletRadius: 2,
+      textIndent: 10,
+      indent: 14,
+      lineGap: 3
+    }
+  );
+
+  doc.moveDown(1.2);
 
   // Undertaking Section
   const declarationText = "I hereby declare that all the information provided in this form is true, complete, and correct to the best of my knowledge. I have read, understood, and agree to abide by all the Training & Placement Cell policies and guidelines."

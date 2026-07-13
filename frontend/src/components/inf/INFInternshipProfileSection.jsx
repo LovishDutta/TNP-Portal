@@ -122,7 +122,7 @@ export default function INFInternshipProfileSection({
             />
 
             <InputField
-              label="Training Period"
+              label="Training Period (In Months)"
               value={
                 formData.internshipProfiles[
                   course.key

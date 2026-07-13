@@ -74,14 +74,14 @@ export default function AdminDashboard() {
     <div className="space-y-6 animate-fade-in">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div className="grid grid-cols-2 gap-4 stagger-children">
-          <div className="bg-white p-5 rounded-xl min-w-[150px] transition-all duration-300 hover:shadow-md" style={{ border: '1px solid var(--color-border)', boxShadow: 'var(--shadow-sm)' }}>
-            <p className="text-xs text-gray-400 font-semibold uppercase tracking-wider">Total JNF</p>
+          <div className="bg-white p-5 rounded-xl min-w-[150px] border-2 border-gray-300 transition-all duration-300 hover:shadow-md hover:border-gray-400" style={{ boxShadow: 'var(--shadow-sm)' }}>
+            <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Total JNF</p>
             <p className="text-2xl font-bold text-gray-900 mt-1.5 tracking-tight">
               {submissions.filter(s => s.formType === 'JNF').length}
             </p>
           </div>
-          <div className="bg-white p-5 rounded-xl min-w-[150px] transition-all duration-300 hover:shadow-md" style={{ border: '1px solid var(--color-border)', boxShadow: 'var(--shadow-sm)' }}>
-            <p className="text-xs text-gray-400 font-semibold uppercase tracking-wider">Total INF</p>
+          <div className="bg-white p-5 rounded-xl min-w-[150px] border-2 border-gray-300 transition-all duration-300 hover:shadow-md hover:border-gray-400" style={{ boxShadow: 'var(--shadow-sm)' }}>
+            <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Total INF</p>
             <p className="text-2xl font-bold text-gray-900 mt-1.5 tracking-tight">
               {submissions.filter(s => s.formType === 'INF').length}
             </p>
@@ -89,107 +89,104 @@ export default function AdminDashboard() {
         </div>
 
         <div className="relative w-full sm:w-72">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Search className="h-4 w-4 text-gray-400" />
+          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+            <Search className="h-4 w-4 text-gray-600" strokeWidth={2.25} />
           </div>
           <input
             type="text"
             placeholder="Search companies..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg leading-5 bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#7A0019]/20 focus:border-[#7A0019] text-sm transition-all duration-200"
+            className="block w-full pl-10 pr-3 py-2.5 border-2 border-gray-300 rounded-lg leading-5 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#7A0019]/20 focus:border-[#7A0019] text-sm font-medium transition-all duration-200"
           />
         </div>
       </div>
 
-      {}
-      <div className="bg-white border-b border-gray-100 rounded-t-xl">
-        <nav className="-mb-px flex space-x-6 px-6" aria-label="Tabs">
+      <div className="bg-white rounded-xl overflow-hidden border-2 border-gray-300" style={{ boxShadow: 'var(--shadow-sm)' }}>
+        <nav className="flex space-x-6 px-6 border-b-2 border-gray-300" aria-label="Tabs">
           {["ALL", "JNF", "INF"].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
               className={`
-                whitespace-nowrap py-3.5 px-1 border-b-2 font-medium text-xs uppercase tracking-wider transition-all duration-200
+                whitespace-nowrap py-3.5 px-1 border-b-2 font-semibold text-xs uppercase tracking-wider transition-all duration-200 -mb-0.5
                 ${activeTab === tab
                   ? "border-[#7A0019] text-[#7A0019]"
-                  : "border-transparent text-gray-400 hover:text-gray-600 hover:border-gray-200"}
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"}
               `}
             >
               {tab === "ALL" ? "All Forms" : `${tab} Forms`}
             </button>
           ))}
         </nav>
-      </div>
 
-      <div className="bg-white rounded-xl overflow-hidden" style={{ border: '1px solid var(--color-border)', boxShadow: 'var(--shadow-sm)' }}>
         {isLoading ? (
-          <div className="p-12 text-center text-gray-400 text-sm">Loading submissions...</div>
+          <div className="p-12 text-center text-gray-500 text-sm">Loading submissions...</div>
         ) : filteredSubmissions.length === 0 ? (
           <div className="p-16 text-center flex flex-col items-center">
-            <div className="w-14 h-14 bg-gray-50 rounded-xl flex items-center justify-center mb-4" style={{ border: '1px solid var(--color-border-light)' }}>
-               <FileText className="h-6 w-6 text-gray-300" />
+            <div className="w-14 h-14 bg-gray-50 rounded-xl border-2 border-gray-300 flex items-center justify-center mb-4">
+               <FileText className="h-6 w-6 text-gray-400" />
             </div>
             <h3 className="text-base font-semibold text-gray-900">No submissions found</h3>
-            <p className="mt-1.5 text-gray-400 text-sm">Wait for recruiters to submit JNF/INF forms.</p>
+            <p className="mt-1.5 text-gray-500 text-sm">Wait for recruiters to submit JNF/INF forms.</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-100">
-              <thead className="bg-gray-50/80">
+            <table className="min-w-full divide-y-2 divide-gray-300">
+              <thead className="bg-gray-100">
                 <tr>
-                  <th scope="col" className="px-6 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
                     Company Name
                   </th>
-                  <th scope="col" className="px-6 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
                     Form Type
                   </th>
-                  <th scope="col" className="px-6 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
                     Submitted Date
                   </th>
-                  <th scope="col" className="px-6 py-3 text-right text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
+                  <th scope="col" className="px-6 py-3 text-right text-xs font-bold text-gray-600 uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-50">
+              <tbody className="bg-white divide-y divide-gray-200">
                 {filteredSubmissions.map((submission) => (
                   <tr key={submission._id} className="hover:bg-gray-50/60 transition-colors duration-150">
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">{submission.companyName}</div>
+                      <div className="text-sm font-semibold text-gray-900">{submission.companyName}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex items-center px-2.5 py-1 rounded-md text-[11px] font-semibold ${
+                      <span className={`inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold ${
                         submission.formType === 'JNF' ? 'bg-blue-50 text-blue-700' : 'bg-emerald-50 text-emerald-700'
                       }`}>
                         {submission.formType}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 font-medium">
                       {new Date(submission.submittedAt).toLocaleDateString()}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <div className="flex items-center justify-end space-x-2">
                         <Link
                           to={`/admin/submission/${submission._id}`}
-                          className="text-gray-300 hover:text-blue-500 transition-colors duration-200 p-1.5 rounded-lg hover:bg-blue-50"
+                          className="text-gray-500 hover:text-blue-600 bg-gray-50 hover:bg-blue-50 transition-colors duration-200 p-2.5 rounded-lg border border-gray-200 hover:border-blue-200"
                           title="View Details"
                         >
-                          <Eye className="w-4 h-4" />
+                          <Eye className="w-5 h-5" strokeWidth={2.25} />
                         </Link>
                         <button
                           onClick={() => handleDownloadPDF(submission._id, submission.companyName, submission.formType)}
-                          className="text-gray-300 hover:text-emerald-500 transition-colors duration-200 p-1.5 rounded-lg hover:bg-emerald-50"
+                          className="text-gray-500 hover:text-emerald-600 bg-gray-50 hover:bg-emerald-50 transition-colors duration-200 p-2.5 rounded-lg border border-gray-200 hover:border-emerald-200"
                           title="Download PDF"
                         >
-                          <Download className="w-4 h-4" />
+                          <Download className="w-5 h-5" strokeWidth={2.25} />
                         </button>
                         <button
                           onClick={() => handleDelete(submission._id)}
-                          className="text-gray-300 hover:text-red-500 transition-colors duration-200 p-1.5 rounded-lg hover:bg-red-50"
+                          className="text-gray-500 hover:text-red-600 bg-gray-50 hover:bg-red-50 transition-colors duration-200 p-2.5 rounded-lg border border-gray-200 hover:border-red-200"
                           title="Delete"
                         >
-                          <Trash2 className="w-4 h-4" />
+                          <Trash2 className="w-5 h-5" strokeWidth={2.25} />
                         </button>
                       </div>
                     </td>
