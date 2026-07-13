@@ -30,6 +30,11 @@ export default function JNFEligibilitySection({
           rows={4}
         />
 
+        <div className="mt-2 text-xs text-gray-500 leading-relaxed space-y-1">
+          <p>• If your organisation has any stringent medical requirements (e.g. colour blindness), please mention them here.</p>
+          <p>• We also encourage you to consider accommodations for PwD (Persons with Disabilities) and Students with Specific Learning Disabilities (SLD) — such as additional time, scribing, or larger fonts — as part of your Diversity, Equity, and Inclusivity (DEI) practices.</p>
+        </div>
+
       </div>
 
       <div className="mt-6">

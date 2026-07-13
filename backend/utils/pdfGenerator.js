@@ -481,7 +481,7 @@ const generatePDF = (submission, res) => {
   doc.moveDown(1.2);
 
   // Undertaking Section
-  const declarationText = "I hereby declare that all the information provided in this form is true, complete, and correct to the best of my knowledge. I have read, understood, and agree to abide by all the Training & Placement Cell policies and guidelines."
+  const declarationText = "I hereby declare that the information provided in this form is true and correct to the best of my knowledge. I have read and understood all the provided important mentions from the TNP Recruitment Portal."
   
   checkPageBreak(150);
   drawSectionHeader('Undertaking');

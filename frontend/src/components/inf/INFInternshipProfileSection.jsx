@@ -33,24 +33,33 @@ export default function INFInternshipProfileSection({
   return (
     <SectionCard title="Internship Profile">
       <div className="space-y-6">
-        <RadioGroup
-          label="Internship Type"
-          name="internshipType"
-          value={formData.internshipType || ""}
-          onChange={(e) => {
-            setValidationMessage("");
-            setFormData((prev) => ({
-              ...prev,
-              internshipType: e.target.value,
-            }));
-          }}
-          options={[
-            "Internship Only",
-            "Internship + FTE",
-            "Internship with PPO Offers"
-          ]}
-          required
-        />
+        <div>
+          <RadioGroup
+            label="Internship Type"
+            name="internshipType"
+            value={formData.internshipType || ""}
+            onChange={(e) => {
+              setValidationMessage("");
+              setFormData((prev) => ({
+                ...prev,
+                internshipType: e.target.value,
+              }));
+            }}
+            options={[
+              "Internship Only",
+              "Internship + FTE",
+              "Internship with PPO Offers"
+            ]}
+            required
+          />
+
+          <p className="mt-2 text-xs text-black-1000 leading-relaxed">
+            <strong>
+            
+            Note: A 6-month internship is permitted only when accompanied by an FTE (Full-Time Employment) offer.
+              </strong>
+          </p>
+        </div>
 
         {infCourses.map((course) => (
           <CourseProfileCard
