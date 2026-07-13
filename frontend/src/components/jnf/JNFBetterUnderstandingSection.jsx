@@ -12,13 +12,7 @@ export default function JNFBetterUnderstandingSection({
 
       <div className="space-y-8">
 
-        <RadioGroup
-          label="Does your organization sponsor any kind of institutional events?"
-          name="sponsorEvents"
-          value={formData.sponsorEvents}
-          onChange={handleChange}
-          options={["Yes", "No"]}
-        />
+
 
         <RadioGroup
           label="Is your organization interested in offering internships/training for pre-final year undergraduate/postgraduate students?"

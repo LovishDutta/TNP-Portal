@@ -67,10 +67,18 @@ export default function INFForm() {
   };
 
   const nextStep = () => {
+    const form = document.querySelector('form');
+    if (form && !form.checkValidity()) {
+      setValidationMessage("Please fill out all required fields.");
+      scrollToTop();
+      return;
+    }
+
     setValidationMessage("");
 
     // STEP 1
     if (currentStep === 1) {
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
       if (
         !formData.companyName.trim() ||
         !formData.emailAddress.trim()
@@ -78,6 +86,17 @@ export default function INFForm() {
         setValidationMessage(
           "Company Name and Email Address are required to continue."
         );
+        scrollToTop();
+        return;
+      }
+      if (!emailRegex.test(formData.emailAddress)) {
+        setValidationMessage("Please enter a valid Email Address.");
+        scrollToTop();
+        return;
+      }
+      const urlRegex = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?(\/.*)?$/;
+      if (formData.website && !urlRegex.test(formData.website)) {
+        setValidationMessage("Please enter a valid Website URL.");
         scrollToTop();
         return;
       }
@@ -108,6 +127,19 @@ export default function INFForm() {
         scrollToTop();
         return;
       }
+
+      const hasInvalidNumeric = Object.values(formData.internshipProfiles).some((profile) => {
+        const grossInvalid = profile.gross && !/^\d+(\.\d{1,2})?$/.test(profile.gross);
+        const stipendInvalid = profile.stipend && !/^\d+(\.\d{1,2})?$/.test(profile.stipend);
+        const trainingPeriodInvalid = profile.trainingPeriod && !/^\d+(\.\d{1,2})?$/.test(profile.trainingPeriod);
+        return grossInvalid || stipendInvalid || trainingPeriodInvalid;
+      });
+  
+      if (hasInvalidNumeric) {
+        setValidationMessage("Please ensure Gross Stipend, In-Hand Stipend, and Training Period are valid numbers with up to 2 decimal places.");
+        scrollToTop();
+        return;
+      }
     }
 
     // STEP 3
@@ -121,6 +153,48 @@ export default function INFForm() {
         setValidationMessage(
           "Please select at least one course/programme before proceeding."
         );
+        scrollToTop();
+        return;
+      }
+    }
+
+    // STEP 4
+    if (currentStep === 4) {
+      if (!formData.backlogsAllowed || !formData.historyOfBacklogsAllowed) {
+        setValidationMessage("Please select options for Backlogs Allowed and History of Backlogs Allowed.");
+        scrollToTop();
+        return;
+      }
+      if (!formData.minimumCGPA) {
+        setValidationMessage("Please provide a Minimum CGPA.");
+        scrollToTop();
+        return;
+      }
+      if (formData.minimumCGPA && !/^\d+(\.\d{1,2})?$/.test(formData.minimumCGPA)) {
+        setValidationMessage("Please enter a valid Minimum CGPA.");
+        scrollToTop();
+        return;
+      }
+    }
+  
+    // STEP 6
+    if (currentStep === 6) {
+      const contact1 = formData.contacts[0];
+      if (!contact1.name.trim() || !contact1.designation.trim() || !contact1.mobile.trim() || !contact1.email.trim()) {
+        setValidationMessage("Please complete all fields for Contact Person 1.");
+        scrollToTop();
+        return;
+      }
+      const invalidMobile = formData.contacts.some(c => c.mobile && c.mobile.length !== 10);
+      if (invalidMobile) {
+        setValidationMessage("Mobile numbers must be exactly 10 digits.");
+        scrollToTop();
+        return;
+      }
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      const invalidEmail = formData.contacts.some(c => c.email && !emailRegex.test(c.email));
+      if (invalidEmail) {
+        setValidationMessage("Please enter a valid Email Address for the contacts.");
         scrollToTop();
         return;
       }

@@ -28,6 +28,7 @@ export default function INFSelectionProcessSection({
           }
           onChange={handleChange}
           options={["Yes", "No"]}
+          required
         />
 
         <RadioGroup
@@ -38,7 +39,8 @@ export default function INFSelectionProcessSection({
           }
           onChange={handleChange}
           options={["Yes", "No"]}
-        />
+          required
+          />
 
         <RadioGroup
           label="Written Test"
@@ -46,6 +48,7 @@ export default function INFSelectionProcessSection({
           value={formData.writtenTest}
           onChange={handleChange}
           options={["Yes", "No"]}
+          required
         />
 
         <RadioGroup
@@ -54,6 +57,7 @@ export default function INFSelectionProcessSection({
           value={formData.aptitudeTest}
           onChange={handleChange}
           options={["Yes", "No"]}
+          required
         />
 
         <RadioGroup
@@ -64,6 +68,7 @@ export default function INFSelectionProcessSection({
           }
           onChange={handleChange}
           options={["Yes", "No"]}
+          required
         />
 
         <RadioGroup
@@ -77,6 +82,7 @@ export default function INFSelectionProcessSection({
     "Both",
     "Not Applicable",
   ]}
+  required
 />
 
         <RadioGroup
@@ -87,6 +93,7 @@ export default function INFSelectionProcessSection({
           }
           onChange={handleChange}
           options={["Yes", "No"]}
+          required
         />
 
         <RadioGroup
@@ -97,6 +104,7 @@ export default function INFSelectionProcessSection({
           }
           onChange={handleChange}
           options={["Yes", "No"]}
+          required
         />
 
         <RadioGroup
@@ -105,6 +113,7 @@ export default function INFSelectionProcessSection({
           value={formData.hrInterview}
           onChange={handleChange}
           options={["Yes", "No"]}
+          required
         />
 
       </div>

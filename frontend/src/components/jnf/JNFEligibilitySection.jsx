@@ -1,6 +1,7 @@
 import SectionCard from "../SectionCard";
 import InputField from "../InputField";
 import TextAreaField from "../TextAreaField";
+import RadioGroup from "../RadioGroup";
 
 export default function JNFEligibilitySection({
   formData,
@@ -9,15 +10,34 @@ export default function JNFEligibilitySection({
   return (
     <SectionCard title="Eligibility Criteria">
 
-      <div className="grid md:grid-cols-2 gap-6">
-
+      <div className="mb-6 md:w-[calc(50%-12px)]">
         <InputField
           label="Minimum CGPA (1-10)"
           name="minimumCGPA"
           value={formData.minimumCGPA}
           onChange={handleChange}
+          required
+        />
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-6">
+        <RadioGroup
+          label="Backlogs Allowed"
+          name="backlogsAllowed"
+          value={formData.backlogsAllowed}
+          onChange={handleChange}
+          options={["Yes", "No"]}
+          required
         />
 
+        <RadioGroup
+          label="History of Backlogs Allowed"
+          name="historyOfBacklogsAllowed"
+          value={formData.historyOfBacklogsAllowed}
+          onChange={handleChange}
+          options={["Yes", "No"]}
+          required
+        />
       </div>
 
       <div className="mt-6">

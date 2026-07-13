@@ -15,6 +15,7 @@ export default function INFContactSection({
           contact={formData.contacts[0]}
           index={0}
           setFormData={setFormData}
+          required={true}
         />
 
         <ContactCard
@@ -22,6 +23,7 @@ export default function INFContactSection({
           contact={formData.contacts[1]}
           index={1}
           setFormData={setFormData}
+          required={false}
         />
 
       </div>
