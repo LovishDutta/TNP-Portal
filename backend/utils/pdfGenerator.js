@@ -449,6 +449,9 @@ const generatePDF = (submission, res) => {
   doc.fillColor(colors.textDark).fontSize(9).font(fonts.regular);
   doc.list(
     [
+      'As per our latest curriculum, B.Tech students are available for internships with a minimum duration of 16 weeks.',
+      'M.Tech students are available for 6/11-month internship.',
+      'MCA students are available for 6-month internship (in their last semester).',
       'All information provided in the notification forms must be accurate and verifiable.',
       'Once submitted, forms cannot be modified without prior approval from the Training & Placement Cell.',
       'Companies are expected to adhere strictly to the agreed-upon compensation structure.',
@@ -481,7 +484,8 @@ const generatePDF = (submission, res) => {
   doc.moveDown(1.2);
 
   // Undertaking Section
-  const declarationText = "I hereby declare that the information provided in this form is true and correct to the best of my knowledge. I have read and understood all the provided important mentions from the TNP Recruitment Portal."
+  const declarationText = "I hereby declare that the information provided in this form is true and correct to the best of my knowledge. I have read and understand all the provided important mentions from the TNP Recruitment Portal."
+
   
   checkPageBreak(150);
   drawSectionHeader('Undertaking');
