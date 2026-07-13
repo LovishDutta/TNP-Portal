@@ -76,7 +76,7 @@ export default function Home() {
 
         <li>
           The student's existing offer must have a CTC of
-          <strong> ₹12 LPA or below.</strong>
+          <strong> Rs.12 LPA or below.</strong>
         </li>
 
         <li>
@@ -138,7 +138,7 @@ export default function Home() {
 
     <span className="text-sm leading-relaxed">
       <strong>Bonus Company Policy:</strong> Companies offering a CTC of
-      <strong> ₹5 LPA or below</strong> shall be classified as
+      <strong> Rs.5 LPA or below</strong> shall be classified as
       <strong> Bonus Companies</strong>. Students selected by a Bonus
       Company shall remain eligible to participate in all subsequent
       campus recruitment drives offering a higher CTC without any
