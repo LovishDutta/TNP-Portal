@@ -31,6 +31,7 @@ router.post('/jnf', async (req, res) => {
 Submission Time: ${submission.submittedAt.toLocaleString("en-IN", {
         dateStyle: "medium",
         timeStyle: "medium",
+        timeZone: "Asia/Kolkata",
       })}`
     }).catch(err => console.log('Email sending failed:', err));
 
@@ -63,6 +64,7 @@ router.post('/inf', async (req, res) => {
 Submission Time: ${submission.submittedAt.toLocaleString("en-IN", {
         dateStyle: "medium",
         timeStyle: "medium",
+        timeZone: "Asia/Kolkata",
       })}`
     }).catch(err => console.log('Email sending failed:', err));
 

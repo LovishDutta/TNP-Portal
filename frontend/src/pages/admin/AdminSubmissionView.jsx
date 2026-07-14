@@ -39,7 +39,7 @@ export default function AdminSubmissionView() {
         headers: { Authorization: `Bearer ${token}` },
         responseType: 'blob'
       });
-      
+
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
@@ -94,7 +94,7 @@ export default function AdminSubmissionView() {
   const updateField = (key, value, isJson = false) => {
     setEditableData(prev => {
       const newData = { ...prev };
-      
+
       if (isJson) {
         try {
           newData[key] = JSON.parse(value);
@@ -169,25 +169,25 @@ export default function AdminSubmissionView() {
                 </div>
               );
             } else {
-               return (
-                  <div key={k} className="flex flex-col mb-2">
-                    <span className="text-[10px] text-gray-500 uppercase tracking-wider font-semibold">{k.replace(/([A-Z])/g, ' $1').trim()}</span>
-                    <span className="text-sm text-gray-800 break-words">{v || 'N/A'}</span>
-                  </div>
-               );
+              return (
+                <div key={k} className="flex flex-col mb-2">
+                  <span className="text-[10px] text-gray-500 uppercase tracking-wider font-semibold">{k.replace(/([A-Z])/g, ' $1').trim()}</span>
+                  <span className="text-sm text-gray-800 break-words">{v || 'N/A'}</span>
+                </div>
+              );
             }
           })}
         </div>
       );
     }
-    
+
     return <span className="text-sm font-medium text-gray-900 mt-1 break-words">{String(value) || 'N/A'}</span>;
   };
 
   const renderAllFields = () => {
     const data = isEditing ? editableData : formData;
     if (!data) return null;
-    
+
     return (
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-6">
         <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
@@ -196,7 +196,7 @@ export default function AdminSubmissionView() {
         <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-8">
           {Object.entries(data).map(([key, value]) => {
             const isObject = typeof value === 'object' && value !== null;
-            
+
             if (isEditing) {
               return (
                 <div key={key} className={`flex flex-col ${isObject ? 'col-span-1 md:col-span-2' : ''}`}>
@@ -221,12 +221,12 @@ export default function AdminSubmissionView() {
             }
 
             if (isObject) {
-               return (
-                 <div key={key} className="col-span-1 md:col-span-2">
-                   <h4 className="text-sm font-semibold text-gray-700 capitalize mb-1">{key.replace(/([A-Z])/g, ' $1').trim()}</h4>
-                   {renderValue(value)}
-                 </div>
-               )
+              return (
+                <div key={key} className="col-span-1 md:col-span-2">
+                  <h4 className="text-sm font-semibold text-gray-700 capitalize mb-1">{key.replace(/([A-Z])/g, ' $1').trim()}</h4>
+                  {renderValue(value)}
+                </div>
+              )
             }
             return (
               <div key={key} className="flex flex-col bg-gray-50 p-3 rounded-lg border border-gray-100">
@@ -300,13 +300,16 @@ export default function AdminSubmissionView() {
           <div>
             <h2 className="text-2xl font-bold text-gray-900">{submission.companyName}</h2>
             <div className="flex items-center space-x-3 mt-1 text-sm text-gray-500">
-              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                submission.formType === 'JNF' ? 'bg-[#7A0019]/10 text-[#7A0019]' : 'bg-green-100 text-green-800'
-              }`}>
+              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${submission.formType === 'JNF' ? 'bg-[#7A0019]/10 text-[#7A0019]' : 'bg-green-100 text-green-800'
+                }`}>
                 {submission.formType}
               </span>
               <span>•</span>
-              <span>Submitted on {new Date(submission.submittedAt).toLocaleString()}</span>
+              <span>Submitted on {new Date(submission.submittedAt).toLocaleString("en-IN", {
+                dateStyle: "medium",
+                timeStyle: "medium",
+                timeZone: "Asia/Kolkata",
+              })}</span>
             </div>
           </div>
         </div>

@@ -108,6 +108,7 @@ const generatePDF = (submission, res) => {
     `Submitted on: ${new Date(submission.submittedAt).toLocaleString("en-IN", {
       dateStyle: "medium",
       timeStyle: "medium",
+      timeZone: "Asia/Kolkata",
     })}`,
     margins.left,
     margins.top + 125,

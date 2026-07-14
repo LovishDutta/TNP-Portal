@@ -29,7 +29,7 @@ export default function AdminDashboard() {
 
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this submission?")) return;
-    
+
     try {
       const token = localStorage.getItem("adminToken");
       await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/admin/submissions/${id}`, {
@@ -49,7 +49,7 @@ export default function AdminDashboard() {
         headers: { Authorization: `Bearer ${token}` },
         responseType: 'blob'
       });
-      
+
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
@@ -65,7 +65,7 @@ export default function AdminDashboard() {
 
   const filteredSubmissions = submissions.filter(sub => {
     const matchesSearch = sub.companyName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          sub.formType.toLowerCase().includes(searchTerm.toLowerCase());
+      sub.formType.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesTab = activeTab === "ALL" || sub.formType === activeTab;
     return matchesSearch && matchesTab;
   });
@@ -125,7 +125,7 @@ export default function AdminDashboard() {
         ) : filteredSubmissions.length === 0 ? (
           <div className="p-16 text-center flex flex-col items-center">
             <div className="w-14 h-14 bg-gray-50 rounded-xl border-2 border-gray-300 flex items-center justify-center mb-4">
-               <FileText className="h-6 w-6 text-gray-400" />
+              <FileText className="h-6 w-6 text-gray-400" />
             </div>
             <h3 className="text-base font-semibold text-gray-900">No submissions found</h3>
             <p className="mt-1.5 text-gray-500 text-sm">Wait for recruiters to submit JNF/INF forms.</p>
@@ -156,14 +156,16 @@ export default function AdminDashboard() {
                       <div className="text-sm font-semibold text-gray-900">{submission.companyName}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold ${
-                        submission.formType === 'JNF' ? 'bg-blue-50 text-blue-700' : 'bg-emerald-50 text-emerald-700'
-                      }`}>
+                      <span className={`inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold ${submission.formType === 'JNF' ? 'bg-blue-50 text-blue-700' : 'bg-emerald-50 text-emerald-700'
+                        }`}>
                         {submission.formType}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 font-medium">
-                      {new Date(submission.submittedAt).toLocaleDateString()}
+                      {new Date(submission.submittedAt).toLocaleDateString("en-IN", {
+                        dateStyle: "medium",
+                        timeZone: "Asia/Kolkata",
+                      })}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <div className="flex items-center justify-end space-x-2">
