@@ -69,7 +69,26 @@ export default function INFForm() {
   const nextStep = () => {
     const form = document.querySelector('form');
     if (form && !form.checkValidity()) {
-      setValidationMessage("Please fill out all required fields.");
+      const invalidElement = form.querySelector(':invalid');
+      let fieldName = "all required fields";
+      if (invalidElement) {
+        const label = invalidElement.closest('.flex-col')?.querySelector('label');
+        if (label) {
+          fieldName = `the ${label.textContent.replace('*', '').trim()} field`;
+        } else if (invalidElement.name) {
+          fieldName = `the ${invalidElement.name.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()).trim()} field`;
+        }
+
+        if (invalidElement.validity.valueMissing) {
+          setValidationMessage(`Please fill out ${fieldName}.`);
+        } else if (invalidElement.type === 'email') {
+          setValidationMessage("Please enter a valid value for email.");
+        } else {
+          setValidationMessage(`Please enter a valid value for ${fieldName}.`);
+        }
+      } else {
+        setValidationMessage("Please fill out all required fields.");
+      }
       scrollToTop();
       return;
     }
@@ -134,7 +153,7 @@ export default function INFForm() {
         const trainingPeriodInvalid = profile.trainingPeriod && !/^\d+(\.\d{1,2})?$/.test(profile.trainingPeriod);
         return grossInvalid || stipendInvalid || trainingPeriodInvalid;
       });
-  
+
       if (hasInvalidNumeric) {
         setValidationMessage("Please ensure Gross Stipend, In-Hand Stipend, and Training Period are valid numbers with up to 2 decimal places.");
         scrollToTop();
@@ -176,7 +195,7 @@ export default function INFForm() {
         return;
       }
     }
-  
+
     // STEP 6
     if (currentStep === 6) {
       const contact1 = formData.contacts[0];
