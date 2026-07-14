@@ -116,8 +116,8 @@ function ImportantMentionsList() {
                   of a department have already been placed, the remaining eligible
                   students of that department shall be permitted to participate in
                   <strong> all subsequent campus recruitment drives, including
-                  PSU/Government Organization recruitment, irrespective of their
-                  existing CTC.</strong>
+                    PSU/Government Organization recruitment, irrespective of their
+                    existing CTC.</strong>
                 </li>
               </ul>
             </div>
@@ -168,6 +168,27 @@ function ImportantMentionsList() {
             </span>
           </li>
 
+
+          <li className="flex items-start">
+            <span className="text-[#7A0019] mr-3 mt-1.5 flex-shrink-0">
+              <svg className="w-4 h-4" viewBox="0 0 16 16" fill="currentColor">
+                <circle cx="4" cy="8" r="3" />
+              </svg>
+            </span>
+
+            <span className="text-sm leading-relaxed">
+              If there are <strong>PwD applicants</strong> or students with
+              <strong> Specific Learning Disabilities (SLD)</strong>, companies must take
+              care of any of their special requirements, such as
+              <strong> additional time, scribing, bigger fonts</strong>, etc. We
+              encourage equal opportunity for all sections of students with equal emphasis
+              on <strong>Diversity, Equity, and Inclusivity (DEI)</strong>. Quite often,
+              DEI provisions start and end with gender diversity. Companies are strongly
+              recommended to go beyond and proactively consider and support
+              <strong> PwD, SLD, and other such applicants.</strong>
+            </span>
+          </li>
+
         </ul>
       </div>
     </div>
@@ -201,7 +222,7 @@ export default function UndertakingSection({ formData, handleChange }) {
           </div>
           <div className="ml-3 text-sm">
             <label htmlFor="undertakingAccepted" className="font-medium text-gray-900">
-I hereby declare that the information provided in this form is true and correct to the best of my knowledge. I have read and understand all the provided important mentions from the TNP Recruitment Portal.            </label>
+              I hereby declare that the information provided in this form is true and correct to the best of my knowledge. I have read and understood all the provided important mentions from the TNP Recruitment Portal.            </label>
             {!formData.undertakingAccepted && (
               <p className="text-red-600 text-xs font-medium mt-1.5">
                 Please read and submit.

@@ -18,6 +18,8 @@ const infInitialState = {
   minimumCGPA: "",
   medicalCondition: "",
   otherCriteria: "",
+  backlogsAllowed: "",
+  historyOfBacklogsAllowed: "",
 
   
   resumeShortlisting: "",

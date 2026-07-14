@@ -4,10 +4,10 @@ const fs = require('fs');
 
 
 const generatePDF = (submission, res) => {
-  const doc = new PDFDocument({ 
-    margin: 50, 
+  const doc = new PDFDocument({
+    margin: 50,
     size: 'A4',
-    bufferPages: true 
+    bufferPages: true
   });
 
   res.setHeader('Content-Type', 'application/pdf');
@@ -18,7 +18,7 @@ const generatePDF = (submission, res) => {
 
   doc.pipe(res);
 
-  
+
   const colors = {
     maroon: '#7A0019',
     textDark: '#1E293B',
@@ -42,14 +42,14 @@ const generatePDF = (submission, res) => {
   const margins = doc.page.margins;
   const contentWidth = pageWidth - margins.left - margins.right;
 
-  
+
   const formatKey = (key) => {
     return key.replace(/([A-Z])/g, ' $1').trim().replace(/^./, str => str.toUpperCase());
   };
 
   const formatValue = (val) => {
     if (typeof val === 'string') {
-      if (val.startsWith('http://') || val.startsWith('https://')) return val; 
+      if (val.startsWith('http://') || val.startsWith('https://')) return val;
       return val;
     }
     return String(val);
@@ -79,7 +79,7 @@ const generatePDF = (submission, res) => {
     return false;
   };
 
-  
+
 
   const drawHeader = () => {
     const logoPath = path.join(__dirname, '../../frontend/public/nitkkr-logo.png');
@@ -89,46 +89,46 @@ const generatePDF = (submission, res) => {
 
     doc.fillColor(colors.textDark).fontSize(16).font(fonts.bold).text('Training & Placement Cell', margins.left, margins.top + 5, { align: 'center' });
     doc.fillColor(colors.textMedium).fontSize(12).font(fonts.regular).text('National Institute of Technology Kurukshetra', margins.left, margins.top + 25, { align: 'center' });
-    
+
     doc.moveTo(margins.left, margins.top + 60)
-       .lineTo(pageWidth - margins.right, margins.top + 60)
-       .lineWidth(1)
-       .strokeColor(colors.maroon)
-       .stroke();
+      .lineTo(pageWidth - margins.right, margins.top + 60)
+      .lineWidth(1)
+      .strokeColor(colors.maroon)
+      .stroke();
 
     const formTitle = submission.formType === 'JNF' ? 'Job Notification Form (JNF)' : 'Internship Notification Form (INF)';
     doc.fillColor(colors.maroon).fontSize(18).font(fonts.bold).text(formTitle, margins.left, margins.top + 75, { align: 'center' });
-    
+
     doc.fillColor(colors.textDark).fontSize(14).font(fonts.bold).text(submission.companyName || 'Unknown Company', margins.left, margins.top + 105, { align: 'center' });
     doc
-  .fillColor(colors.textLight)
-  .fontSize(10)
-  .font(fonts.regular)
-  .text(
-    `Submitted on: ${new Date(submission.submittedAt).toLocaleString("en-IN", {
-      dateStyle: "medium",
-      timeStyle: "medium",
-      timeZone: "Asia/Kolkata",
-    })}`,
-    margins.left,
-    margins.top + 125,
-    { align: "center" }
-  );
+      .fillColor(colors.textLight)
+      .fontSize(10)
+      .font(fonts.regular)
+      .text(
+        `Submitted on: ${new Date(submission.submittedAt).toLocaleString("en-IN", {
+          dateStyle: "medium",
+          timeStyle: "medium",
+          timeZone: "Asia/Kolkata",
+        })}`,
+        margins.left,
+        margins.top + 125,
+        { align: "center" }
+      );
     doc.y = margins.top + 160;
   };
 
   const drawSectionHeader = (title) => {
     checkPageBreak(30);
     doc.moveDown(0.5);
-    
+
     const startY = doc.y;
     doc.rect(margins.left, startY, contentWidth, 20).fill(colors.bgGray);
-    
+
     doc.moveTo(margins.left, startY).lineTo(pageWidth - margins.right, startY).lineWidth(1).strokeColor(colors.border).stroke();
     doc.moveTo(margins.left, startY).lineTo(margins.left, startY + 20).lineWidth(1).strokeColor(colors.border).stroke();
     doc.moveTo(pageWidth - margins.right, startY).lineTo(pageWidth - margins.right, startY + 20).lineWidth(1).strokeColor(colors.border).stroke();
     doc.moveTo(margins.left, startY + 20).lineTo(pageWidth - margins.right, startY + 20).lineWidth(1).strokeColor(colors.border).stroke();
-    
+
     doc.fillColor(colors.maroon).fontSize(10).font(fonts.bold).text(title.toUpperCase(), margins.left + 10, startY + 6);
     doc.y = startY + 20;
   };
@@ -136,9 +136,9 @@ const generatePDF = (submission, res) => {
   const drawBadge = (x, y, text, isYes) => {
     const bgColor = isYes ? '#DCFCE7' : '#FEE2E2';
     const textColor = isYes ? colors.green : colors.red;
-    
+
     doc.roundedRect(x, y - 2, 38, 14, 4).fill(bgColor);
-    
+
     if (isYes) {
       doc.moveTo(x + 5, y + 5).lineTo(x + 8, y + 8).lineTo(x + 13, y + 3).lineWidth(1.2).strokeColor(textColor).stroke();
     } else {
@@ -153,17 +153,17 @@ const generatePDF = (submission, res) => {
     const colCount = keys.length;
     const colWidth = contentWidth / colCount;
     let maxRowHeight = 18;
-    
+
     keys.forEach(k => {
       const val = data[k];
       const labelWidth = colCount === 1 ? 140 : 100;
       const textWidth = colCount === 1 ? contentWidth - 170 : colWidth - 120;
-      
+
       doc.font(fonts.regular).fontSize(9);
       const valHeight = doc.heightOfString(formatValue(val), { width: textWidth });
       doc.font(fonts.bold).fontSize(9);
       const labelHeight = doc.heightOfString(formatKey(k), { width: labelWidth });
-      
+
       const neededHeight = Math.max(valHeight, labelHeight) + 12;
       if (neededHeight > maxRowHeight) maxRowHeight = neededHeight;
     });
@@ -175,7 +175,7 @@ const generatePDF = (submission, res) => {
       doc.addPage();
       doc.moveTo(margins.left, doc.y).lineTo(pageWidth - margins.right, doc.y).lineWidth(1).strokeColor(colors.border).stroke();
     }
-    
+
     const startY = doc.y;
 
     keys.forEach((k, idx) => {
@@ -186,7 +186,7 @@ const generatePDF = (submission, res) => {
       const valueWidth = colCount === 1 ? contentWidth - 170 : colWidth - 120;
 
       doc.fillColor(colors.textMedium).fontSize(9).font(fonts.bold).text(formatKey(k), startX + 10, startY + 6, { width: labelWidth });
-      
+
       const valStr = formatValue(val);
       if (valStr.toLowerCase() === 'yes' || valStr.toLowerCase() === 'no') {
         drawBadge(valueX, startY + 5, valStr, valStr.toLowerCase() === 'yes');
@@ -197,15 +197,15 @@ const generatePDF = (submission, res) => {
       }
 
       if (idx === 0 && colCount === 2) {
-         doc.moveTo(startX + colWidth, startY).lineTo(startX + colWidth, startY + maxRowHeight).lineWidth(0.5).strokeColor(colors.border).stroke();
+        doc.moveTo(startX + colWidth, startY).lineTo(startX + colWidth, startY + maxRowHeight).lineWidth(0.5).strokeColor(colors.border).stroke();
       }
     });
-    
+
     doc.y = startY + maxRowHeight;
-    
+
     doc.moveTo(margins.left, startY).lineTo(margins.left, doc.y).lineWidth(1).strokeColor(colors.border).stroke();
     doc.moveTo(pageWidth - margins.right, startY).lineTo(pageWidth - margins.right, doc.y).lineWidth(1).strokeColor(colors.border).stroke();
-    
+
     if (isLast) {
       doc.moveTo(margins.left, doc.y).lineTo(pageWidth - margins.right, doc.y).lineWidth(1).strokeColor(colors.border).stroke();
     } else {
@@ -213,12 +213,12 @@ const generatePDF = (submission, res) => {
     }
   };
 
-  
+
   const data = submission.formData;
-  
+
   drawHeader();
 
-  
+
   const sections = [
     { title: 'Company Information', keys: ['companyName', 'emailAddress', 'website', 'companyType', 'companyTypeOther', 'domain', 'domainOther', 'organisationDescription', 'internshipType'] },
     { title: 'Eligibility Criteria', keys: ['minimumCGPA', 'backlogsAllowed', 'historyOfBacklogsAllowed', 'medicalCondition', 'otherCriteria'] },
@@ -232,7 +232,7 @@ const generatePDF = (submission, res) => {
       let gridRows = [];
       let currentRow = [];
       const longTextKeys = ['minimumCGPA', 'organisationDescription', 'medicalCondition', 'otherCriteria', 'bondDetails', 'contestDetails'];
-      
+
       validKeys.forEach((k) => {
         if (longTextKeys.includes(k)) {
           if (currentRow.length > 0) { gridRows.push(currentRow); currentRow = []; }
@@ -244,25 +244,25 @@ const generatePDF = (submission, res) => {
       });
       if (currentRow.length > 0) { gridRows.push(currentRow); }
 
-      let requiredHeight = 80; 
+      let requiredHeight = 80;
       checkPageBreak(requiredHeight);
 
       drawSectionHeader(section.title);
-      
+
       gridRows.forEach((row, idx) => {
         drawGridRowMulti(row, idx === 0, idx === gridRows.length - 1);
       });
-      
+
       doc.moveDown(1.5);
     }
   });
 
-  
+
   if (!isEmpty(data.contacts)) {
     const validContacts = data.contacts.filter(c => !isEmpty(c.name) || !isEmpty(c.email));
     if (validContacts.length > 0) {
       drawSectionHeader('Contact Persons');
-      
+
       const cardWidth = (contentWidth - 20) / 2;
       let col = 0;
       let startY = doc.y;
@@ -270,9 +270,9 @@ const generatePDF = (submission, res) => {
 
       validContacts.forEach((contact, idx) => {
         const keys = Object.keys(contact).filter(k => !isEmpty(contact[k]));
-        
-        
-        let requiredHeight = 25; 
+
+
+        let requiredHeight = 25;
         keys.forEach(k => {
           doc.font(fonts.regular).fontSize(9);
           const tH = doc.heightOfString(String(contact[k]), { width: cardWidth - 20 });
@@ -284,10 +284,10 @@ const generatePDF = (submission, res) => {
           maxCardHeight = 0;
           doc.y = startY;
         }
-        
+
         if (checkPageBreak(requiredHeight + 20)) {
-           startY = doc.y; 
-           if (col === 1) col = 0; 
+          startY = doc.y;
+          if (col === 1) col = 0;
         }
 
         const x = margins.left + (col * (cardWidth + 10));
@@ -306,25 +306,25 @@ const generatePDF = (submission, res) => {
 
         const currentHeight = y - startY + 5;
         if (currentHeight > maxCardHeight) maxCardHeight = currentHeight;
-        
+
         doc.roundedRect(x, startY, cardWidth, currentHeight, 6).lineWidth(1).strokeColor(colors.border).stroke();
-        
+
         col = (col + 1) % 2;
       });
       doc.y = startY + maxCardHeight + 15;
     }
   }
 
-  
+
   const branchKeys = { 'ugBranches': 'Eligible UG Branches', 'minorDegrees': 'Eligible Minor Degrees', 'pgSpecializations': 'Eligible PG Specializations', 'dualDegreeBranches': 'Eligible Dual Degree Branches' };
-  
+
   Object.entries(branchKeys).forEach(([key, title]) => {
     if (!isEmpty(data[key])) {
       const chipHeight = 18;
-      let requiredHeight = 40; 
+      let requiredHeight = 40;
       let tempX = margins.left + 10;
       let tempY = 0;
-      
+
       data[key].forEach(item => {
         if (isEmpty(item)) return;
         const textWidth = doc.widthOfString(item, { font: fonts.regular, fontSize: 8 });
@@ -336,31 +336,31 @@ const generatePDF = (submission, res) => {
         tempX += chipWidth + 6;
       });
       requiredHeight += tempY + chipHeight + 10;
-      
+
       checkPageBreak(requiredHeight);
 
       drawSectionHeader(title);
-      
+
       const gridStartY = doc.y;
       let x = margins.left + 10;
       let y = gridStartY + 8;
-      
+
       data[key].forEach(item => {
         if (isEmpty(item)) return;
         const textWidth = doc.widthOfString(item, { font: fonts.regular, fontSize: 8 });
         const chipWidth = textWidth + 16;
-        
+
         if (x + chipWidth > pageWidth - margins.right - 10) {
           x = margins.left + 10;
           y += chipHeight + 6;
         }
-        
+
         doc.roundedRect(x, y, chipWidth, chipHeight, 9).lineWidth(1).fillAndStroke(colors.bgGray, colors.border);
         doc.fillColor(colors.textDark).fontSize(8).font(fonts.regular).text(item, x + 8, y + 5);
-        
+
         x += chipWidth + 6;
       });
-      
+
       doc.y = y + chipHeight + 8;
       doc.moveTo(margins.left, gridStartY).lineTo(margins.left, doc.y).lineWidth(1).strokeColor(colors.border).stroke();
       doc.moveTo(pageWidth - margins.right, gridStartY).lineTo(pageWidth - margins.right, doc.y).lineWidth(1).strokeColor(colors.border).stroke();
@@ -369,61 +369,61 @@ const generatePDF = (submission, res) => {
     }
   });
 
-  
+
   const profileKeys = { 'jobProfiles': 'Job Profiles', 'internshipProfiles': 'Internship Profiles' };
-  
+
   Object.entries(profileKeys).forEach(([pk, title]) => {
     if (!isEmpty(data[pk])) {
       const validProfiles = Object.entries(data[pk]).filter(([course, details]) => !isEmpty(details.designation));
-      
+
       if (validProfiles.length > 0) {
         drawSectionHeader(title);
-        
+
         validProfiles.forEach(([course, details]) => {
           const detailKeys = Object.keys(details).filter(k => !isEmpty(details[k]));
           const colWidth = (contentWidth - 40) / 2;
-          
-          let requiredHeight = 35; 
+
+          let requiredHeight = 35;
           let tempRowMax = 0;
           let tempCol = 0;
-          
+
           detailKeys.forEach((k, i) => {
-             doc.font(fonts.regular).fontSize(9);
-             const tH = doc.heightOfString(String(details[k]), { width: colWidth });
-             const itemHeight = 10 + tH + 10;
-             if (itemHeight > tempRowMax) tempRowMax = itemHeight;
-             if (tempCol === 1 || i === detailKeys.length - 1) {
-                requiredHeight += tempRowMax;
-                tempRowMax = 0;
-                tempCol = 0;
-             } else {
-                tempCol = 1;
-             }
+            doc.font(fonts.regular).fontSize(9);
+            const tH = doc.heightOfString(String(details[k]), { width: colWidth });
+            const itemHeight = 10 + tH + 10;
+            if (itemHeight > tempRowMax) tempRowMax = itemHeight;
+            if (tempCol === 1 || i === detailKeys.length - 1) {
+              requiredHeight += tempRowMax;
+              tempRowMax = 0;
+              tempCol = 0;
+            } else {
+              tempCol = 1;
+            }
           });
-          
+
           checkPageBreak(requiredHeight + 15);
-          
+
           const startY = doc.y;
-          
+
           doc.roundedRect(margins.left, startY, contentWidth, 24, 6).fill(colors.bgGray);
           doc.fillColor(colors.maroon).fontSize(10).font(fonts.bold).text(`Profile for ${course.toUpperCase()}`, margins.left + 10, startY + 7);
-          
+
           let y = startY + 30;
-          
+
           let colIndex = 0;
           let rowY = y;
           let maxRowHeight = 0;
-          
+
           detailKeys.forEach((k, i) => {
             const currentX = margins.left + 10 + (colIndex * (colWidth + 10));
-            
+
             doc.fillColor(colors.textLight).fontSize(7).font(fonts.bold).text(formatKey(k).toUpperCase(), currentX, rowY);
             const textHeight = doc.heightOfString(String(details[k]), { width: colWidth, font: fonts.regular, fontSize: 9 });
             doc.fillColor(colors.textDark).fontSize(9).font(fonts.regular).text(String(details[k]), currentX, rowY + 10, { width: colWidth });
-            
+
             const itemHeight = 10 + textHeight + 10;
             if (itemHeight > maxRowHeight) maxRowHeight = itemHeight;
-            
+
             if (colIndex === 1 || i === detailKeys.length - 1) {
               rowY += maxRowHeight;
               maxRowHeight = 0;
@@ -432,10 +432,10 @@ const generatePDF = (submission, res) => {
               colIndex = 1;
             }
           });
-          
+
           const cardHeight = rowY - startY + 6;
           doc.roundedRect(margins.left, startY, contentWidth, cardHeight, 6).lineWidth(1).strokeColor(colors.border).stroke();
-          
+
           doc.y = startY + cardHeight + 12;
         });
       }
@@ -469,7 +469,8 @@ const generatePDF = (submission, res) => {
         'Students who have already secured an on-campus offer shall remain eligible to participate in recruitment drives conducted by Public Sector Undertakings (PSUs) and Government Organizations, subject to the eligibility criteria prescribed by the recruiting organization.',
         'Once a student receives an offer from a PSU/Government Organization, the student shall not be permitted to participate in the recruitment process of any other PSU/Government Organization.'
       ],
-      'Bonus Company Policy: Companies offering a CTC of \u20b95 LPA or below shall be classified as Bonus Companies. Students selected by a Bonus Company shall remain eligible to participate in all subsequent campus recruitment drives offering a higher CTC without any restriction arising from their earlier selection.'
+      'Bonus Company Policy: Companies offering a CTC of \u20b95 LPA or below shall be classified as Bonus Companies. Students selected by a Bonus Company shall remain eligible to participate in all subsequent campus recruitment drives offering a higher CTC without any restriction arising from their earlier selection.',
+      'If there are PwD applicants or Students with Specific Learning Disabilities (SLD), companies must take care of any of their special requirements, such as additional time, scribing, bigger fonts, etc. We encourage equal opportunity for all sections of the students with equal emphasis on Diversity, Equity, and Inclusivity (DEI). Quite often, DEI provisions start and end with Gender diversity. Companies are strongly recommended to go beyond and proactively consider and support PwD, SLD, and other such applicants.'
     ],
     margins.left + 10,
     doc.y,
@@ -485,18 +486,18 @@ const generatePDF = (submission, res) => {
   doc.moveDown(1.2);
 
   // Undertaking Section
-  const declarationText = "I hereby declare that the information provided in this form is true and correct to the best of my knowledge. I have read and understand all the provided important mentions from the TNP Recruitment Portal."
+  const declarationText = "I hereby declare that the information provided in this form is true and correct to the best of my knowledge. I have read and understood all the provided important mentions from the TNP Recruitment Portal."
 
-  
+
   checkPageBreak(150);
   drawSectionHeader('Undertaking');
-  
+
   const undertakingStartY = doc.y;
-  
+
   doc.fillColor(colors.textDark).fontSize(10).font(fonts.regular).text(declarationText, margins.left + 10, doc.y + 10, { width: contentWidth - 20, align: 'justify' });
-  
+
   doc.moveDown(1.5);
-  
+
   // Statuses
   doc.fillColor(colors.textMedium).fontSize(10).font(fonts.bold).text("Undertaking Accepted:", margins.left + 10, doc.y, { continued: true });
   doc.fillColor(colors.textDark).font(fonts.regular).text(` ${data.undertakingAccepted ? 'Yes' : 'No'}`);
@@ -509,38 +510,38 @@ const generatePDF = (submission, res) => {
   doc.fillColor(colors.textMedium).fontSize(10).font(fonts.bold).text("Designation:", margins.left + 10, doc.y, { continued: true });
   doc.fillColor(colors.textDark).font(fonts.regular).text(` ${data.formFillerDesignation || 'N/A'}`);
   doc.moveDown(0.8);
-  
+
   doc.fillColor(colors.textMedium).fontSize(10).font(fonts.bold).text("Submitted On:", margins.left + 10, doc.y, { continued: true });
   doc.fillColor(colors.textDark).font(fonts.regular).text(` ${new Date(submission.submittedAt).toLocaleString()}`);
-  
+
   doc.y += 10;
-  
+
   doc.moveTo(margins.left, undertakingStartY).lineTo(margins.left, doc.y).lineWidth(1).strokeColor(colors.border).stroke();
   doc.moveTo(pageWidth - margins.right, undertakingStartY).lineTo(pageWidth - margins.right, doc.y).lineWidth(1).strokeColor(colors.border).stroke();
   doc.moveTo(margins.left, doc.y).lineTo(pageWidth - margins.right, doc.y).lineWidth(1).strokeColor(colors.border).stroke();
-  
+
   doc.moveDown(2);
 
-  
+
   const range = doc.bufferedPageRange();
   for (let i = range.start; i < range.start + range.count; i++) {
     doc.switchToPage(i);
-    
+
     const originalBottomMargin = doc.page.margins.bottom;
     doc.page.margins.bottom = 0;
-    
+
     doc.moveTo(margins.left, pageHeight - 40)
-       .lineTo(pageWidth - margins.right, pageHeight - 40)
-       .lineWidth(1)
-       .strokeColor(colors.border)
-       .stroke();
-       
+      .lineTo(pageWidth - margins.right, pageHeight - 40)
+      .lineWidth(1)
+      .strokeColor(colors.border)
+      .stroke();
+
     doc.fillColor(colors.textLight).fontSize(8).font(fonts.bold)
-       .text('National Institute of Technology Kurukshetra | Training & Placement Cell', margins.left, pageHeight - 30, { lineBreak: false });
-       
+      .text('National Institute of Technology Kurukshetra | Training & Placement Cell', margins.left, pageHeight - 30, { lineBreak: false });
+
     doc.fillColor(colors.textLight).fontSize(8).font(fonts.regular)
-       .text(`Page ${i + 1} of ${range.count}`, margins.left, pageHeight - 30, { align: 'right', width: contentWidth, lineBreak: false });
-       
+      .text(`Page ${i + 1} of ${range.count}`, margins.left, pageHeight - 30, { align: 'right', width: contentWidth, lineBreak: false });
+
     doc.page.margins.bottom = originalBottomMargin;
   }
 
