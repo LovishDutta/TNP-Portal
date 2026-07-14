@@ -221,9 +221,9 @@ const generatePDF = (submission, res) => {
   
   const sections = [
     { title: 'Company Information', keys: ['companyName', 'emailAddress', 'website', 'companyType', 'companyTypeOther', 'domain', 'domainOther', 'organisationDescription', 'internshipType'] },
-    { title: 'Eligibility Criteria', keys: ['minimumCGPA', 'medicalCondition', 'otherCriteria'] },
+    { title: 'Eligibility Criteria', keys: ['minimumCGPA', 'backlogsAllowed', 'historyOfBacklogsAllowed', 'medicalCondition', 'otherCriteria'] },
     { title: 'Recruitment Process', keys: ['resumeShortlisting', 'prePlacementTalk', 'groupDiscussion', 'aptitudeTest', 'testMode', 'technicalTest', 'technicalInterview', 'hrInterview', 'otherRounds', 'expectedRecruits', 'tentativeVisitDate', 'accommodationRequired', 'bondDetails'] },
-    { title: 'Additional Details', keys: ['sponsorEvents', 'internshipsOffered', 'internshipStreams', 'internshipDuration', 'studentContests', 'contestDetails'] }
+    { title: 'Additional Details', keys: ['internshipsOffered', 'internshipStreams', 'internshipDuration', 'studentContests', 'contestDetails'] }
   ];
 
   sections.forEach(section => {
@@ -231,7 +231,7 @@ const generatePDF = (submission, res) => {
     if (validKeys.length > 0) {
       let gridRows = [];
       let currentRow = [];
-      const longTextKeys = ['organisationDescription', 'medicalCondition', 'otherCriteria', 'bondDetails', 'contestDetails'];
+      const longTextKeys = ['minimumCGPA', 'organisationDescription', 'medicalCondition', 'otherCriteria', 'bondDetails', 'contestDetails'];
       
       validKeys.forEach((k) => {
         if (longTextKeys.includes(k)) {

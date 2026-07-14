@@ -12,23 +12,29 @@ export default function INFInternshipProfileSection({
   setValidationMessage,
 }) {
   const handleProfileChange = (
-  course,
-  field,
-  value
-) => {
-  setValidationMessage("");
+    course,
+    field,
+    value
+  ) => {
+    setValidationMessage("");
 
-  setFormData((prev) => ({
-    ...prev,
-    internshipProfiles: {
-      ...prev.internshipProfiles,
-      [course]: {
-        ...prev.internshipProfiles[course],
-        [field]: value,
+    if (field === "gross" || field === "stipend" || field === "trainingPeriod") {
+      if (value !== "" && !/^\d*\.?\d{0,2}$/.test(value)) {
+        return;
+      }
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      internshipProfiles: {
+        ...prev.internshipProfiles,
+        [course]: {
+          ...prev.internshipProfiles[course],
+          [field]: value,
+        },
       },
-    },
-  }));
-};
+    }));
+  };
 
   return (
     <SectionCard title="Internship Profile">
@@ -96,6 +102,9 @@ export default function INFInternshipProfileSection({
                   e.target.value
                 )
               }
+              placeholder="e.g. 50000"
+              suffix="Per Month"
+              error={formData.internshipProfiles[course.key].gross && !/^\d+(\.\d{1,2})?$/.test(formData.internshipProfiles[course.key].gross) ? "Invalid format" : ""}
             />
 
             <InputField
@@ -112,6 +121,9 @@ export default function INFInternshipProfileSection({
                   e.target.value
                 )
               }
+              placeholder="e.g. 45000"
+              suffix="Per Month"
+              error={formData.internshipProfiles[course.key].stipend && !/^\d+(\.\d{1,2})?$/.test(formData.internshipProfiles[course.key].stipend) ? "Invalid format" : ""}
             />
 
             <InputField
@@ -131,7 +143,7 @@ export default function INFInternshipProfileSection({
             />
 
             <InputField
-              label="Training Period (In Months)"
+              label="Training Period"
               value={
                 formData.internshipProfiles[
                   course.key
@@ -144,6 +156,9 @@ export default function INFInternshipProfileSection({
                   e.target.value
                 )
               }
+              placeholder="e.g. 6"
+              suffix="Months"
+              error={formData.internshipProfiles[course.key].trainingPeriod && !/^\d+(\.\d{1,2})?$/.test(formData.internshipProfiles[course.key].trainingPeriod) ? "Invalid format" : ""}
             />
 
             <InputField

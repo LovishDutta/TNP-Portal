@@ -17,6 +17,12 @@ export default function JNFJobProfileSection({
   ) => {
     setValidationMessage("");
 
+    if (field === "ctc" || field === "takeHome" || field === "trainingPeriod") {
+      if (value !== "" && !/^\d*\.?\d{0,2}$/.test(value)) {
+        return;
+      }
+    }
+
     setFormData((prev) => ({
       ...prev,
       jobProfiles: {
@@ -91,6 +97,9 @@ export default function JNFJobProfileSection({
                   e.target.value
                 )
               }
+              placeholder="e.g. 12.5"
+              suffix="LPA"
+              error={formData.jobProfiles[course.key].ctc && !/^\d+(\.\d{1,2})?$/.test(formData.jobProfiles[course.key].ctc) ? "Invalid format" : ""}
             />
 
             <InputField
@@ -106,6 +115,9 @@ export default function JNFJobProfileSection({
                   e.target.value
                 )
               }
+              placeholder="e.g. 10.5"
+              suffix="LPA"
+              error={formData.jobProfiles[course.key].takeHome && !/^\d+(\.\d{1,2})?$/.test(formData.jobProfiles[course.key].takeHome) ? "Invalid format" : ""}
             />
 
             <InputField
@@ -124,7 +136,7 @@ export default function JNFJobProfileSection({
             />
 
             <InputField
-              label="Training Period (In Months)"
+              label="Training Period"
               value={
                 formData.jobProfiles[course.key]
                   .trainingPeriod
@@ -136,6 +148,9 @@ export default function JNFJobProfileSection({
                   e.target.value
                 )
               }
+              placeholder="e.g. 6"
+              suffix="Months"
+              error={formData.jobProfiles[course.key].trainingPeriod && !/^\d+(\.\d{1,2})?$/.test(formData.jobProfiles[course.key].trainingPeriod) ? "Invalid format" : ""}
             />
 
             <InputField

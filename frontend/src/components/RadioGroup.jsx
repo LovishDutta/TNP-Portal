@@ -5,6 +5,7 @@ export default function RadioGroup({
   options,
   onChange,
   required = false,
+  error = "",
 }) {
   return (
     <div>
@@ -25,16 +26,17 @@ export default function RadioGroup({
               ${
                 value === option
                   ? "bg-[#7A0019] text-white border-[#7A0019]"
-                  : "bg-white border-gray-300"
+                  : error ? "bg-white border-red-500" : "bg-white border-gray-300"
               }`}
           >
             <input
               type="radio"
-              className="hidden"
+              className="sr-only"
               name={name}
               value={option}
               checked={value === option}
               onChange={onChange}
+              required={required}
             />
 
             {option}
@@ -42,6 +44,7 @@ export default function RadioGroup({
         ))}
 
       </div>
+      {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
 
     </div>
   );

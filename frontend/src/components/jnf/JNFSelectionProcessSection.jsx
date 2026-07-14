@@ -17,6 +17,7 @@ export default function JNFSelectionProcessSection({
           value={formData.resumeShortlisting}
           onChange={handleChange}
           options={["Yes", "No"]}
+          required
         />
 
         <RadioGroup
@@ -25,6 +26,7 @@ export default function JNFSelectionProcessSection({
           value={formData.prePlacementTalk}
           onChange={handleChange}
           options={["Yes", "No"]}
+          required
         />
 
         <RadioGroup
@@ -38,6 +40,7 @@ export default function JNFSelectionProcessSection({
     "Both",
     "Not Applicable",
   ]}
+  required
 />
 
         <RadioGroup
@@ -46,6 +49,7 @@ export default function JNFSelectionProcessSection({
           value={formData.groupDiscussion}
           onChange={handleChange}
           options={["Yes", "No"]}
+          required
         />
 
         <RadioGroup
@@ -54,6 +58,7 @@ export default function JNFSelectionProcessSection({
           value={formData.aptitudeTest}
           onChange={handleChange}
           options={["Yes", "No"]}
+          required
         />
 
         <RadioGroup
@@ -62,6 +67,7 @@ export default function JNFSelectionProcessSection({
           value={formData.technicalTest}
           onChange={handleChange}
           options={["Yes", "No"]}
+          required
         />
 
         <RadioGroup
@@ -70,6 +76,7 @@ export default function JNFSelectionProcessSection({
           value={formData.technicalInterview}
           onChange={handleChange}
           options={["Yes", "No"]}
+          required
         />
 
         <RadioGroup
@@ -78,6 +85,7 @@ export default function JNFSelectionProcessSection({
           value={formData.hrInterview}
           onChange={handleChange}
           options={["Yes", "No"]}
+          required
         />
 
         <TextAreaField
@@ -112,6 +120,7 @@ export default function JNFSelectionProcessSection({
           value={formData.accommodationRequired}
           onChange={handleChange}
           options={["Yes", "No"]}
+          required
         />
 
         <TextAreaField
@@ -119,6 +128,8 @@ export default function JNFSelectionProcessSection({
           name="bondDetails"
           value={formData.bondDetails}
           onChange={handleChange}
+          required
+          placeholder="NA if not applicable"
         />
 
       </div>

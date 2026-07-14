@@ -15,6 +15,7 @@ export default function JNFCompanyOfficialsSection({
           contact={formData.contacts[0]}
           index={0}
           setFormData={setFormData}
+          required={0 === 0}
         />
 
         <ContactCard
