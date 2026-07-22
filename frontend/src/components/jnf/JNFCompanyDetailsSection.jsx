@@ -2,16 +2,18 @@ import SectionCard from "../SectionCard";
 import InputField from "../InputField";
 import TextAreaField from "../TextAreaField";
 import RadioGroup from "../RadioGroup";
+import CheckboxGroup from "../CheckboxGroup";
 
 export default function JNFCompanyDetailsSection({
   formData,
   handleChange,
+  handleCategoryToggle,
 }) {
   return (
     <SectionCard title="Company Details">
       <div className="grid md:grid-cols-2 gap-6">
         <InputField
-          label="Company Name"
+          label="Name of the Company"
           name="companyName"
           value={formData.companyName}
           onChange={handleChange}
@@ -19,16 +21,7 @@ export default function JNFCompanyDetailsSection({
         />
 
         <InputField
-          label="Email Address"
-          name="emailAddress"
-          value={formData.emailAddress}
-          onChange={handleChange}
-          type="email"
-          required
-        />
-
-        <InputField
-          label="Website"
+          label="Official Website"
           name="website"
           value={formData.website}
           onChange={handleChange}
@@ -36,28 +29,33 @@ export default function JNFCompanyDetailsSection({
       </div>
 
       <div className="mt-8">
-        <RadioGroup
-          label="Company Type"
-          name="companyType"
-          value={formData.companyType}
-          onChange={handleChange}
+        <CheckboxGroup
+          label="Category/Sector"
           options={[
-            "MNC",
-            "Start-up",
+            "Software/IT",
+            "Education/EdTech",
+            "E-Commerce",
+            "Consulting",
+            "Core",
+            "Banking & Finance",
+            "Analytics",
+            "Technology",
+            "Media",
+            "FMCG",
             "PSU",
-            "Private",
-            "NGO",
             "Other",
           ]}
+          selected={formData.category}
+          onChange={handleCategoryToggle}
         />
       </div>
 
-      {formData.companyType === "Other" && (
+      {formData.category?.includes("Other") && (
         <div className="mt-5">
           <InputField
-            label="Specify Company Type"
-            name="companyTypeOther"
-            value={formData.companyTypeOther}
+            label="Specify Category/Sector"
+            name="categoryOther"
+            value={formData.categoryOther}
             onChange={handleChange}
           />
         </div>
@@ -65,38 +63,24 @@ export default function JNFCompanyDetailsSection({
 
       <div className="mt-8">
         <RadioGroup
-          label="Domain"
-          name="domain"
-          value={formData.domain}
+          label="Hiring Type"
+          name="hiringType"
+          value={formData.hiringType}
           onChange={handleChange}
           options={[
-            "Analytics",
-            "Consulting",
-            "Core (Technical)",
-            "Finance",
-            "Management",
-            "I.T.",
-            "Other",
+            "Full Time Employment (FTE)",
+            "Internship + FTE",
+            "Internship + PPO",
+            "Internship only",
           ]}
         />
       </div>
-
-      {formData.domain === "Other" && (
-        <div className="mt-5">
-          <InputField
-            label="Specify Domain"
-            name="domainOther"
-            value={formData.domainOther}
-            onChange={handleChange}
-          />
-        </div>
-      )}
 
       <div className="mt-8">
         <TextAreaField
-          label="Brief About the Organisation"
-          name="organisationDescription"
-          value={formData.organisationDescription}
+          label="Overview of the Company"
+          name="companyOverview"
+          value={formData.companyOverview}
           onChange={handleChange}
           rows={6}
         />

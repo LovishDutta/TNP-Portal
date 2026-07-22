@@ -33,9 +33,9 @@ export default function Home() {
             <p className="mt-5 max-w-2xl mx-auto text-gray-500 text-sm sm:text-base md:text-lg leading-relaxed">
               Welcome to the official recruitment portal of the
               Training & Placement Cell, National Institute of
-              Technology Kurukshetra. Recruiters may submit Job
-              Notification Forms (JNF) and Internship Notification
-              Forms (INF) through this portal.
+              Technology Kurukshetra. Recruiters may submit Job Internship
+              Notification Forms (JINF) and Summer Internship Notification
+              Forms (SINF) through this portal.
             </p>
 
           </div>
@@ -165,26 +165,26 @@ export default function Home() {
 <div className="flex-1 flex flex-col justify-start">                
   <div className="space-y-5">
                   <div className="p-5 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-gray-200 transition-all duration-200">
-                    <h3 className="text-base font-semibold text-gray-800">Job Notification Form</h3>
+                    <h3 className="text-base font-semibold text-gray-800">Job Internship Notification Form</h3>
                     <p className="mt-1 text-sm text-gray-500 mb-4">For final year students seeking full-time roles.</p>
                     <Link
                       to="/jnf"
                       className="block w-full text-center bg-[#7A0019] hover:bg-[#5C0013] text-white px-4 py-2.5 rounded-lg font-medium transition-all duration-200 text-sm"
                       style={{ boxShadow: '0 1px 3px rgba(122, 0, 25, 0.2)' }}
                     >
-                      Fill JNF
+                      Fill JINF
                     </Link>
                   </div>
 
                   <div className="p-5 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-gray-200 transition-all duration-200">
-                    <h3 className="text-base font-semibold text-gray-800">Internship Notification Form</h3>
+                    <h3 className="text-base font-semibold text-gray-800">Summer Internship Notification Form</h3>
                     <p className="mt-1 text-sm text-gray-500 mb-4">For pre-final year students seeking internships.</p>
                     <Link
                       to="/inf"
                       className="block w-full text-center bg-[#7A0019] hover:bg-[#5C0013] text-white px-4 py-2.5 rounded-lg font-medium transition-all duration-200 text-sm"
                       style={{ boxShadow: '0 1px 3px rgba(122, 0, 25, 0.2)' }}
                     >
-                      Fill INF
+                      Fill SINF
                     </Link>
                   </div>
                 </div>

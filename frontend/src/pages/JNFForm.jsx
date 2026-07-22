@@ -171,12 +171,15 @@ export default function JNFForm() {
   const formTopRef = useRef(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState(() => {
-    const savedDraft =
-      localStorage.getItem("jnfDraft");
+    const savedDraft = localStorage.getItem("jnfDraft");
+    if (!savedDraft) return jnfInitialState;
 
-    return savedDraft
-      ? JSON.parse(savedDraft)
-      : jnfInitialState;
+    try {
+      const parsed = JSON.parse(savedDraft);
+      return { ...jnfInitialState, ...parsed };
+    } catch (e) {
+      return jnfInitialState;
+    }
   });
 
   const [currentStep, setCurrentStep] =
@@ -210,6 +213,22 @@ export default function JNFForm() {
       [name]: value,
     }));
   };
+
+
+  const handleCategoryToggle = (option) => {
+    setValidationMessage("");
+    setFormData((prev) => {
+      const alreadySelected = prev.category.includes(option);
+      return {
+        ...prev,
+        category: alreadySelected
+          ? prev.category.filter((item) => item !== option)
+          : [...prev.category, option],
+      };
+    });
+  };
+
+
   const scrollToTop = () => {
     formTopRef.current?.scrollIntoView({
       behavior: "smooth",
@@ -246,26 +265,38 @@ export default function JNFForm() {
     setValidationMessage("");
 
     // STEP 1
+    // STEP 1
     if (currentStep === 1) {
-      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-      if (
-        !formData.companyName.trim() ||
-        !formData.emailAddress.trim()
-      ) {
-        setValidationMessage(
-          "Company Name and Email Address are required to continue."
-        );
+      if (!formData.companyName.trim()) {
+        setValidationMessage("Company Name is required to continue.");
         scrollToTop();
         return;
       }
-      if (!emailRegex.test(formData.emailAddress)) {
-        setValidationMessage("Please enter a valid Email Address.");
-        scrollToTop();
-        return;
-      }
+
       const urlRegex = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?(\/.*)?$/;
       if (formData.website && !urlRegex.test(formData.website)) {
         setValidationMessage("Please enter a valid Website URL.");
+        scrollToTop();
+        return;
+      }
+
+      if (!formData.category || formData.category.length === 0) {
+        setValidationMessage("Please select at least one Category/Sector.");
+        scrollToTop();
+        return;
+      }
+
+      if (
+        formData.category.includes("Other") &&
+        !formData.categoryOther.trim()
+      ) {
+        setValidationMessage("Please specify the Category/Sector.");
+        scrollToTop();
+        return;
+      }
+
+      if (!formData.hiringType) {
+        setValidationMessage("Please select a Hiring Type.");
         scrollToTop();
         return;
       }
@@ -442,7 +473,7 @@ export default function JNFForm() {
         {/* <JNFPoliciesBox /> */}
 
         <FormStepper
-          title="Job Notification Form"
+          title="Job Internship Notification Form"
           currentStep={currentStep}
           steps={stepperLabels}
         />
@@ -458,6 +489,7 @@ export default function JNFForm() {
               <JNFCompanyDetailsSection
                 formData={formData}
                 handleChange={handleChange}
+                handleCategoryToggle={handleCategoryToggle}
               />
 
               <FormNavigation

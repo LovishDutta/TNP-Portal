@@ -302,7 +302,7 @@ export default function AdminSubmissionView() {
             <div className="flex items-center space-x-3 mt-1 text-sm text-gray-500">
               <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${submission.formType === 'JNF' ? 'bg-[#7A0019]/10 text-[#7A0019]' : 'bg-green-100 text-green-800'
                 }`}>
-                {submission.formType}
+                {formTypeLabel(submission.formType)}
               </span>
               <span>•</span>
               <span>Submitted on {new Date(submission.submittedAt).toLocaleString("en-IN", {

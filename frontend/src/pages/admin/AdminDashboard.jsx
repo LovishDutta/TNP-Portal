@@ -8,6 +8,7 @@ export default function AdminDashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("ALL");
+  const formTypeLabel = (type) => (type === 'JNF' ? 'JINF' : type === 'INF' ? 'SINF' : type);
 
   const fetchSubmissions = async () => {
     try {
@@ -75,13 +76,13 @@ export default function AdminDashboard() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div className="grid grid-cols-2 gap-4 stagger-children">
           <div className="bg-white p-5 rounded-xl min-w-[150px] border-2 border-gray-300 transition-all duration-300 hover:shadow-md hover:border-gray-400" style={{ boxShadow: 'var(--shadow-sm)' }}>
-            <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Total JNF</p>
+            <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Total JINF</p>
             <p className="text-2xl font-bold text-gray-900 mt-1.5 tracking-tight">
               {submissions.filter(s => s.formType === 'JNF').length}
             </p>
           </div>
           <div className="bg-white p-5 rounded-xl min-w-[150px] border-2 border-gray-300 transition-all duration-300 hover:shadow-md hover:border-gray-400" style={{ boxShadow: 'var(--shadow-sm)' }}>
-            <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Total INF</p>
+            <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Total SINF</p>
             <p className="text-2xl font-bold text-gray-900 mt-1.5 tracking-tight">
               {submissions.filter(s => s.formType === 'INF').length}
             </p>
@@ -115,8 +116,7 @@ export default function AdminDashboard() {
                   : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"}
               `}
             >
-              {tab === "ALL" ? "All Forms" : `${tab} Forms`}
-            </button>
+              {tab === "ALL" ? "All Forms" : `${formTypeLabel(tab)} Forms`}            </button>
           ))}
         </nav>
 
@@ -128,7 +128,7 @@ export default function AdminDashboard() {
               <FileText className="h-6 w-6 text-gray-400" />
             </div>
             <h3 className="text-base font-semibold text-gray-900">No submissions found</h3>
-            <p className="mt-1.5 text-gray-500 text-sm">Wait for recruiters to submit JNF/INF forms.</p>
+            <p className="mt-1.5 text-gray-500 text-sm">Wait for recruiters to submit JINF/SINF forms.</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -158,7 +158,7 @@ export default function AdminDashboard() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold ${submission.formType === 'JNF' ? 'bg-blue-50 text-blue-700' : 'bg-emerald-50 text-emerald-700'
                         }`}>
-                        {submission.formType}
+                        {formTypeLabel(submission.formType)}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 font-medium">

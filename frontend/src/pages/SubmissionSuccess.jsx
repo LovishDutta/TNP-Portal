@@ -8,6 +8,7 @@ export default function SubmissionSuccess() {
   const navigate = useNavigate();
   const [submission, setSubmission] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const formTypeLabel = (type) => (type === 'JNF' ? 'JINF' : type === 'INF' ? 'SINF' : type);
 
   useEffect(() => {
     const fetchSubmission = async () => {
@@ -34,8 +35,7 @@ export default function SubmissionSuccess() {
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', `${submission.formType}_${submission.companyName.replace(/\\s+/g, '_')}.pdf`);
-      document.body.appendChild(link);
+      link.setAttribute('download', `${formTypeLabel(submission.formType)}_${submission.companyName.replace(/\\s+/g, '_')}.pdf`); document.body.appendChild(link);
       link.click();
       link.parentNode.removeChild(link);
     } catch (error) {
@@ -177,8 +177,7 @@ export default function SubmissionSuccess() {
             <CheckCircle className="h-6 w-6 text-green-600" />
           </div>
           <h2 className="text-2xl font-bold text-gray-900">Form Submitted Successfully!</h2>
-          <p className="text-gray-600 mt-2">Thank you for submitting the {submission.formType} for {submission.companyName}.</p>
-          <p className="text-gray-500 text-sm mt-1">Our Training and Placement team will review it shortly.</p>
+          <p className="text-gray-600 mt-2">Thank you for submitting the {formTypeLabel(submission.formType)} for {submission.companyName}.</p>          <p className="text-gray-500 text-sm mt-1">Our Training and Placement team will review it shortly.</p>
         </div>
 
         { }
@@ -211,7 +210,7 @@ export default function SubmissionSuccess() {
               <div className="flex items-center space-x-3 mt-1 text-sm text-gray-500">
                 <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${submission.formType === 'JNF' ? 'bg-[#7A0019]/10 text-[#7A0019]' : 'bg-green-100 text-green-800'
                   }`}>
-                  {submission.formType}
+                  {formTypeLabel(submission.formType)}
                 </span>
                 <span>•</span>
                 <span>Submitted on {new Date(submission.submittedAt).toLocaleString("en-IN", {

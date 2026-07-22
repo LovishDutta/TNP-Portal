@@ -52,9 +52,11 @@ const generatePDF = (submission, res) => {
       if (val.startsWith('http://') || val.startsWith('https://')) return val;
       return val;
     }
+    if (Array.isArray(val)) {
+      return val.join(', ');
+    }
     return String(val);
   };
-
   const isEmpty = (val) => {
     if (val === undefined || val === null) return true;
     if (typeof val === 'string') {
@@ -96,7 +98,7 @@ const generatePDF = (submission, res) => {
       .strokeColor(colors.maroon)
       .stroke();
 
-    const formTitle = submission.formType === 'JNF' ? 'Job Notification Form (JNF)' : 'Internship Notification Form (INF)';
+    const formTitle = submission.formType === 'JNF' ? 'Job Internship Notification Form (JINF)' : 'Summer Internship Notification Form (SINF)';
     doc.fillColor(colors.maroon).fontSize(18).font(fonts.bold).text(formTitle, margins.left, margins.top + 75, { align: 'center' });
 
     doc.fillColor(colors.textDark).fontSize(14).font(fonts.bold).text(submission.companyName || 'Unknown Company', margins.left, margins.top + 105, { align: 'center' });
@@ -220,7 +222,7 @@ const generatePDF = (submission, res) => {
 
 
   const sections = [
-    { title: 'Company Information', keys: ['companyName', 'emailAddress', 'website', 'companyType', 'companyTypeOther', 'domain', 'domainOther', 'organisationDescription', 'internshipType'] },
+    { title: 'Company Information', keys: ['companyName', 'emailAddress', 'website', 'companyType', 'companyTypeOther', 'domain', 'domainOther', 'organisationDescription', 'category', 'categoryOther', 'hiringType', 'companyOverview'] },
     { title: 'Eligibility Criteria', keys: ['minimumCGPA', 'backlogsAllowed', 'historyOfBacklogsAllowed', 'medicalCondition', 'otherCriteria'] },
     { title: 'Recruitment Process', keys: ['resumeShortlisting', 'prePlacementTalk', 'groupDiscussion', 'aptitudeTest', 'testMode', 'technicalTest', 'technicalInterview', 'hrInterview', 'otherRounds', 'expectedRecruits', 'tentativeVisitDate', 'accommodationRequired', 'bondDetails'] },
     { title: 'Additional Details', keys: ['internshipsOffered', 'internshipStreams', 'internshipDuration', 'studentContests', 'contestDetails'] }
@@ -231,8 +233,7 @@ const generatePDF = (submission, res) => {
     if (validKeys.length > 0) {
       let gridRows = [];
       let currentRow = [];
-      const longTextKeys = ['minimumCGPA', 'organisationDescription', 'medicalCondition', 'otherCriteria', 'bondDetails', 'contestDetails'];
-
+      const longTextKeys = ['minimumCGPA', 'organisationDescription', 'companyOverview', 'medicalCondition', 'otherCriteria', 'bondDetails', 'contestDetails'];
       validKeys.forEach((k) => {
         if (longTextKeys.includes(k)) {
           if (currentRow.length > 0) { gridRows.push(currentRow); currentRow = []; }
@@ -378,6 +379,14 @@ const generatePDF = (submission, res) => {
 
       if (validProfiles.length > 0) {
         drawSectionHeader(title);
+
+        // Show Internship Type right under the section header, only for internshipProfiles
+        if (pk === 'internshipProfiles' && !isEmpty(data.internshipType)) {
+          checkPageBreak(20);
+          doc.fillColor(colors.textMedium).fontSize(9).font(fonts.bold).text('Internship Type: ', margins.left + 10, doc.y + 6, { continued: true });
+          doc.fillColor(colors.textDark).font(fonts.regular).text(String(data.internshipType));
+          doc.moveDown(0.8);
+        }
 
         validProfiles.forEach(([course, details]) => {
           const detailKeys = Object.keys(details).filter(k => !isEmpty(details[k]));
