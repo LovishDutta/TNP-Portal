@@ -10,7 +10,7 @@ const infInitialState = {
   categoryOther: "",
   hiringType: "",
   companyOverview: "",
-  internshipType: "",   // Step 2 ke liye (Internship Type: Only/FTE/PPO) — separate rakha
+  // internshipType: "",   // Step 2 ke liye (Internship Type: Only/FTE/PPO) — separate rakha
 
 
   minimumCGPA: "",
@@ -59,50 +59,34 @@ const infInitialState = {
 
 
   internshipProfiles: {
-    btech: {
-      designation: "",
-      stipend: "",
-      gross: "",
-      perks: "",
-      trainingPeriod: "",
-      location: "",
-    },
-
-    mca: {
-      designation: "",
-      stipend: "",
-      gross: "",
-      perks: "",
-      trainingPeriod: "",
-      location: "",
-    },
-
-    mtech: {
-      designation: "",
-      stipend: "",
-      gross: "",
-      perks: "",
-      trainingPeriod: "",
-      location: "",
-    },
-
-    mba: {
-      designation: "",
-      stipend: "",
-      gross: "",
-      perks: "",
-      trainingPeriod: "",
-      location: "",
-    },
-
-    msc: {
-      designation: "",
-      stipend: "",
-      gross: "",
-      perks: "",
-      trainingPeriod: "",
-      location: "",
-    },
+  btech: {
+    designation: "",
+    ctc: "",
+    stipend: "",
+    internshipDuration: "",
+    location: "",
+  },
+  mba: {
+    designation: "",
+    ctc: "",
+    stipend: "",
+    internshipDuration: "",
+    location: "",
+  },
+  mca: {
+    designation: "",
+    ctc: "",
+    stipend: "",
+    internshipDuration: "",
+    location: "",
+  },
+  dualDegree: {
+    designation: "",
+    ctc: "",
+    stipend: "",
+    internshipDuration: "",
+    location: "",
+  },
   },
 };
 

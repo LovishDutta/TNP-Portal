@@ -1,24 +1,26 @@
 import SectionCard from "../SectionCard";
 import InputField from "../InputField";
 import CourseProfileCard from "../CourseProfileCard";
-import SelectField from "../SelectField";
-import RadioGroup from "../RadioGroup";
 
 import infCourses from "../../constants/infCourses";
+
+const EMPTY_PROFILE = {
+  designation: "",
+  ctc: "",
+  stipend: "",
+  internshipDuration: "",
+  location: "",
+};
 
 export default function INFInternshipProfileSection({
   formData,
   setFormData,
   setValidationMessage,
 }) {
-  const handleProfileChange = (
-    course,
-    field,
-    value
-  ) => {
+  const handleProfileChange = (course, field, value) => {
     setValidationMessage("");
 
-    if (field === "gross" || field === "stipend" || field === "trainingPeriod") {
+    if (field === "ctc" || field === "stipend") {
       if (value !== "" && !/^\d*\.?\d{0,2}$/.test(value)) {
         return;
       }
@@ -29,7 +31,8 @@ export default function INFInternshipProfileSection({
       internshipProfiles: {
         ...prev.internshipProfiles,
         [course]: {
-          ...prev.internshipProfiles[course],
+          ...EMPTY_PROFILE,
+          ...(prev.internshipProfiles?.[course] || {}),
           [field]: value,
         },
       },
@@ -37,148 +40,60 @@ export default function INFInternshipProfileSection({
   };
 
   return (
-    <SectionCard title="Internship Profile">
+    <SectionCard title="Job Profile">
+      <p className="text-xs text-gray-500 leading-relaxed italic mb-4">
+        *Any amount to be disbursed after the end of the first 12 months should not be a part of CTC.
+      </p>
+
       <div className="space-y-6">
-        <div>
-          <RadioGroup
-            label="Internship Type"
-            name="internshipType"
-            value={formData.internshipType || ""}
-            onChange={(e) => {
-              setValidationMessage("");
-              setFormData((prev) => ({
-                ...prev,
-                internshipType: e.target.value,
-              }));
-            }}
-            options={[
-              "Internship Only",
-              "Internship + FTE",
-              "Internship with PPO Offers"
-            ]}
-            required
-          />
+        {infCourses.map((course) => {
+          // Fallback: agar formData.internshipProfiles me is course ka key
+          // (e.g. sinf / jinf) abhi tak initialize nahi hua, to empty profile use karo
+          const profile =
+            formData.internshipProfiles?.[course.key] || EMPTY_PROFILE;
 
-          <p className="mt-2 text-xs text-black-1000 leading-relaxed">
-            <strong>
-            
-            Note: A 6-month internship is permitted only when accompanied by an FTE (Full-Time Employment) offer.
-              </strong>
-          </p>
-        </div>
+          return (
+            <CourseProfileCard key={course.key} title={course.title}>
+              <InputField
+                label="Job Designation"
+                value={profile.designation}
+                onChange={(e) => handleProfileChange(course.key, "designation", e.target.value)}
+              />
 
-        {infCourses.map((course) => (
-          <CourseProfileCard
-            key={course.key}
-            title={course.title}
-          >
-            <InputField
-              label="Designation"
-              value={
-                formData.internshipProfiles[
-                  course.key
-                ].designation
-              }
-              onChange={(e) =>
-                handleProfileChange(
-                  course.key,
-                  "designation",
-                  e.target.value
-                )
-              }
-            />
+              <InputField
+                label="CTC (if applicable)"
+                value={profile.ctc}
+                onChange={(e) => handleProfileChange(course.key, "ctc", e.target.value)}
+                placeholder="e.g. 12.5"
+                suffix="LPA"
+                error={profile.ctc && !/^\d+(\.\d{1,2})?$/.test(profile.ctc) ? "Invalid format" : ""}
+              />
 
-            <InputField
-              label="Gross Stipend"
-              value={
-                formData.internshipProfiles[
-                  course.key
-                ].gross
-              }
-              onChange={(e) =>
-                handleProfileChange(
-                  course.key,
-                  "gross",
-                  e.target.value
-                )
-              }
-              placeholder="e.g. 50000"
-              suffix="Per Month"
-              error={formData.internshipProfiles[course.key].gross && !/^\d+(\.\d{1,2})?$/.test(formData.internshipProfiles[course.key].gross) ? "Invalid format" : ""}
-            />
+              <InputField
+                label="Stipend (Monthly)"
+                value={profile.stipend}
+                onChange={(e) => handleProfileChange(course.key, "stipend", e.target.value)}
+                placeholder="e.g. 25000"
+                suffix="Per Month"
+                error={profile.stipend && !/^\d+(\.\d{1,2})?$/.test(profile.stipend) ? "Invalid format" : ""}
+              />
 
-            <InputField
-              label="In-Hand Stipend"
-              value={
-                formData.internshipProfiles[
-                  course.key
-                ].stipend
-              }
-              onChange={(e) =>
-                handleProfileChange(
-                  course.key,
-                  "stipend",
-                  e.target.value
-                )
-              }
-              placeholder="e.g. 45000"
-              suffix="Per Month"
-              error={formData.internshipProfiles[course.key].stipend && !/^\d+(\.\d{1,2})?$/.test(formData.internshipProfiles[course.key].stipend) ? "Invalid format" : ""}
-            />
+              <InputField
+                label="Internship Duration"
+                value={profile.internshipDuration}
+                onChange={(e) => handleProfileChange(course.key, "internshipDuration", e.target.value)}
+                placeholder="e.g. 6"
+                suffix="Months"
+              />
 
-            <InputField
-              label="Perks"
-              value={
-                formData.internshipProfiles[
-                  course.key
-                ].perks
-              }
-              onChange={(e) =>
-                handleProfileChange(
-                  course.key,
-                  "perks",
-                  e.target.value
-                )
-              }
-            />
-
-            <InputField
-              label="Training Period"
-              value={
-                formData.internshipProfiles[
-                  course.key
-                ].trainingPeriod
-              }
-              onChange={(e) =>
-                handleProfileChange(
-                  course.key,
-                  "trainingPeriod",
-                  e.target.value
-                )
-              }
-              placeholder="e.g. 6"
-              suffix="Months"
-              error={formData.internshipProfiles[course.key].trainingPeriod && !/^\d+(\.\d{1,2})?$/.test(formData.internshipProfiles[course.key].trainingPeriod) ? "Invalid format" : ""}
-            />
-
-            <InputField
-              label="Location"
-              value={
-                formData.internshipProfiles[
-                  course.key
-                ].location
-              }
-              onChange={(e) =>
-                handleProfileChange(
-                  course.key,
-                  "location",
-                  e.target.value
-                )
-              }
-            />
-          </CourseProfileCard>
-        ))}
-
+              <InputField
+                label="Location"
+                value={profile.location}
+                onChange={(e) => handleProfileChange(course.key, "location", e.target.value)}
+              />
+            </CourseProfileCard>
+          );
+        })}
       </div>
     </SectionCard>
   );

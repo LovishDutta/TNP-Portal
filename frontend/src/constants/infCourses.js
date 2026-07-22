@@ -1,9 +1,8 @@
 const infCourses = [
-  { key: "btech", title: "B. Tech." },
-  { key: "mtech", title: "M. Tech." },
+  { key: "btech", title: "B.Tech." },
   { key: "mba", title: "MBA" },
   { key: "mca", title: "MCA" },
-  { key: "msc", title: "M. Sc." },
+  { key: "dualDegree", title: "Dual Degree (B.Tech.+M.Tech.)" },
 ];
 
 export default infCourses;

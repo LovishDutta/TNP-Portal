@@ -26,7 +26,7 @@ router.post('/jnf', async (req, res) => {
     await sendEmail({
       to: 'tnpoffice@nitkkr.ac.in',
       subject: `New JNF Submission: ${companyName}`,
-      text: `A new Job Notification Form (JNF) has been submitted by ${companyName}.
+      text: `A new Job Internship Notification Form (JINF) has been submitted by ${companyName}.
 
 Submission Time: ${submission.submittedAt.toLocaleString("en-IN", {
         dateStyle: "medium",
@@ -35,9 +35,9 @@ Submission Time: ${submission.submittedAt.toLocaleString("en-IN", {
       })}`
     }).catch(err => console.log('Email sending failed:', err));
 
-    res.status(201).json({ message: 'JNF submitted successfully', id: submission._id });
+    res.status(201).json({ message: 'JINF submitted successfully', id: submission._id });
   } catch (error) {
-    console.error('Error submitting JNF:', error);
+    console.error('Error submitting JINF:', error);
     res.status(500).json({ message: 'Server Error' });
   }
 });
@@ -59,7 +59,7 @@ router.post('/inf', async (req, res) => {
     await sendEmail({
       to: 'tnpoffice@nitkkr.ac.in',
       subject: `New INF Submission: ${companyName}`,
-      text: `A new Internship Notification Form (INF) has been submitted by ${companyName}.
+      text: `A new Summer Internship Notification Form (SINF) has been submitted by ${companyName}.
 
 Submission Time: ${submission.submittedAt.toLocaleString("en-IN", {
         dateStyle: "medium",
@@ -68,7 +68,7 @@ Submission Time: ${submission.submittedAt.toLocaleString("en-IN", {
       })}`
     }).catch(err => console.log('Email sending failed:', err));
 
-    res.status(201).json({ message: 'INF submitted successfully', id: submission._id });
+    res.status(201).json({ message: 'SINF submitted successfully', id: submission._id });
   } catch (error) {
     console.error('Error submitting INF:', error);
     res.status(500).json({ message: 'Server Error' });

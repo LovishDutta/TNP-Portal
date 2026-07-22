@@ -146,40 +146,34 @@ export default function INFForm() {
     }
 
     // STEP 2
+    // STEP 2
     if (currentStep === 2) {
-      if (!formData.internshipType) {
-        setValidationMessage("Please select the Internship Type before proceeding.");
-        scrollToTop();
-        return;
-      }
-
       const hasInternshipProfile = Object.values(
         formData.internshipProfiles
       ).some((profile) => {
         return (
           profile.designation?.trim() &&
-          profile.gross?.trim() &&
+          profile.stipend?.trim() &&
           profile.location?.trim()
         );
       });
 
       if (!hasInternshipProfile) {
         setValidationMessage(
-          "Please complete the Internship Profile (Designation, Gross Stipend and Location) for at least one programme before proceeding."
+          "Please complete the Job Profile (Job Designation, Stipend and Location) for at least one programme before proceeding."
         );
         scrollToTop();
         return;
       }
 
       const hasInvalidNumeric = Object.values(formData.internshipProfiles).some((profile) => {
-        const grossInvalid = profile.gross && !/^\d+(\.\d{1,2})?$/.test(profile.gross);
+        const ctcInvalid = profile.ctc && !/^\d+(\.\d{1,2})?$/.test(profile.ctc);
         const stipendInvalid = profile.stipend && !/^\d+(\.\d{1,2})?$/.test(profile.stipend);
-        const trainingPeriodInvalid = profile.trainingPeriod && !/^\d+(\.\d{1,2})?$/.test(profile.trainingPeriod);
-        return grossInvalid || stipendInvalid || trainingPeriodInvalid;
+        return ctcInvalid || stipendInvalid;
       });
 
       if (hasInvalidNumeric) {
-        setValidationMessage("Please ensure Gross Stipend, In-Hand Stipend, and Training Period are valid numbers with up to 2 decimal places.");
+        setValidationMessage("Please ensure CTC and Stipend are valid numbers with up to 2 decimal places.");
         scrollToTop();
         return;
       }
