@@ -381,12 +381,12 @@ const generatePDF = (submission, res) => {
         drawSectionHeader(title);
 
         // Show Internship Type right under the section header, only for internshipProfiles
-        if (pk === 'internshipProfiles' && !isEmpty(data.internshipType)) {
-          checkPageBreak(20);
-          doc.fillColor(colors.textMedium).fontSize(9).font(fonts.bold).text('Internship Type: ', margins.left + 10, doc.y + 6, { continued: true });
-          doc.fillColor(colors.textDark).font(fonts.regular).text(String(data.internshipType));
-          doc.moveDown(0.8);
-        }
+        // if (pk === 'internshipProfiles' && !isEmpty(data.internshipType)) {
+        //   checkPageBreak(20);
+        //   doc.fillColor(colors.textMedium).fontSize(9).font(fonts.bold).text('Internship Type: ', margins.left + 10, doc.y + 6, { continued: true });
+        //   doc.fillColor(colors.textDark).font(fonts.regular).text(String(data.internshipType));
+        //   doc.moveDown(0.8);
+        // }
 
         validProfiles.forEach(([course, details]) => {
           const detailKeys = Object.keys(details).filter(k => !isEmpty(details[k]));
@@ -450,37 +450,62 @@ const generatePDF = (submission, res) => {
       }
     }
   });
+// Important Mentions (policies) — content differs by form type
+  const jnfMentions = [
+    'B.Tech students are available for a minimum of 16-week internship starting from January 2027.',
+    'M.Tech students are available for 6 to 11-months internships starting from July 2026.',
+    'MCA students are available for internship in their last semester starting from January 2027.',
+    'Job offers up to 5 LPA CTC will be considered as a Bonus offer.',
+    "Students having first offer's CTC < 12 LPA, will be eligible for the second offer, provided 50% of their branch is placed and their second offer's CTC is 1.5 times the CTC of their first offer.",
+    'For PSUs, the students are eligible irrespective of the previous offer or CTC. If the first offer is from PSU, then the student is not eligible for a second offer in any other PSU or private company.',
+    "Students are eligible for the second offer, provided 80% of their branch is placed and their second offer's CTC is higher than their current CTC.",
+    'Training & Placement Cell, NIT Kurukshetra encourages equal opportunity for all sections of the students with equal emphasis on Diversity, Equity, and Inclusivity (DEI). In addition to Gender Diversity consideration, Companies are strongly recommended to proactively support PwD/students with SLD, and other such applicants. If there are eligible PwD/SLD students, companies must take care of any of their special requirements.'
+  ];
 
-  // Important Mentions (policies) — shown just before the Undertaking section
+  const infMentions = [
+    'Dual Degree students are available for 6-8 week (2 month) internships, and are eligible to join full-time only after completing the remaining two years of their 5-year programme, i.e., in 2029.',
+    'It is highly recommended that the PPO offers be made well in time, as students are eligible to apply to other companies till a PPO is confirmed.',
+    'Job offers up to 5 LPA CTC will be considered as a Bonus offer.',
+    "Students having first offer's CTC < 12 LPA, will be eligible for the second offer, provided 50% of their branch is placed and their second offer's CTC is 1.5 times the CTC of their first offer.",
+    'For PSUs, the students are eligible irrespective of the previous offer or CTC. If the first offer is from PSU, then the student is not eligible for a second offer in any other PSU or private company.',
+    "Students are eligible for the second offer, provided 80% of their branch is placed and their second offer's CTC is higher than their current CTC.",
+    'Training & Placement Cell, NIT Kurukshetra encourages equal opportunity for all sections of the students with equal emphasis on Diversity, Equity, and Inclusivity (DEI). In addition to Gender Diversity consideration, Companies are strongly recommended to proactively support PwD/students with SLD, and other such applicants. If there are eligible PwD/SLD students, companies must take care of any of their special requirements.'
+  ];
+
+  const facilities = [
+    '250+ computers with webcam, microphone, and power backup for OAs/PIs.',
+    'Institute Guest House on campus, without any charges.',
+    'Pick & drop facility from Delhi NCR/Chandigarh.'
+  ];
+
   checkPageBreak(150);
   drawSectionHeader('Important Mentions');
   doc.moveDown(0.3);
 
   doc.fillColor(colors.textDark).fontSize(9).font(fonts.regular);
   doc.list(
-    [
-      'As per our latest curriculum, B.Tech students are available for internships with a minimum duration of 16 weeks.',
-      'M.Tech students are available for 6/11-month internship.',
-      'MCA students are available for 6-month internship (in their last semester).',
-      'All information provided in the notification forms must be accurate and verifiable.',
-      'Once submitted, forms cannot be modified without prior approval from the Training & Placement Cell.',
-      'Companies are expected to adhere strictly to the agreed-upon compensation structure.',
-      'Pre-Placement Offers (PPOs) must be routed exclusively through the Training & Placement Cell.',
-      'Second Offer Policy:',
-      [
-        "The new opportunity must offer a CTC of at least 1.5x the student's current offer.",
-        "The student's existing offer must have a CTC of \u20b912 LPA or below.",
-        'At least 50% of students from the respective department must have already been placed at the time of recruitment.',
-        'If 80% or more students of a department have already been placed, the remaining eligible students of that department shall be permitted to participate in all subsequent campus recruitment drives, including PSU/Government Organization recruitment, irrespective of their existing CTC.'
-      ],
-      'PSU Recruitment Policy:',
-      [
-        'Students who have already secured an on-campus offer shall remain eligible to participate in recruitment drives conducted by Public Sector Undertakings (PSUs) and Government Organizations, subject to the eligibility criteria prescribed by the recruiting organization.',
-        'Once a student receives an offer from a PSU/Government Organization, the student shall not be permitted to participate in the recruitment process of any other PSU/Government Organization.'
-      ],
-      'Bonus Company Policy: Companies offering a CTC of \u20b95 LPA or below shall be classified as Bonus Companies. Students selected by a Bonus Company shall remain eligible to participate in all subsequent campus recruitment drives offering a higher CTC without any restriction arising from their earlier selection.',
-      'If there are PwD applicants or Students with Specific Learning Disabilities (SLD), companies must take care of any of their special requirements, such as additional time, scribing, bigger fonts, etc. We encourage equal opportunity for all sections of the students with equal emphasis on Diversity, Equity, and Inclusivity (DEI). Quite often, DEI provisions start and end with Gender diversity. Companies are strongly recommended to go beyond and proactively consider and support PwD, SLD, and other such applicants.'
-    ],
+    submission.formType === 'JNF' ? jnfMentions : infMentions,
+    margins.left + 10,
+    doc.y,
+    {
+      width: contentWidth - 20,
+      bulletRadius: 2,
+      textIndent: 10,
+      indent: 14,
+      lineGap: 3
+    }
+  );
+
+  doc.moveDown(1.2);
+
+  // Facilities Available
+  checkPageBreak(100);
+  drawSectionHeader('Facilities Available');
+  doc.moveDown(0.3);
+
+  doc.fillColor(colors.textDark).fontSize(9).font(fonts.regular);
+  doc.list(
+    facilities,
     margins.left + 10,
     doc.y,
     {
@@ -495,8 +520,7 @@ const generatePDF = (submission, res) => {
   doc.moveDown(1.2);
 
   // Undertaking Section
-  const declarationText = "I hereby declare that the information provided in this form is true and correct to the best of my knowledge. I have read and understood all the provided important mentions from the TNP Recruitment Portal."
-
+  const declarationText = "I hereby declare that all the information provided in this form is true, complete, and correct to the best of my knowledge. I have read and understood the information provided in this form by the T&P Cell, NIT Kurukshetra.";
 
   checkPageBreak(150);
   drawSectionHeader('Undertaking');
@@ -510,14 +534,6 @@ const generatePDF = (submission, res) => {
   // Statuses
   doc.fillColor(colors.textMedium).fontSize(10).font(fonts.bold).text("Undertaking Accepted:", margins.left + 10, doc.y, { continued: true });
   doc.fillColor(colors.textDark).font(fonts.regular).text(` ${data.undertakingAccepted ? 'Yes' : 'No'}`);
-  doc.moveDown(0.8);
-
-  doc.fillColor(colors.textMedium).fontSize(10).font(fonts.bold).text("Name of Form Filler:", margins.left + 10, doc.y, { continued: true });
-  doc.fillColor(colors.textDark).font(fonts.regular).text(` ${data.formFillerName || 'N/A'}`);
-  doc.moveDown(0.8);
-
-  doc.fillColor(colors.textMedium).fontSize(10).font(fonts.bold).text("Designation:", margins.left + 10, doc.y, { continued: true });
-  doc.fillColor(colors.textDark).font(fonts.regular).text(` ${data.formFillerDesignation || 'N/A'}`);
   doc.moveDown(0.8);
 
   doc.fillColor(colors.textMedium).fontSize(10).font(fonts.bold).text("Submitted On:", margins.left + 10, doc.y, { continued: true });

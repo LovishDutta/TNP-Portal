@@ -11,7 +11,8 @@ export default function AdminSubmissionView() {
   const [isEditing, setIsEditing] = useState(false);
   const [editableData, setEditableData] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
-
+  const formTypeLabel = (type) => (type === 'JNF' ? 'JINF' : type === 'INF' ? 'SINF' : type);
+  
   useEffect(() => {
     const fetchSubmission = async () => {
       try {

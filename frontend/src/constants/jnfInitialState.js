@@ -53,12 +53,14 @@ const jnfInitialState = {
       designation: "",
       mobile: "",
       email: "",
+      signature: "",
     },
     {
       name: "",
       designation: "",
       mobile: "",
       email: "",
+      signature: "",
     },
   ],
 

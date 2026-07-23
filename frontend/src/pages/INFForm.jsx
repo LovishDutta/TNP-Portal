@@ -18,7 +18,7 @@ import INFBetterUnderstandingSection from "../components/inf/INFBetterUnderstand
 import INFImportantNotes from "../components/inf/INFImportantNotes";
 import INFSubmitSection from "../components/inf/INFSubmitSection";
 import FormValidationMessage from "../components/FormValidationMessage";
-import UndertakingSection from "../components/UndertakingSection";
+import INFUndertakingSection from "../components/inf/INFUndertakingSection";
 export default function INFForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
@@ -259,22 +259,8 @@ export default function INFForm() {
       return;
     }
 
-    if (!formData.formFillerName || formData.formFillerName.trim() === "") {
-      setValidationMessage("Please enter the name of the form filler.");
-      scrollToTop();
-      return;
-    }
-
-    if (!formData.formFillerDesignation || formData.formFillerDesignation.trim() === "") {
-      setValidationMessage("Please enter the designation.");
-      scrollToTop();
-      return;
-    }
-
     const trimmedData = {
       ...formData,
-      formFillerName: formData.formFillerName.trim(),
-      formFillerDesignation: formData.formFillerDesignation.trim()
     };
 
     setIsSubmitting(true);
@@ -421,15 +407,9 @@ export default function INFForm() {
                 handleChange={handleChange}
               />
 
-              <UndertakingSection
+              <INFUndertakingSection
                 formData={formData}
                 handleChange={handleChange}
-                academicNotes={[
-                  "B.Tech students are available for 2-month summer internship (4th & 6th semester).",
-                  "M.Tech students are available for 6/11-month internship.",
-                  "MCA students are available for 2-month internship (4th semester).",
-                  "MBA students are available for 2-month internship.",
-                ]}
               />
 
               <INFSubmitSection

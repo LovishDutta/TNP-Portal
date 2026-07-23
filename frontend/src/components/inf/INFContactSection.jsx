@@ -28,6 +28,14 @@ export default function INFContactSection({
 
       </div>
 
+      <p className="mt-6 text-gray-700 text-sm">
+        The completed form is to be mailed to:{" "}
+        <a href="mailto:tnpoffice@nitkkr.ac.in" className="text-blue-600 underline">tnpoffice@nitkkr.ac.in</a>{" "}
+        and{" "}
+        <a href="mailto:tpo@nitkkr.ac.in" className="text-blue-600 underline">tpo@nitkkr.ac.in</a>{" "}
+        at the earliest.
+      </p>
+
     </SectionCard>
   );
 }

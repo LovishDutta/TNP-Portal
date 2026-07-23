@@ -1,5 +1,4 @@
-import React from "react";
-import SectionCard from "./SectionCard";
+import SectionCard from "../SectionCard";
 
 function ImportantMentionsList() {
   return (
@@ -10,13 +9,10 @@ function ImportantMentionsList() {
 
       <ul className="list-disc pl-6 space-y-3 text-gray-700">
         <li>
-          B.Tech students are available for a minimum of 16-week internship starting from January 2027.
+          Dual Degree students are available for 6-8 week (2 month) internships, and are eligible to join full-time only after completing the remaining two years of their 5-year programme, i.e., in 2029.
         </li>
         <li>
-          M.Tech students are available for 6 to 11-months internships starting from July 2026.
-        </li>
-        <li>
-          MCA students are available for internship in their last semester starting from January 2027.
+          It is highly recommended that the PPO offers be made well in time, as students are eligible to apply to other companies till a PPO is confirmed.
         </li>
         <li>
           Job offers up to 5 LPA CTC will be considered as a Bonus offer.
@@ -38,7 +34,7 @@ function ImportantMentionsList() {
   );
 }
 
-export default function UndertakingSection({ formData, handleChange }) {
+export default function INFUndertakingSection({ formData, handleChange }) {
   return (
     <SectionCard title="Undertaking">
       <div className="space-y-6">

@@ -43,12 +43,14 @@ const infInitialState = {
       designation: "",
       mobile: "",
       email: "",
+      signature: "",
     },
     {
       name: "",
       designation: "",
       mobile: "",
       email: "",
+      signature: "",
     },
   ],
 

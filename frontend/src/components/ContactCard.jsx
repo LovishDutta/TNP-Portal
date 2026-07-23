@@ -76,6 +76,15 @@ export default function ContactCard({
           error={contact.email && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(contact.email) ? "Invalid email address" : ""}
         />
 
+        <InputField
+          label="Signature"
+          name="signature"
+          value={contact.signature || ""}
+          onChange={handleChange}
+          placeholder="Type full name as signature"
+          required={required}
+        />
+
       </div>
 
     </div>

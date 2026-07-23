@@ -425,22 +425,9 @@ export default function JNFForm() {
       return;
     }
 
-    if (!formData.formFillerName || formData.formFillerName.trim() === "") {
-      setValidationMessage("Please enter the name of the form filler.");
-      scrollToTop();
-      return;
-    }
-
-    if (!formData.formFillerDesignation || formData.formFillerDesignation.trim() === "") {
-      setValidationMessage("Please enter the designation.");
-      scrollToTop();
-      return;
-    }
 
     const trimmedData = {
       ...formData,
-      formFillerName: formData.formFillerName.trim(),
-      formFillerDesignation: formData.formFillerDesignation.trim()
     };
 
     setIsSubmitting(true);
